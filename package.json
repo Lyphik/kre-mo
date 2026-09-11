@@ -1,0 +1,27 @@
+{
+  "name": "kre-mo",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Kre mo - turns phone calls into verifiable, timestamped real-world facts (CALL-E hackathon). Phase 1: prove the CALL-E integration. Phase 2: river-crossing verification demo with live/demo provider abstraction and a deterministic consensus engine.",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.web.json",
+    "build:web": "tsc -p tsconfig.web.json",
+    "serve": "tsx src/server/http.ts",
+    "dev": "npm run build:web && npm run serve",
+    "test": "tsx --test tests/consensus.engine.test.ts",
+    "test:call": "tsx src/test-call.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@call-e/calle": "0.7.0",
+    "dotenv": "17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.4",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}

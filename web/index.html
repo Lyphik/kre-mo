@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Krè mo — field verification network</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="console">
+    <header class="console__header">
+      <div class="console__brand">
+        KRÈ MO
+        <span class="console__tagline">FIELD VERIFICATION NETWORK</span>
+      </div>
+      <div class="console__mode" id="mode-badge"><span class="dot"></span>MODE -</div>
+    </header>
+
+    <p class="console__flag" id="demo-flag">-</p>
+
+    <section class="console__question">
+      <p class="console__label">QUESTION</p>
+      <h1 id="question-text">-</h1>
+      <button id="start-button" type="button">VERIFY FIELD STATUS</button>
+      <p class="console__principle">One source is an observation.<br />Agreement makes it a verified fact.</p>
+    </section>
+
+    <section class="console__grid">
+      <div class="node" id="node-a" data-state="idle">
+        <p class="node__label">SOURCE A</p>
+        <p class="node__name" id="node-a-name">-</p>
+        <p class="node__role" id="node-a-role">-</p>
+        <p class="node__status" id="node-a-status">STANDBY</p>
+      </div>
+
+      <div class="convergence-col">
+        <div class="convergence" id="signal" data-state="idle">
+          <span class="convergence__trace convergence__trace--a"></span>
+          <span class="convergence__node"></span>
+          <span class="convergence__trace convergence__trace--b"></span>
+        </div>
+        <p class="convergence__label" id="signal-state">STANDBY</p>
+      </div>
+
+      <div class="node" id="node-b" data-state="idle">
+        <p class="node__label">SOURCE B</p>
+        <p class="node__name" id="node-b-name">-</p>
+        <p class="node__role" id="node-b-role">-</p>
+        <p class="node__status" id="node-b-status">STANDBY</p>
+      </div>
+    </section>
+
+    <section class="result" id="result" data-status="none" hidden>
+      <p class="result__banner" id="result-banner">-</p>
+      <p class="result__consensus" id="result-consensus">-</p>
+      <p class="result__hero" id="result-answer">-</p>
+      <p class="result__meta" id="result-meta">-</p>
+      <details class="result__evidence">
+        <summary>EVIDENCE LOG</summary>
+        <ul id="evidence-list"></ul>
+      </details>
+    </section>
+
+    <section class="result result--error" id="error" hidden>
+      <p class="result__banner">VERIFICATION FAILED</p>
+      <p id="error-message"></p>
+    </section>
+  </main>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

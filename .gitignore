@@ -1,0 +1,12 @@
+# dependencies / build
+node_modules/
+dist/
+
+# secrets - never commit
+.env
+.env.*
+!.env.local.example
+
+# misc
+*.log
+.DS_Store
