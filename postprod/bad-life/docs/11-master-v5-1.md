@@ -37,4 +37,39 @@ Audio du master : **flux original copié bit à bit** (option `audio_copie`, uni
 
 **Verdict : vérification passée → master lancé.**
 
-_Rendu et contrôles du master : §11.3 et suivants (complétés après rendu)._
+## 11.3 Premier rendu du master : contrôle non passé, correction ciblée
+
+Premier rendu complet (2 h 23, ≈ 1 image/s) puis contrôle du master
+(`tools/v5/qc_master.py`) :
+
+| Contrôle | Résultat |
+|---|---|
+| Audio original copié bit à bit (SHA-256 des paquets) | **identique** : `b567694f…bb1f4194` |
+| Durées vidéo / audio, nombre d'images | 175,200 s / 175,200 s, **8760** images |
+| Coupes (259 frontières validées) | **259 / 259** : même saut dans la source et dans le master |
+| Montage image par image | 5 images signalées, toutes dans le **fondu au noir final** (168,42–168,74 s) |
+
+L'examen du fondu a mis en évidence un **défaut réel** : le pied de courbe de la LUT de jour et
+l'harmonisation des artistes assombrissaient le fondu plus vite que la source, qui atteignait
+10 % de son niveau initial **0,48 s trop tôt** (168,60 s contre 169,08 s). Le fondu fait partie
+du montage : il doit suivre la source. **Le master n'a pas été déclaré prêt.**
+
+Correction minimale, limitée à la famille `OUTRO_fondu` (161,7–175,2 s) :
+
+- nouvelle LUT `v5_1_fondu` : preset `v5_jour` avec une courbe **neutre sous 0,20** (aucune
+  LUT existante modifiée, `v5_jour` et `v5_1_sujets` régénérées à l'octet près) ;
+- `artistes_mode: source` sur ce plan : pixels des artistes = source.
+
+Vérification sur la fenêtre 161,7–175,2 s avant de relancer : luminance sortie / source
+identique à chaque image (résidu ≤ 0,0025), seuils 50 / 25 / 10 % atteints **à la même image**,
+écart des artistes **0**.
+
+Le contrôle du montage a aussi été **renforcé** : la première version excluait 5532 images
+« quasi fixes » (doublons 25p dans 50p) comme non décidables. Désormais, chaque image est
+comparée à ±3 images. Elle n'est fausse que si elle ressemble davantage à une image source
+réellement différente de la sienne. Seules les images quasi uniformes (noir) restent non
+décidables.
+
+Le premier rendu est conservé hors dépôt, à titre de traçabilité ; il n'est pas livré.
+
+_Second rendu et contrôles complets : §11.4._

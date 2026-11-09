@@ -3,9 +3,9 @@
 
   1. Audio ORIGINAL copie bit a bit : empreinte SHA-256 des paquets audio (source contre master).
   2. Durees des flux video et audio = 175,200 s ; 8760 images.
-  3. Montage intact sur les 8760 images : chaque image du master est plus correlee a l'image source
-     de meme indice qu'a ses voisines (+/- 1) -> aucun decalage, aucune image ajoutee ou perdue,
-     coupes a leur place. Les images ou la source est quasi fixe (voisines identiques) sont comptees a part.
+  3. Montage intact sur les 8760 images : aucune image du master n'est plus correlee a une image source
+     d'un autre indice (fenetre +/- 3) qui differe reellement de la sienne -> aucun decalage, aucune image
+     ajoutee ou perdue, coupes a leur place. Seules les images quasi uniformes (noir) sont non decidables.
   4. Coupes : a chaque frontiere de plan validee, la correlation source/master saute comme dans la source.
 Usage : qc_master.py SOURCE MASTER.mp4 PLANS.csv OUT.json
 """
@@ -32,22 +32,30 @@ def frames(path, w=160, h=90):
     b = subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-i', path, '-vf', f'scale={w}:{h}:flags=area,format=gray', '-f', 'rawvideo', '-'],
                        capture_output=True).stdout
     a = np.frombuffer(b, np.uint8).reshape(-1, h * w).astype(np.float32)
+    sd = a.std(axis=1)
     a -= a.mean(axis=1, keepdims=True); a /= (np.linalg.norm(a, axis=1, keepdims=True) + 1e-6)
-    return a
+    return a, sd
 
 
-S, M = frames(SRC), frames(MST)
+(S, sdS), (M, _) = frames(SRC), frames(MST)
 n = min(len(S), len(M)); rep['images'] = {'source': len(S), 'master': len(M)}
 c0 = np.einsum('ij,ij->i', M[:n], S[:n])
-cm = np.full(n, -2.0); cp = np.full(n, -2.0)
-cm[1:] = np.einsum('ij,ij->i', M[1:n], S[:n - 1]); cp[:-1] = np.einsum('ij,ij->i', M[:n - 1], S[1:n])
-static = np.zeros(n, bool)                       # source quasi fixe : voisine identique (25p dans 50p, plan fixe)
-static[1:] |= np.einsum('ij,ij->i', S[1:n], S[:n - 1]) > 0.995
-static[:-1] |= np.einsum('ij,ij->i', S[:n - 1], S[1:n]) > 0.995
-bad = (np.maximum(cm, cp) > c0 + 0.002) & ~static
-rep['montage_8760_images'] = {'images_meilleure_correlation_hors_indice': int(bad.sum()), 'images_quasi_fixes_non_decidables': int(static.sum()),
-                             'correlation_moyenne_meme_image': round(float(c0.mean()), 4), 'correlation_min_meme_image': round(float(c0.min()), 4),
-                             'images_signalees': [int(i) for i in np.nonzero(bad)[0][:20]],
+# Fenetre +/- 3 images : une image du master est fausse si elle ressemble davantage a une image source
+# d'un autre indice ET que cette image source est reellement differente de la sienne (corr < 0,995).
+# Les doublons 25p dans 50p (images source identiques) ne sont donc plus exclus mais neutres.
+uni = sdS[:n] < 2.0                              # image quasi uniforme (noir) : correlation non definie
+bad = np.zeros(n, bool); wrong_to = {}
+for o in (-3, -2, -1, 1, 2, 3):
+    i = np.arange(max(0, -o), min(n, n - o)); j = i + o
+    cj = np.einsum('ij,ij->i', M[i], S[j]); sij = np.einsum('ij,ij->i', S[i], S[j])
+    hit = (cj > c0[i] + 0.002) & (sij < 0.995)
+    bad[i[hit]] = True
+    for k in i[hit]: wrong_to.setdefault(int(k), o)
+bad &= ~uni
+rep['montage_8760_images'] = {'images_meilleure_correlation_hors_indice': int(bad.sum()), 'images_uniformes_non_decidables': int(uni.sum()),
+                             'images_uniformes_indices': [int(i) for i in np.nonzero(uni)[0][:40]],
+                             'correlation_moyenne_meme_image': round(float(c0[~uni].mean()), 4), 'correlation_min_meme_image_hors_uniformes': round(float(c0[~uni].min()), 4),
+                             'images_signalees': [(int(i), wrong_to[int(i)], round(float(c0[i]), 3)) for i in np.nonzero(bad)[0][:20]],
                              'verdict': 'OK' if bad.sum() == 0 and len(S) == len(M) else 'A VERIFIER'}
 bounds = [int(r['image_debut']) for r in csv.DictReader(open(PLANS)) if int(r['image_debut']) > 0]
 ok_cut = 0; ko = []
