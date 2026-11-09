@@ -135,6 +135,16 @@ PRESETS['v5_jour'] = dict(PRESETS['v3'],
     curve_y=[0.0, 0.008, 0.032, 0.097, 0.200, 0.452, 0.715, 0.895, 0.970],
     sat_global=1.20, vibrance=0.45, red_gain=0.25, green_rot=8, shadow_amt=0.014, high_amt=0.006,
 )
+# --- V5.1 : harmonisation TRES LEGERE et GLOBALE des artistes (option comparee au mode strict) ---
+# Seul but : rapprocher les noirs releves de la source de ceux du decor etalonne. Visages (0,10-0,20)
+# quasi inchanges, saturation +4 % (carnations plafonnees a +1 %), AUCUNE rotation de teinte, AUCUN
+# cyan / ambre / rouge ajoute. Meme fonction pour chaque pixel : aucune retouche locale.
+PRESETS['v5_1_sujets'] = dict(PRESETS['v3'],
+    curve_x=[0.0, 0.035, 0.06, 0.10, 0.20, 0.45, 0.70, 0.90, 1.0],
+    curve_y=[0.0, 0.016, 0.044, 0.097, 0.200, 0.452, 0.705, 0.902, 0.988],
+    sat_global=1.04, vibrance=0.06, sat_skin_max=1.01, red_gain=0.0, green_rot=0,
+    shadow_amt=0.0, high_amt=0.0,
+)
 P = PRESETS['v3']
 
 

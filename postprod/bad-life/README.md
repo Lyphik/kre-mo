@@ -15,7 +15,7 @@ d'analyse et la documentation le sont.
 | 5. Validation colorimétrie + effets | 🔁 V3 → V4 (tests A / B / C) → **V5 définitive** ([`docs/07`](docs/07-cahier-des-charges-v5.md)) |
 | **V5 — étapes 1 à 3** (sécurisation, analyse complète, masques) | ✅ Fait — [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md), [`data/v5/`](data/v5/) |
 | **V5 — étapes 4 à 6** (étalonnage par famille, effets, contrôle) | ✅ Fait sur 5 extraits — [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) |
-| **V5 — étape 7** (validation des 5 extraits) | ⏳ **En attente de validation** |
+| **V5 — étape 7** (validation des 5 extraits) | 🔁 V5 jugée trop chargée → **V5.1 passe de finition** ([`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md)) — ⏳ en attente de validation |
 | V5 — étape 8 (master 4K) | 🔒 Après validation uniquement |
 
 ## Documentation
@@ -29,6 +29,7 @@ d'analyse et la documentation le sont.
 7. [`docs/07-cahier-des-charges-v5.md`](docs/07-cahier-des-charges-v5.md) — cahier des charges V5 définitif (référence).
 8. [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md) — V5 : sécurisation, coupes refaites et validées, plans réels, ambiances, N&B, musique, masques.
 9. [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) — V5 : étalonnage C hybride, effets, 5 extraits, rapport de contrôle qualité, décisions attendues.
+10. [`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md) — V5.1 : passe de finition (moins d'effets, plus de profondeur), mesures d'amélioration, conservé / réduit / supprimé par extrait, autocritique.
 
 ## Arborescence
 
@@ -49,7 +50,8 @@ postprod/bad-life/
 │   ├── badlife_look_v4_sujets.cube  V4 — appliquée sur les personnes
 │   ├── badlife_look_v5_nuit.cube        V5 — décor des scènes nocturnes rouges
 │   ├── badlife_look_v5_nuit_ambre.cube  V5 — décor rideau métallique / nuit extérieure
-│   └── badlife_look_v5_jour.cube        V5 — décor des scènes de jour
+│   ├── badlife_look_v5_jour.cube        V5 — décor des scènes de jour
+│   └── badlife_look_v5_1_sujets.cube    V5.1 — harmonisation très légère et globale des artistes
 └── tools/
     ├── analyze.sh         étape 1 : détection des coupes + statistiques signal
     ├── shots.py           agrégation des statistiques par plan
@@ -74,7 +76,10 @@ postprod/bad-life/
         ├── qc_extract.py      contrôle qualité automatique d'un extrait
         ├── compare_v5.sh      comparatifs 4 vues + compilation
         ├── extracts.json      les 5 extraits de validation
-        └── v5_config.json     réglages par famille (LUT, effets, confiance, transitions)
+        ├── v5_config.json / v5_config_V5_fige.json   réglages V5 (copie figée de référence)
+        ├── v5_1_config.json   réglages V5.1 (surcharges par famille et par plan, artistes harmonisés)
+        ├── metrics_v51.py     mesures d'amélioration (effets, détail, noirs, profondeur)
+        └── compare_v51.sh     comparatif SOURCE | ÉTALONNAGE | V5 | V5.1 + compilation
 ```
 
 ## Reproduire

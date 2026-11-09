@@ -1,0 +1,189 @@
+{
+ "_doc": "V5.1 : passe de finition. Part de la V5 figee (v5_config_V5_fige.json) ; seules les valeurs ci-dessous changent. Objectif : moins d'effets, plus de profondeur lisible, artistes mieux integres.",
+ "familles": {
+  "B_nuit_rouge": {
+   "lut": "v5_nuit",
+   "fumee": 0.35,
+   "fumee_couleur": [
+    0.8,
+    0.07,
+    0.05
+   ],
+   "ambre_sources": 0.4,
+   "particules": 1.0,
+   "halos": 0.45,
+   "halation": 0.35,
+   "anamorphique": 0.35,
+   "rayons": 0.35,
+   "contre_jour": "rouge",
+   "contre_jour_force": 0.07,
+   "fumee_profondeur": "loin",
+   "particules_n": 40,
+   "particules_justifiees": true,
+   "particules_seuil_source": 0.3,
+   "particules_scintillement": false,
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "D_nuit_exterieure": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.3,
+   "fumee_couleur": [
+    0.62,
+    0.42,
+    0.26
+   ],
+   "ambre_sources": 0.8,
+   "particules": 1.0,
+   "halos": 0.5,
+   "halation": 0.3,
+   "anamorphique": 0.4,
+   "rayons": 0.3,
+   "contre_jour": null,
+   "contre_jour_force": 0.0,
+   "fumee_profondeur": "loin",
+   "particules_n": 18,
+   "particules_justifiees": true,
+   "particules_seuil_source": 0.35,
+   "particules_scintillement": false,
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "C_rideau_metallique": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.15,
+   "fumee_couleur": [
+    0.7,
+    0.4,
+    0.2
+   ],
+   "ambre_sources": 0.3,
+   "particules": 0.0,
+   "halos": 0.35,
+   "halation": 0.25,
+   "anamorphique": 0.15,
+   "rayons": 0.0,
+   "contre_jour": "ambre",
+   "contre_jour_force": 0.04,
+   "fumee_profondeur": "loin",
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "A_jour_cite": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  },
+  "OUTRO_fondu": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  }
+ },
+ "sans_effet": [
+  "X_effet_montage",
+  "NB"
+ ],
+ "confiance_masque": {
+  "_doc": "Reduction des effets si detourage incertain (data qualite.csv) : facteur = clip(1 - (instabilite - i0)/di) * clip(1 - (bord - b0)/db), borne basse 'min', lisse dans le temps.",
+  "i0": 0.03,
+  "di": 0.1,
+  "b0": 0.3,
+  "db": 0.6,
+  "min": 0.25
+ },
+ "transitions": {
+  "_doc": "Transition lumineuse entre deux PLANS REELS (>= 0,3 s, hors effets de montage) qui CHANGENT D'AMBIANCE, si : (1) impact musical a <= 80 ms ET section 'forte' ou frontiere de section a <= 0,3 s ; ou (2) kick/snare a <= 40 ms dans une section 'forte'.",
+  "tolerance_s": 0.08,
+  "force": 0.3,
+  "descente_s": 0.09,
+  "jour_exclu": true
+ },
+ "suffixe": "V5_1",
+ "video_masque": false,
+ "effets_duree_min_images": 2,
+ "plans": {
+  "_doc": "Reglages par plan (cle = image de debut, data/v5/plans.csv). Conteneur 114,1-120,7 s : particules supprimees, brume -70 % et seulement au lointain, ni rayons ni contre-jour invente, halos reduits (LED vertes preservees sans amplification).",
+  "5790": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "115,80 s conteneur (micro)"
+  },
+  "5793": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "115,86-117,20 s conteneur rouge"
+  },
+  "5944": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "118,88-120,10 s conteneur LED vertes"
+  },
+  "6021": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "120,42-120,74 s conteneur"
+  }
+ },
+ "artistes": {
+  "mode": "harmonise",
+  "lut": "v5_1_sujets",
+  "force": 1.0,
+  "_doc": "Choix fait apres comparaison strict / harmonise (doc 10)."
+ }
+}

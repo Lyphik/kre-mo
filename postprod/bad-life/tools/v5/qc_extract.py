@@ -16,6 +16,7 @@ import csv, json, subprocess, sys
 import numpy as np, cv2
 
 SRC, EXTP, EID, RD, PLANS, NBP = sys.argv[1:7]
+SUF = sys.argv[7] if len(sys.argv) > 7 else 'V5'          # 'V5_1' pour la passe de finition
 ex = next(e for e in json.load(open(EXTP))['extraits'] if e['id'] == EID)
 F0, F1 = int(round(ex['debut_s'] * 50)), int(round(ex['fin_s'] * 50)); NF = F1 - F0
 rep = {'extrait': EID, 'debut_s': ex['debut_s'], 'fin_s': ex['fin_s']}
@@ -29,15 +30,16 @@ def probe(p):
 
 
 ok = True
-for tag in ('V5_COMPLET', 'V5_ETALONNAGE_SEUL'):
+for tag in (f'{SUF}_COMPLET', f'{SUF}_ETALONNAGE_SEUL'):
     s = probe(f'{RD}/{EID}_{tag}.mp4')
     good = (s['width'] == 3840 and s['height'] == 2160 and s.get('sample_aspect_ratio') == '1:1' and s['r_frame_rate'] == '50/1'
             and int(s['nb_frames']) == NF and s['codec_name'] == 'hevc' and s['color_space'] == 'bt709' and s['color_range'] == 'tv')
-    rep[f'format_{tag}'] = f"{s['width']}x{s['height']} {s.get('sample_aspect_ratio')} {s['r_frame_rate']} {s['nb_frames']} img {s['codec_name']} {s['profile']} {s['color_space']}/{s['color_range']} {int(s['bit_rate']) / 1e6:.1f} Mb/s -> {'OK' if good else 'ECHEC'}"
+    rep[f'format_{tag.replace(SUF + "_", "")}'] = f"{s['width']}x{s['height']} {s.get('sample_aspect_ratio')} {s['r_frame_rate']} {s['nb_frames']} img {s['codec_name']} {s['profile']} {s['color_space']}/{s['color_range']} {int(s['bit_rate']) / 1e6:.1f} Mb/s -> {'OK' if good else 'ECHEC'}"
     ok &= good
 qa = list(csv.DictReader(open(f'{RD}/qc_artistes.csv')))
 dmax = max(int(r['ecart_max_vs_source']) for r in qa); popq = int(np.mean([int(r['px_opaques']) for r in qa]))
-rep['artistes'] = f"{len(qa)} images, {popq} px opaques/image en moyenne, ecart max vs source = {dmax} -> {'OK' if dmax == 0 else 'ECHEC'}"
+refn = qa[0].get('reference', 'source')
+rep['artistes'] = f"{len(qa)} images, {popq} px opaques/image en moyenne, ecart max vs reference ({refn}) = {dmax} -> {'OK' if dmax == 0 else 'ECHEC'}"
 ok &= dmax == 0
 
 
@@ -48,7 +50,7 @@ def frames(path, ss=None, t=None, w=160, h=90):
     return np.frombuffer(b, np.uint8).reshape(-1, h, w).astype(np.float32)
 
 
-src = frames(SRC, F0 / 50, NF / 50); out = frames(f'{RD}/{EID}_V5_COMPLET.mp4')
+src = frames(SRC, F0 / 50, NF / 50); out = frames(f'{RD}/{EID}_{SUF}_COMPLET.mp4')
 n = min(len(src), len(out)); rep['images_source_vs_sortie'] = f'{len(src)} / {len(out)}'
 bad = 0; samples = list(range(3, n - 3, 7))
 for i in samples:
@@ -65,7 +67,7 @@ def audio(path, ss=None, t=None):
     return np.frombuffer(subprocess.run(cmd, capture_output=True).stdout, np.float32)
 
 
-a_s, a_o = audio(SRC, F0 / 50, NF / 50), audio(f'{RD}/{EID}_V5_COMPLET.mp4')
+a_s, a_o = audio(SRC, F0 / 50, NF / 50), audio(f'{RD}/{EID}_{SUF}_COMPLET.mp4')
 m = min(len(a_s), len(a_o)) - 800; seg_s = a_s[400:400 + m]
 best = max(range(-160, 161), key=lambda d: float(np.dot(seg_s, a_o[400 + d:400 + d + m])) if 0 <= 400 + d and 400 + d + m <= len(a_o) else -1e9)
 rep['sync_audio'] = f'decalage audio mesure = {best / 8:.2f} ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> {"OK" if abs(best) <= 8 else "ECHEC"}'
@@ -101,7 +103,7 @@ if nbr:
     worst_c = 0.0
     for a0, b0, _, _ in nbr:
         for i in range(max(a0, F0), min(b0 + 1, F1), 3):
-            b = subprocess.run(['ffmpeg', '-v', 'error', '-i', f'{RD}/{EID}_V5_COMPLET.mp4', '-vf', f"select=eq(n\\,{i - F0}),scale=160:90:flags=area,format=yuv444p",
+            b = subprocess.run(['ffmpeg', '-v', 'error', '-i', f'{RD}/{EID}_{SUF}_COMPLET.mp4', '-vf', f"select=eq(n\\,{i - F0}),scale=160:90:flags=area,format=yuv444p",
                                 '-frames:v', '1', '-f', 'rawvideo', '-'], capture_output=True).stdout
             yuv = np.frombuffer(b, np.uint8).reshape(3, 90, 160).astype(np.float32); Y, U, V = yuv
             mid = (Y > 40) & (Y < 220)
@@ -124,7 +126,7 @@ if nbr:
         tem = f'{RD}/temoin_nb_{a1}.mp4'
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f'{a1 / 50:.3f}', '-i', SRC, '-frames:v', str(nn), '-an', '-vf', chain,
                         '-c:v', 'libx265', '-preset', 'ultrafast', '-crf', '10', '-x265-params', 'log-level=error', tem], check=True)
-        ut, vt = uvm(tem, 0.0, nn); uo, vo = uvm(f'{RD}/{EID}_V5_COMPLET.mp4', (a1 - F0) / 50, nn)
+        ut, vt = uvm(tem, 0.0, nn); uo, vo = uvm(f'{RD}/{EID}_{SUF}_COMPLET.mp4', (a1 - F0) / 50, nn)
         d = max(abs(uo - ut), abs(vo - vt)); good_nb &= d <= 0.3
         msgs.append(f'{a1 / 50:.2f}-{b1 / 50:.2f} s : U/V sortie {uo:+.2f}/{vo:+.2f} vs temoin {ut:+.2f}/{vt:+.2f} (ecart max {d:.2f})')
     rep['noir_et_blanc'] = ' ; '.join(msgs) + f' ; chroma max brute {worst_c:.2f} -> {"OK" if good_nb else "ECHEC"}'

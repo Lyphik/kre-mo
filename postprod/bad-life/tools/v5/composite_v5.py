@@ -35,6 +35,12 @@ plans = list(csv.DictReader(open(PLANS)))
 for p in plans:
     p['a'], p['b'] = int(p['image_debut']), int(p['image_fin'])
 FAMS = cfg['familles']; NOFX = set(cfg['sans_effet'])
+# --- options V5.1 (absentes de la config V5 -> comportement V5 inchange) ---
+PLAN_OV = {k: v for k, v in cfg.get('plans', {}).items() if not k.startswith('_')}   # cle = image de debut du plan
+DUREE_MIN_FX = int(cfg.get('effets_duree_min_images', 0))                          # plans <= N images : sans effet
+SUFFIXE = cfg.get('suffixe', 'V5')
+ART = cfg.get('artistes', {'mode': 'source'})                                       # 'source' ou 'harmonise'
+VIDEO_MASQUE = bool(cfg.get('video_masque', True))
 
 
 def lut_family(idx):
@@ -95,10 +101,14 @@ for k in range(1, len(plans)):
     if tb is not None: TRANS.append((tb, len(TRANS) % 2))
 
 
+TR_DECAY = float(cfg['transitions'].get('descente_s', 0.14))
+TR_JOUR_EXCLU = bool(cfg['transitions'].get('jour_exclu', False))     # V5.1 : pas de voile sur un plan de jour
+
+
 def trans_env(t):
     e, side = 0.0, 0
     for tb, sd in TRANS:
-        v = np.exp(-((t - tb) / 0.05) ** 2) if t < tb else np.exp(-(t - tb) / 0.14)
+        v = np.exp(-((t - tb) / 0.05) ** 2) if t < tb else np.exp(-(t - tb) / TR_DECAY)
         if v > e: e, side = v, sd
     return e, side
 
@@ -220,15 +230,18 @@ class Particles:
         s.z = (rng.uniform(0.1, 1.0, n) ** 0.7).astype(np.float32); s.vy = -rng.uniform(5, 18, n).astype(np.float32)
         s.ph = rng.uniform(0, 2 * np.pi, n).astype(np.float32); s.fq = rng.uniform(0.25, 0.7, n).astype(np.float32)
 
-    def render(s, t, cam, light, disp):
+    def render(s, t, cam, light, disp, twinkle=True, jmap=None, jseuil=0.0):
         lay = [np.zeros((H, W), np.float32) for _ in range(3)]
         px = s.x + 9 * np.sin(0.6 * t + s.ph) * s.z - cam[0] * (0.6 + 0.7 * s.z)
         py = (s.y + s.vy * t * s.z - cam[1] * (0.6 + 0.7 * s.z) + 0.1 * H) % (1.2 * H) - 0.1 * H
-        tw = 0.65 + 0.35 * np.sin(2 * np.pi * s.fq * t + s.ph)
+        tw = 0.65 + 0.35 * np.sin(2 * np.pi * s.fq * t + s.ph) if twinkle else np.full(len(px), 0.85, np.float32)
         for k in range(len(px)):
             x, y = int(px[k]), int(py[k])
             if not (0 <= x < W and 0 <= y < H): continue
             if disp is not None and s.z[k] < disp[y, x] - 0.08: continue      # cachee par le decor plus proche
+            # V5.1 : particule SUPPRIMEE (pas attenuee) si elle n'est pas dans l'influence d'une vraie source
+            # lumineuse du decor (halo ou faisceau) -> plus de points repartis uniformement sur l'image
+            if jmap is not None and jmap[y, x] < jseuil: continue
             b = float(tw[k] * (0.3 + 1.1 * light[y, x]))
             bk = 0 if s.z[k] < 0.45 else (1 if s.z[k] < 0.8 else 2)
             cv2.circle(lay[bk], (x, y), 1 + int(round(4 * s.z[k] ** 2)), b, -1, cv2.LINE_AA)
@@ -260,21 +273,24 @@ xx = np.arange(W, dtype=np.float32)[None, :]; yy = np.arange(H, dtype=np.float32
 
 # ---------------- boucle ----------------
 dec_src = decoder(None); dec = {l: decoder(l) for l in LUTS}
-enc = {} if STILLS_ONLY else {'COMPLET': encoder_4k(f'{OUT}/{EID}_V5_COMPLET.mp4'),
-                               'ETAL': encoder_4k(f'{OUT}/{EID}_V5_ETALONNAGE_SEUL.mp4'),
-                               'MASK': encoder_1080(f'{OUT}/{EID}_MASQUE.mp4')}
-qa = csv.writer(open(f'{OUT}/qc_artistes.csv', 'w', newline='')); qa.writerow(['image', 'plan', 'famille', 'px_opaques', 'ecart_max_vs_source'])
+dec_subj = decoder(ART['lut']) if ART.get('mode') == 'harmonise' else None    # LUT GLOBALE des artistes (V5.1)
+enc = {} if STILLS_ONLY else {'COMPLET': encoder_4k(f'{OUT}/{EID}_{SUFFIXE}_COMPLET.mp4'),
+                               'ETAL': encoder_4k(f'{OUT}/{EID}_{SUFFIXE}_ETALONNAGE_SEUL.mp4')}
+if not STILLS_ONLY and VIDEO_MASQUE: enc['MASK'] = encoder_1080(f'{OUT}/{EID}_MASQUE.mp4')
+qa = csv.writer(open(f'{OUT}/qc_artistes.csv', 'w', newline='')); qa.writerow(['image', 'plan', 'famille', 'px_opaques', 'ecart_max_vs_source', 'reference'])
 CNAMES = ['fumee', 'rayons', 'contre_jour', 'particules', 'halos', 'halation', 'anamorphique']
 qe = csv.writer(open(f'{OUT}/qc_effets.csv', 'w', newline='')); qe.writerow(['image', 'famille', 'confiance', 'chroma_k', 'effet_moyen', 'transition'] + CNAMES + ['flash_montage', 'gain_effets'])
 cam = Cam(); parts = None; a_prev = None; curp = None; conf_s = 1.0; fxg = 1.0; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None; cam_prev_off = np.zeros(2, np.float32); t0 = time.time()
 for n in range(NF):
     i = F0 + n
     S16 = read(dec_src); Dl = {l: read(p) for l, p in dec.items()}
-    if S16 is None or any(v is None for v in Dl.values()): print('fin de flux', n); break
+    SL16 = read(dec_subj) if dec_subj is not None else None
+    if S16 is None or any(v is None for v in Dl.values()) or (dec_subj is not None and SL16 is None): print('fin de flux', n); break
     k = frame_plan[i]; p = plans[k]; fam = p['famille']; lf = lut_family(k); P = FAMS[lf]
+    if str(p['a']) in PLAN_OV: P = dict(P, **PLAN_OV[str(p['a'])])          # V5.1 : reglages propres au plan
     t = (i - p['a']) / FPS
     if k != curp:
-        curp = k; cam.reset(); parts = Particles(int(300 * max(P['particules'], 0.01))); a_prev = None; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None
+        curp = k; cam.reset(); parts = Particles(int(P.get('particules_n', 300) * max(P['particules'], 0.01))); a_prev = None; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None
         cam_prev_off = np.zeros(2, np.float32)
     SRCf = S16.astype(np.float32) / 65535; D = Dl[P['lut']].astype(np.float32) / 65535
     a = cv2.imread(f'{MATTE}/alpha_{i:05d}.png', 0).astype(np.float32) / 255
@@ -294,11 +310,19 @@ for n in range(NF):
         g = luma(img)[..., None]
         return g + kc * (img - g) + (1 - kc) * SRCc
 
-    ETAL = am * SRCf + (1 - am) * chroma_src_mix(D)      # D reste brut pour les effets (melange une seule fois)
+    # ARTISTES : mode 'source' = pixels source exacts ; mode 'harmonise' (V5.1) = meme LUT globale tres legere
+    # pour chaque pixel (aucune retouche locale), dosee par 'force', chroma N&B identique a la source.
+    if SL16 is not None:
+        SUBJ = SRCf + float(ART.get('force', 1.0)) * (SL16.astype(np.float32) / 65535 - SRCf)
+        SUBJ = chroma_src_mix(SUBJ)
+    else:
+        SUBJ = SRCf
+    ETAL = am * SUBJ + (1 - am) * chroma_src_mix(D)      # D reste brut pour les effets (melange une seule fois)
     COMP = {}
     def _acc(name, before):
         COMP[name] = COMP.get(name, 0.0) + float(np.abs(DC - before).mean())
     DC = D.copy(); efx = fam not in NOFX and any(P[x] > 0 for x in ('fumee', 'particules', 'halos', 'rayons'))
+    if (p['b'] - p['a']) <= DUREE_MIN_FX: efx = False   # V5.1 : inserts de 1-2 images -> aucun effet procedural
     # FLASH DU MONTAGE : image nettement plus claire que la mediane de son plan (salve surexposee du
     # monteur) -> effets suspendus (fondu rapide) pour ne pas pulser avec le flash ni s'y superposer.
     ylum = float(luma(cv2.resize(SRCf, (160, 90), interpolation=cv2.INTER_AREA)).mean()) * 255
@@ -321,7 +345,11 @@ for n in range(NF):
         near_src = np.clip(blur(key, 60) * 3, 0, 1)
         dens = None
         if P['fumee'] > 0:
-            dens = smoke(i / FPS, camoff, P['fumee'] * conf_s) * (0.35 + 0.65 * far)
+            if P.get('fumee_profondeur') == 'loin':
+                # V5.1 : brume RESERVEE au lointain (decor proche net, fond qui recule = profondeur lisible)
+                dens = smoke(i / FPS, camoff, P['fumee'] * conf_s) * smoothstep(0.30, 0.85, far)
+            else:
+                dens = smoke(i / FPS, camoff, P['fumee'] * conf_s) * (0.35 + 0.65 * far)
             col = np.array(P['fumee_couleur'], np.float32)[None, None, :] * (1 - near_src[..., None] * P['ambre_sources']) \
                 + np.array([0.95, 0.55, 0.22], np.float32) * near_src[..., None] * P['ambre_sources']
             dm = dens[..., None]
@@ -341,7 +369,7 @@ for n in range(NF):
                     k2 = 1 + int(np.argmax(st2[1:, cv2.CC_STAT_AREA])); subj = np.array([st2[k2, 0] + st2[k2, 2] / 2, st2[k2, 1] + 0.28 * st2[k2, 3]], np.float32)
             if src_mode is None:
                 if lamps: src_mode = 'lampe'; bl_prev = lamps[int(np.argmax(areas))]
-                elif subj is not None and (i - p['a']) >= 8: src_mode = 'sujet'; bl_prev = subj
+                elif subj is not None and (i - p['a']) >= 8 and P.get('rayons_source', 'toutes') != 'lampe': src_mode = 'sujet'; bl_prev = subj
                 if src_mode is not None and (i - p['a']) <= 2: presence = 1.0   # source visible des la coupe
             seen = False
             if src_mode == 'lampe' and lamps and bl_prev is not None:
@@ -377,39 +405,54 @@ for n in range(NF):
                 _b = DC; DC = DC + (fall * P['contre_jour_force'] * conf_s * (0.3 + 0.7 * (1 - LD)))[..., None] * BL[P['contre_jour']]; _acc('contre_jour', _b)
         if P['particules'] > 0:
             plight = light if rays is None else np.clip(light + 1.5 * rays, 0, 1)
-            pl = parts.render(t, camoff, plight, disp) * 0.85 * P['particules'] * conf_s
+            jmap = None
+            if P.get('particules_justifiees'):
+                jmap = np.clip(near_src + (0 if rays is None else 2.0 * rays), 0, 1)
+            pl = parts.render(t, camoff, plight, disp, twinkle=P.get('particules_scintillement', True),
+                              jmap=jmap, jseuil=P.get('particules_seuil_source', 0.25)) * 0.85 * P['particules'] * conf_s
             pcol = 0.55 * np.array([1.0, 0.82, 0.62], np.float32) + 0.45 * np.clip(blur(D, 30) * 2.5, 0, 1)
             _b = DC; DC = DC + pl[..., None] * pcol; _acc('particules', _b)
         if P['halos'] > 0 or P['halation'] > 0 or P['anamorphique'] > 0:
-            kcol = D * key[..., None]
+            keyf = key * smoothstep(0.45, 0.75, key) if P.get('sources_persistantes') else key   # V5.1 : sources stables seulement
+            if P.get('sources_marge_bord', 0) > 0:
+                # V5.1 : une source en lisiere du cadre (qui entre / sort pendant un mouvement de camera) ne
+                # declenche pas de halo ni de flare : sinon l'effet 'pulse' en quelques images (extrait 1, 4184-4191)
+                mb = P['sources_marge_bord']
+                edge = smoothstep(0.0, mb * W, np.minimum(xx, W - 1 - xx)) * smoothstep(0.0, mb * H, np.minimum(yy, H - 1 - yy))
+                keyf = keyf * edge
+            kcol = D * keyf[..., None]
             if P['halos'] > 0:
                 _b = DC; DC = DC + (0.55 * blur(kcol, 8, 2) + 0.40 * blur(kcol, 24) + 0.30 * blur(kcol, 64)) * 0.7 * P['halos']; _acc('halos', _b)
             if P['halation'] > 0:
                 _b = DC; DC = DC + blur(luma(kcol), 12, 2)[..., None] * np.array([1.0, 0.42, 0.22], np.float32) * 0.45 * P['halation']; _acc('halation', _b)
             if P['anamorphique'] > 0:
-                k2 = key * smoothstep(0.15, 0.30, LD - blur(LD, 40, 2))
+                k2 = keyf * smoothstep(0.15, 0.30, LD - blur(LD, 40, 2))
                 st_ = streak(luma(D) * k2, 110)
                 _b = DC; DC = DC + st_[..., None] * np.array([1.0, 0.50, 0.30], np.float32) * 1.6 * P['anamorphique']; _acc('anamorphique', _b)
     if fxg < 0.999: DC = D + fxg * (DC - D)
     e, side = trans_env(i / FPS)
+    if TR_JOUR_EXCLU and lf in ('A_jour_cite', 'OUTRO_fondu'): e = 0.0
     if e > 0.01:
         gx = (1 - xx / W) if side == 0 else (xx / W)
         band = np.exp(-((yy - H * 0.45) / (H * 0.18)) ** 2)
         DC = DC + ((gx ** 2.0) * (0.35 + 0.65 * band) * e * cfg['transitions']['force'])[..., None] * np.array([1.0, 0.45, 0.20], np.float32)
     DC = chroma_src_mix(DC)                            # effets colores neutralises pendant le N&B
-    OUTF = am * SRCf + (1 - am) * DC
+    OUTF = am * SUBJ + (1 - am) * DC
     O16, E16 = to16(OUTF), to16(ETAL)
     opq = a >= 1.0
-    dmax = int(np.abs(O16.astype(np.int32) - S16.astype(np.int32))[opq].max()) if opq.any() else 0
-    dmax_e = int(np.abs(E16.astype(np.int32) - S16.astype(np.int32))[opq].max()) if opq.any() else 0
-    qa.writerow([i, p['plan'], fam, int(opq.sum()), max(dmax, dmax_e)])
+    # reference des artistes : la source (mode 'source') ou la source passee par la LUT globale (mode
+    # 'harmonise'). Ecart 0 = aucune retouche locale ni aucun effet sur les pixels opaques des artistes.
+    REF16 = S16 if SL16 is None else to16(SUBJ)
+    dmax = int(np.abs(O16.astype(np.int32) - REF16.astype(np.int32))[opq].max()) if opq.any() else 0
+    dmax_e = int(np.abs(E16.astype(np.int32) - REF16.astype(np.int32))[opq].max()) if opq.any() else 0
+    qa.writerow([i, p['plan'], fam, int(opq.sum()), max(dmax, dmax_e), 'source' if SL16 is None else 'source+LUT_globale'])
     qe.writerow([i, fam, round(conf_s, 3), round(kc, 3), round(float(np.abs(OUTF - ETAL).mean()), 5), round(e, 3)] + [round(COMP.get(c, 0.0), 5) for c in CNAMES] + [int(flash), round(fxg, 3)])
     if not STILLS_ONLY:
         enc['COMPLET'].stdin.write(O16.tobytes()); enc['ETAL'].stdin.write(E16.tobytes())
         ov = (np.clip(SRCf[..., ::-1], 0, 1) * 255).astype(np.uint8)
         tint = ov.copy(); tint[..., 1] = np.clip(tint[..., 1].astype(np.int32) + 90, 0, 255).astype(np.uint8)
         ovm = (ov * (1 - am * 0.55) + tint * am * 0.55).astype(np.uint8)
-        enc['MASK'].stdin.write(ovm.tobytes())
+        if 'MASK' in enc: enc['MASK'].stdin.write(ovm.tobytes())
     if n % STILL_EVERY == 0 or n == NF // 2:
         for tag, im in (('SRC', SRCf), ('ETAL', ETAL), ('V5', OUTF)):
             cv2.imwrite(f'{OUT}/stills/{tag}_{i:05d}.png', (np.clip(im[..., ::-1], 0, 1) * 65535).astype(np.uint16))
