@@ -1,0 +1,10 @@
+{
+  "_doc": "Extraits de validation V5 (etape 7). Bornes en secondes, alignees sur des coupes validees (data/v5/plans.csv).",
+  "extraits": [
+    {"id": "1_nuit_rouge",       "debut_s": 81.58,  "fin_s": 88.50,  "but": "scene rouge de nuit, salves de montage, section forte du morceau"},
+    {"id": "2_urbain_jour",      "debut_s": 9.84,   "fin_s": 15.84,  "but": "cite de jour, longues prises, base A"},
+    {"id": "3_atmospherique",    "debut_s": 114.14, "fin_s": 120.74, "but": "rideau metallique -> rouge -> nuit exterieure (lampadaires) : profondeur, fumee, volumetrie"},
+    {"id": "4_noir_et_blanc",    "debut_s": 72.02,  "fin_s": 78.74,  "but": "plan couleur -> passage N&B (75,62-76,56 s) -> scene rouge"},
+    {"id": "5_mouvement_rapide", "debut_s": 44.48,  "fin_s": 49.88,  "but": "montage alterne toutes les 2 images (46,84-47,12 s), mouvements de camera, stabilite des effets"}
+  ]
+}

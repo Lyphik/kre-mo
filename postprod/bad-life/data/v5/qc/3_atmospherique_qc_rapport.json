@@ -1,0 +1,14 @@
+{
+ "extrait": "3_atmospherique",
+ "debut_s": 114.14,
+ "fin_s": 120.74,
+ "format_V5_COMPLET": "3840x2160 1:1 50/1 330 img hevc Main 10 bt709/tv 31.6 Mb/s -> OK",
+ "format_V5_ETALONNAGE_SEUL": "3840x2160 1:1 50/1 330 img hevc Main 10 bt709/tv 31.7 Mb/s -> OK",
+ "artistes": "330 images, 570473 px opaques/image en moyenne, ecart max vs source = 0 -> OK",
+ "images_source_vs_sortie": "330 / 330",
+ "sync_image": "47 images testees, 0 meilleure correlation hors decalage 0 -> OK",
+ "sync_audio": "decalage audio mesure = 0.00 ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> OK",
+ "scintillement": "ecart max a la tendance (pic / saut) = 4.3 % du niveau d'effet du plan (image 5808) ; variation progressive max = 7.1 % (image 5811) -> OK",
+ "transitions": "0 images de pic de transition ; 7 images de flash du montage (effets suspendus)",
+ "VERDICT": "CONFORME"
+}

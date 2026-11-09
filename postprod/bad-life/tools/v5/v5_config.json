@@ -1,0 +1,107 @@
+{
+ "_doc": "Parametres V5 par famille de plans (data/v5/plans.csv). Intensites 0 = absent. 'lut' = LUT du DECOR ; les artistes sont toujours recomposes depuis la source.",
+ "familles": {
+  "B_nuit_rouge": {
+   "lut": "v5_nuit",
+   "fumee": 0.8,
+   "fumee_couleur": [
+    0.8,
+    0.07,
+    0.05
+   ],
+   "ambre_sources": 0.6,
+   "particules": 1.0,
+   "halos": 1.0,
+   "halation": 1.0,
+   "anamorphique": 0.8,
+   "rayons": 1.0,
+   "contre_jour": "rouge",
+   "contre_jour_force": 0.18
+  },
+  "D_nuit_exterieure": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.6,
+   "fumee_couleur": [
+    0.62,
+    0.42,
+    0.26
+   ],
+   "ambre_sources": 0.8,
+   "particules": 0.6,
+   "halos": 1.0,
+   "halation": 0.7,
+   "anamorphique": 1.0,
+   "rayons": 0.8,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  },
+  "C_rideau_metallique": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.35,
+   "fumee_couleur": [
+    0.7,
+    0.4,
+    0.2
+   ],
+   "ambre_sources": 0.6,
+   "particules": 0.45,
+   "halos": 0.6,
+   "halation": 0.5,
+   "anamorphique": 0.4,
+   "rayons": 0.3,
+   "contre_jour": "ambre",
+   "contre_jour_force": 0.09
+  },
+  "A_jour_cite": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  },
+  "OUTRO_fondu": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  }
+ },
+ "sans_effet": [
+  "X_effet_montage",
+  "NB"
+ ],
+ "confiance_masque": {
+  "_doc": "Reduction des effets si detourage incertain (data qualite.csv) : facteur = clip(1 - (instabilite - i0)/di) * clip(1 - (bord - b0)/db), borne basse 'min', lisse dans le temps.",
+  "i0": 0.03,
+  "di": 0.1,
+  "b0": 0.3,
+  "db": 0.6,
+  "min": 0.25
+ },
+ "transitions": {
+  "_doc": "Transition lumineuse entre deux PLANS REELS (>= 0,3 s, hors effets de montage) qui CHANGENT D'AMBIANCE, si : (1) impact musical a <= 80 ms ET section 'forte' ou frontiere de section a <= 0,3 s ; ou (2) kick/snare a <= 40 ms dans une section 'forte'.",
+  "tolerance_s": 0.08,
+  "force": 0.6
+ }
+}

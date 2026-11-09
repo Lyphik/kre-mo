@@ -1,0 +1,15 @@
+{
+ "extrait": "4_noir_et_blanc",
+ "debut_s": 72.02,
+ "fin_s": 78.74,
+ "format_V5_COMPLET": "3840x2160 1:1 50/1 336 img hevc Main 10 bt709/tv 34.5 Mb/s -> OK",
+ "format_V5_ETALONNAGE_SEUL": "3840x2160 1:1 50/1 336 img hevc Main 10 bt709/tv 34.3 Mb/s -> OK",
+ "artistes": "336 images, 815128 px opaques/image en moyenne, ecart max vs source = 0 -> OK",
+ "images_source_vs_sortie": "336 / 336",
+ "sync_image": "48 images testees, 0 meilleure correlation hors decalage 0 -> OK",
+ "sync_audio": "decalage audio mesure = 0.00 ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> OK",
+ "scintillement": "ecart max a la tendance (pic / saut) = 3.6 % du niveau d'effet du plan (image 3894) ; variation progressive max = 9.0 % (image 3896) -> OK",
+ "transitions": "7 images de pic de transition ; 9 images de flash du montage (effets suspendus)",
+ "noir_et_blanc": "75.62-76.56 s : U/V sortie +0.77/-1.71 vs temoin +0.76/-1.72 (ecart max 0.01) ; chroma max brute 3.03 -> OK",
+ "VERDICT": "CONFORME"
+}

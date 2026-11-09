@@ -1,0 +1,14 @@
+{
+ "extrait": "1_nuit_rouge",
+ "debut_s": 81.58,
+ "fin_s": 88.5,
+ "format_V5_COMPLET": "3840x2160 1:1 50/1 346 img hevc Main 10 bt709/tv 29.2 Mb/s -> OK",
+ "format_V5_ETALONNAGE_SEUL": "3840x2160 1:1 50/1 346 img hevc Main 10 bt709/tv 29.3 Mb/s -> OK",
+ "artistes": "346 images, 658788 px opaques/image en moyenne, ecart max vs source = 0 -> OK",
+ "images_source_vs_sortie": "346 / 346",
+ "sync_image": "49 images testees, 0 meilleure correlation hors decalage 0 -> OK",
+ "sync_audio": "decalage audio mesure = 0.00 ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> OK",
+ "scintillement": "ecart max a la tendance (pic / saut) = 8.2 % du niveau d'effet du plan (image 4189) ; variation progressive max = 23.2 % (image 4191) -> OK",
+ "transitions": "0 images de pic de transition ; 0 images de flash du montage (effets suspendus)",
+ "VERDICT": "CONFORME"
+}

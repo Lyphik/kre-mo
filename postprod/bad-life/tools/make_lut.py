@@ -118,6 +118,23 @@ PRESETS['v4_sujets'] = dict(PRESETS['v3'],
     sat_global=1.22, vibrance=0.40, red_gain=0.50, red_width=16,
     green_rot=0, shadow_amt=0.0, high_amt=0.008,
 )
+# --- V5 : LUT du DECOR uniquement (les artistes sont recomposes depuis la source, sans LUT) ---
+# v5_nuit : scenes nocturnes rouges (base C). Rouges intenses non fluo (gamut compresse), noirs profonds
+#           detailles, cyan/petrole dans les ombres froides, ambre maitrise dans les hautes lumieres.
+PRESETS['v5_nuit'] = dict(PRESETS['v4_decor'],
+    curve_y=[0.0, 0.003, 0.021, 0.088, 0.188, 0.455, 0.748, 0.928, 0.985],
+    sat_global=1.36, red_gain=0.78, red_width=16, shadow_amt=0.040, high_amt=0.020, high_start=0.50,
+)
+# v5_nuit_ambre : rideau metallique / nuit exterieure eclairee (lampadaires, lumiere chaude) :
+#                 meme base, rouge moins pousse, ambre plus present.
+PRESETS['v5_nuit_ambre'] = dict(PRESETS['v5_nuit'], red_gain=0.50, high_amt=0.026, high_start=0.45, shadow_amt=0.034)
+# v5_jour : cite de jour (base A). Contraste naturel, blancs maitrises (epaule plus douce), couleurs
+#           realistes, detail dans les ombres, AUCUNE dominante rouge, cyan et ambre tres legers.
+PRESETS['v5_jour'] = dict(PRESETS['v3'],
+    curve_x=[0.0, 0.035, 0.06, 0.10, 0.20, 0.45, 0.70, 0.90, 1.0],
+    curve_y=[0.0, 0.008, 0.032, 0.097, 0.200, 0.452, 0.715, 0.895, 0.970],
+    sat_global=1.20, vibrance=0.45, red_gain=0.25, green_rot=8, shadow_amt=0.014, high_amt=0.006,
+)
 P = PRESETS['v3']
 
 

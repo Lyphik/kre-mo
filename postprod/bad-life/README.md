@@ -12,8 +12,11 @@ d'analyse et la documentation le sont.
 | 2. Diagnostic | ✅ Fait — [`docs/03-diagnostic.md`](docs/03-diagnostic.md) |
 | 3. Copie de sauvegarde de l'original | ✅ Fait — copie en lecture seule, SHA-256 vérifié (voir doc 02) |
 | 4. Test représentatif 10–15 s | ✅ Fait — 39,36 → 52,34 s (12,98 s), 4K, look v3, contrôlé (doc 04 §4.5) |
-| 5. Validation colorimétrie + effets | 🔁 V3 commentée → **corrections V4** : 3 tests comparatifs A / B / C ([`docs/06-corrections-v4.md`](docs/06-corrections-v4.md)) — ⏳ en attente de validation |
-| 6–9. Plan par plan, harmonisation, QC, master 4K | 🔒 Bloqué par l'étape 5 — voir [`docs/05-faisabilite-et-plan.md`](docs/05-faisabilite-et-plan.md) |
+| 5. Validation colorimétrie + effets | 🔁 V3 → V4 (tests A / B / C) → **V5 définitive** ([`docs/07`](docs/07-cahier-des-charges-v5.md)) |
+| **V5 — étapes 1 à 3** (sécurisation, analyse complète, masques) | ✅ Fait — [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md), [`data/v5/`](data/v5/) |
+| **V5 — étapes 4 à 6** (étalonnage par famille, effets, contrôle) | ✅ Fait sur 5 extraits — [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) |
+| **V5 — étape 7** (validation des 5 extraits) | ⏳ **En attente de validation** |
+| V5 — étape 8 (master 4K) | 🔒 Après validation uniquement |
 
 ## Documentation
 
@@ -23,6 +26,9 @@ d'analyse et la documentation le sont.
 4. [`docs/04-look-et-controle-qualite.md`](docs/04-look-et-controle-qualite.md) — conception du look (v1 → v3), mesures de fidélité des tons chair, effets écartés.
 5. [`docs/05-faisabilite-et-plan.md`](docs/05-faisabilite-et-plan.md) — ce qui est réalisable avec quels outils, décisions attendues, plan des étapes 6 à 9.
 6. [`docs/06-corrections-v4.md`](docs/06-corrections-v4.md) — corrections V4 : masque des artistes, tests A (étalonnage), B (+ atmosphère), C (+ lumière), contrôle qualité.
+7. [`docs/07-cahier-des-charges-v5.md`](docs/07-cahier-des-charges-v5.md) — cahier des charges V5 définitif (référence).
+8. [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md) — V5 : sécurisation, coupes refaites et validées, plans réels, ambiances, N&B, musique, masques.
+9. [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) — V5 : étalonnage C hybride, effets, 5 extraits, rapport de contrôle qualité, décisions attendues.
 
 ## Arborescence
 
@@ -32,13 +38,18 @@ postprod/bad-life/
 ├── docs/                  documentation (01 → 05)
 ├── data/
 │   ├── families.json      classification des plans par famille de lumière (éditable)
-│   └── shots.csv          table des 130 segments détectés (généré, PROVISOIRE : coupes manquées)
+│   ├── shots.csv          V1–V4 (OBSOLÈTE : sous-segmentation) — remplacé par data/v5/plans.csv
+│   └── v5/                plans.csv (204 segments validés), nb_images.json, musique.json,
+│                          cuts_validation.json, familles_overrides.json, masques_qualite_par_plan.csv
 ├── luts/
 │   ├── badlife_look_v1.cube   historique — rejeté (peaux foncées assombries/bleuies)
 │   ├── badlife_look_v2.cube   historique — rejeté (peaux quasi neutres bleuies)
 │   ├── badlife_look_v3.cube   look V3 (remplacé par la paire V4)
 │   ├── badlife_look_v4_decor.cube   V4 — appliquée hors personnes
-│   └── badlife_look_v4_sujets.cube  V4 — appliquée sur les personnes
+│   ├── badlife_look_v4_sujets.cube  V4 — appliquée sur les personnes
+│   ├── badlife_look_v5_nuit.cube        V5 — décor des scènes nocturnes rouges
+│   ├── badlife_look_v5_nuit_ambre.cube  V5 — décor rideau métallique / nuit extérieure
+│   └── badlife_look_v5_jour.cube        V5 — décor des scènes de jour
 └── tools/
     ├── analyze.sh         étape 1 : détection des coupes + statistiques signal
     ├── shots.py           agrégation des statistiques par plan
@@ -47,12 +58,23 @@ postprod/bad-life/
     ├── skin_probe.py      mesure de dérive des tons chair (source vs étalonné)
     ├── render.sh          rendu : LUT + N&B préservé + vignettage + upscale 4K + export HEVC
     ├── compare.sh         vidéo de validation AVANT / APRÈS (1080p)
-    └── v4/
-        ├── test_segment.json  plans de l'extrait, gains d'exposition, effets par plan
-        ├── matte.py           détourage des personnes (Robust Video Matting, ONNX)
-        ├── beats.py           tempo et attaques de la musique (transitions)
-        ├── composite.py       rendu simultané A / B / C, compositing derrière les artistes, QC
-        └── compare4.sh        comparatif 4 vues SOURCE | A | B | C
+    ├── v4/
+    │   ├── test_segment.json  plans de l'extrait, gains d'exposition, effets par plan
+    │   ├── matte.py           détourage des personnes (Robust Video Matting, ONNX)
+    │   ├── beats.py           tempo et attaques de la musique (transitions)
+    │   ├── composite.py       rendu simultané A / B / C, compositing derrière les artistes, QC
+    │   └── compare4.sh        comparatif 4 vues SOURCE | A | B | C
+    └── v5/
+        ├── detect_cuts.py     détection robuste des coupes (couleur, contours, normalisation locale, flashs)
+        ├── build_shots.py     table des plans, ambiances, passages N&B
+        ├── music.py           tempo, kicks, snares, basses, sections, impacts (+ frise)
+        ├── matte_full.py      détourage du clip entier + fiabilité par image
+        ├── depth.py           profondeur du décor (Depth Anything V2 Small)
+        ├── composite_v5.py    compositeur V5 (artistes = source, décor étalonné + effets)
+        ├── qc_extract.py      contrôle qualité automatique d'un extrait
+        ├── compare_v5.sh      comparatifs 4 vues + compilation
+        ├── extracts.json      les 5 extraits de validation
+        └── v5_config.json     réglages par famille (LUT, effets, confiance, transitions)
 ```
 
 ## Reproduire

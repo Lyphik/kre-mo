@@ -1,0 +1,14 @@
+{
+ "extrait": "5_mouvement_rapide",
+ "debut_s": 44.48,
+ "fin_s": 49.88,
+ "format_V5_COMPLET": "3840x2160 1:1 50/1 270 img hevc Main 10 bt709/tv 29.8 Mb/s -> OK",
+ "format_V5_ETALONNAGE_SEUL": "3840x2160 1:1 50/1 270 img hevc Main 10 bt709/tv 30.2 Mb/s -> OK",
+ "artistes": "270 images, 612468 px opaques/image en moyenne, ecart max vs source = 0 -> OK",
+ "images_source_vs_sortie": "270 / 270",
+ "sync_image": "38 images testees, 0 meilleure correlation hors decalage 0 -> OK",
+ "sync_audio": "decalage audio mesure = 0.00 ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> OK",
+ "scintillement": "ecart max a la tendance (pic / saut) = 4.1 % du niveau d'effet du plan (image 2391) ; variation progressive max = 11.2 % (image 2390) -> OK",
+ "transitions": "0 images de pic de transition ; 0 images de flash du montage (effets suspendus)",
+ "VERDICT": "CONFORME"
+}

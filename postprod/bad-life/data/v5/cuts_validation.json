@@ -1,0 +1,100 @@
+{
+ "_doc": "Validation VISUELLE des candidats de tools/v5/detect_cuts.py (planches avant/apres de chaque evenement, 2026-11-09). Images = indices a 50 i/s depuis le debut du clip.",
+ "rejetes": {
+  "3486": "E53 69,72 s : pulsation lumineuse dans le meme plan (effet de montage), pas une coupe",
+  "8543": "E137 170,86 s : bruit dans le noir du fondu de fin",
+  "8569": "E138 171,38 s : bruit dans le noir du fondu de fin",
+  "8589": "E139 171,78 s : bruit dans le noir du fondu de fin",
+  "8610": "E140 172,20 s : bruit dans le noir du fondu de fin",
+  "4917": "98,34 s : pulsation lumineuse verte dans le meme plan (meme cadrage), pas une coupe (revue des coupes 'defusionnees')"
+ },
+ "effets_de_montage": {
+  "_doc": "Zones de transition du montage (file flou, flash blanc, glitch, pulsation) : aucun effet ajoute, etalonnage seul.",
+  "zones_s": [
+   [
+    27.56,
+    28.96
+   ],
+   [
+    56.9,
+    57.0
+   ],
+   [
+    62.2,
+    62.7
+   ],
+   [
+    65.96,
+    67.2
+   ],
+   [
+    69.36,
+    69.6
+   ],
+   [
+    69.66,
+    69.76
+   ],
+   [
+    72.0,
+    72.06
+   ],
+   [
+    74.76,
+    75.06
+   ],
+   [
+    85.5,
+    85.76
+   ],
+   [
+    86.46,
+    86.56
+   ],
+   [
+    93.04,
+    93.32
+   ],
+   [
+    95.48,
+    95.62
+   ],
+   [
+    100.6,
+    100.86
+   ],
+   [
+    104.38,
+    105.8
+   ],
+   [
+    118.6,
+    118.9
+   ],
+   [
+    120.1,
+    120.44
+   ],
+   [
+    123.82,
+    124.72
+   ],
+   [
+    142.78,
+    143.92
+   ],
+   [
+    159.46,
+    159.86
+   ],
+   [
+    161.68,
+    162.06
+   ]
+  ]
+ },
+ "fondu_de_fin_s": [
+  161.7,
+  175.2
+ ]
+}

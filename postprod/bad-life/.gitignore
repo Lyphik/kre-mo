@@ -8,3 +8,6 @@
 analysis/
 out/
 renders/
+
+# Exception : illustrations de la documentation
+!docs/img/*.png

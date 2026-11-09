@@ -135,3 +135,12 @@ il ne s'agit pas d'un artefact ajouté.
 
 Avant le master, il faut aussi refaire la liste des coupes du clip entier (erratum doc 02), puis
 étendre la configuration plan par plan à tout le clip.
+
+## 6.9 Erratum (2026-11-09, découvert pendant la V5)
+
+En diagnostiquant un scintillement en V5, une **erreur de signe** a été trouvée dans le suivi de
+caméra appliqué à la fumée : dans les tests V4 (B et C), le motif de fumée se déplaçait **à l'opposé**
+du décor lors des mouvements de caméra, au lieu de le suivre. Convention vérifiée sur un cas
+synthétique : `cv2.phaseCorrelate` renvoie le déplacement du contenu. Les particules n'étaient pas
+concernées. Le défaut est corrigé dans `tools/v5/composite_v5.py` ; les fichiers V4 ne sont pas
+re-rendus, car ils sont remplacés par les tests V5.
