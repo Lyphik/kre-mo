@@ -11,3 +11,7 @@ renders/
 
 # Exception : illustrations de la documentation
 !docs/img/*.png
+
+# Cache Python
+__pycache__/
+*.pyc
