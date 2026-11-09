@@ -1,0 +1,32 @@
+{
+  "_doc": "Classification visuelle des plans (image mediane de chaque plan >= 0.5 s). A confirmer par le realisateur. Plans < 0.5 s = micro-plans / flashs de montage.",
+  "families": {
+    "A_cite_jour": "Cite, cage d'escalier exterieure, lumiere du jour couverte",
+    "B_scene_rouge": "Decor rouge 'BIENVENUE', nuit, tubes LED et projecteurs colores",
+    "C_rideau_metallique": "Devant le rideau metallique / grille, lumiere d'appoint",
+    "D_nuit_exterieure": "Exterieur nuit / crepuscule",
+    "BW": "Plan noir et blanc dans la source (intention presumee)",
+    "OUTRO": "Plan final assombri et desature au montage (intention presumee)"
+  },
+  "shots": {
+    "1": "A_cite_jour", "2": "A_cite_jour", "3": "A_cite_jour", "4": "A_cite_jour", "9": "A_cite_jour",
+    "10": "A_cite_jour", "24": "A_cite_jour", "25": "A_cite_jour", "27": "A_cite_jour", "28": "B_scene_rouge",
+    "29": "A_cite_jour", "30": "B_scene_rouge", "31": "A_cite_jour", "32": "C_rideau_metallique", "33": "B_scene_rouge",
+    "35": "D_nuit_exterieure", "37": "A_cite_jour", "38": "A_cite_jour", "39": "A_cite_jour", "50": "C_rideau_metallique",
+    "53": "B_scene_rouge", "56": "C_rideau_metallique", "60": "BW", "61": "B_scene_rouge", "72": "C_rideau_metallique",
+    "73": "B_scene_rouge", "75": "C_rideau_metallique", "76": "A_cite_jour", "77": "A_cite_jour", "79": "A_cite_jour",
+    "82": "B_scene_rouge", "84": "A_cite_jour", "85": "C_rideau_metallique", "91": "C_rideau_metallique", "102": "B_scene_rouge",
+    "103": "A_cite_jour", "104": "C_rideau_metallique", "105": "D_nuit_exterieure", "106": "B_scene_rouge", "107": "A_cite_jour",
+    "108": "A_cite_jour", "109": "C_rideau_metallique", "110": "B_scene_rouge", "111": "A_cite_jour", "112": "C_rideau_metallique",
+    "113": "A_cite_jour", "121": "A_cite_jour", "122": "C_rideau_metallique", "123": "B_scene_rouge", "124": "A_cite_jour",
+    "125": "D_nuit_exterieure", "126": "C_rideau_metallique", "129": "B_scene_rouge", "130": "OUTRO"
+  },
+  "notes": {
+    "1": "Titre incruste 'LYPHIK x JAHSIK - BAD LIFE' (or) : l'etalonnage modifiera aussi le titre (image deja aplatie).",
+    "2": "Titre incruste 'BAD LIFE'.",
+    "3": "Logo 'LBC' incruste.",
+    "60": "Saturation moyenne 2.9 : N&B. Conserver le N&B (hue=s=0 apres LUT).",
+    "125": "Saturation moyenne 1.0 sur le plan : quasi N&B ? A verifier.",
+    "130": "13.5 s, tres sombre et desature : fondu/outro volontaire presume. Ne pas 'corriger'."
+  }
+}

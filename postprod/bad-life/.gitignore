@@ -1,0 +1,10 @@
+# Médias et sorties de rendu : jamais versionnés
+*.mov
+*.mp4
+*.mxf
+*.png
+*.jpg
+*.wav
+analysis/
+out/
+renders/
