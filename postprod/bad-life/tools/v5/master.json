@@ -1,0 +1,11 @@
+{
+ "_doc": "Master : clip entier.",
+ "extraits": [
+  {
+   "id": "MASTER",
+   "debut_s": 0.0,
+   "fin_s": 175.2,
+   "but": "master complet V5.1"
+  }
+ ]
+}

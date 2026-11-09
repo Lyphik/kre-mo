@@ -41,6 +41,7 @@ DUREE_MIN_FX = int(cfg.get('effets_duree_min_images', 0))                       
 SUFFIXE = cfg.get('suffixe', 'V5')
 ART = cfg.get('artistes', {'mode': 'source'})                                       # 'source' ou 'harmonise'
 VIDEO_MASQUE = bool(cfg.get('video_masque', True))
+AUDIO_COPIE = bool(cfg.get('audio_copie', False)) and F0 == 0 and abs(NF / FPS - 175.2) < 0.03   # clip entier uniquement
 
 
 def lut_family(idx):
@@ -133,10 +134,16 @@ def encoder_4k(path):
     vf = ('format=gbrp16le,zscale=w=3840:h=2160:filter=lanczos,zscale=matrix=709:range=limited,'
           'format=yuv420p10le,setsar=1,setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709:range=tv')
     x265 = 'colorprim=bt709:transfer=bt709:colormatrix=bt709:range=limited:vbv-maxrate=80000:vbv-bufsize=160000:aq-mode=3:log-level=error'
+    # Master (clip entier + 'audio_copie') : flux audio ORIGINAL copie bit a bit, sans coupe ni reencodage.
+    # Extraits : un extrait ne peut pas etre coupe a l'echantillon pres en copie -> AAC 320 kb/s.
+    if AUDIO_COPIE:
+        ain = ['-i', SRC]; acod = ['-c:a', 'copy']
+    else:
+        ain = ['-ss', f'{F0 / FPS:.3f}', '-t', f'{NF / FPS:.3f}', '-i', SRC]; acod = ['-c:a', 'aac', '-b:a', '320k']
     return subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb48le', '-s', f'{W}x{H}', '-r', str(FPS),
-                             '-i', '-', '-ss', f'{F0 / FPS:.3f}', '-t', f'{NF / FPS:.3f}', '-i', SRC, '-map', '0:v', '-map', '1:a:0',
+                             '-i', '-'] + ain + ['-map', '0:v', '-map', '1:a:0',
                              '-vf', vf, '-c:v', 'libx265', '-preset', 'medium', '-crf', '16', '-profile:v', 'main10', '-tag:v', 'hvc1',
-                             '-x265-params', x265, '-c:a', 'aac', '-b:a', '320k', '-movflags', '+faststart', path], stdin=subprocess.PIPE)
+                             '-x265-params', x265] + acod + ['-movflags', '+faststart', path], stdin=subprocess.PIPE)
 
 
 def encoder_1080(path):

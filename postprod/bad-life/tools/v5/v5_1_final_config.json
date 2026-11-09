@@ -1,0 +1,346 @@
+{
+ "_doc": "V5.1 FINALE (master) : V5.1 validee (v5_1_config.json, inchangee) + arbitrages definitifs du 2026-11-09 : (1) couloir vert = etalonnage harmonise seul, sans brume ni VFX ; (2) particules : reduction actuelle conservee ; (3) contre-jour invente retire partout ; (4) artistes harmonises ; (5) 4 transitions a intensite reduite.",
+ "familles": {
+  "B_nuit_rouge": {
+   "lut": "v5_nuit",
+   "fumee": 0.35,
+   "fumee_couleur": [
+    0.8,
+    0.07,
+    0.05
+   ],
+   "ambre_sources": 0.4,
+   "particules": 1.0,
+   "halos": 0.45,
+   "halation": 0.35,
+   "anamorphique": 0.35,
+   "rayons": 0.35,
+   "contre_jour": "rouge",
+   "contre_jour_force": 0.0,
+   "fumee_profondeur": "loin",
+   "particules_n": 40,
+   "particules_justifiees": true,
+   "particules_seuil_source": 0.3,
+   "particules_scintillement": false,
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "D_nuit_exterieure": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.3,
+   "fumee_couleur": [
+    0.62,
+    0.42,
+    0.26
+   ],
+   "ambre_sources": 0.8,
+   "particules": 1.0,
+   "halos": 0.5,
+   "halation": 0.3,
+   "anamorphique": 0.4,
+   "rayons": 0.3,
+   "contre_jour": null,
+   "contre_jour_force": 0.0,
+   "fumee_profondeur": "loin",
+   "particules_n": 18,
+   "particules_justifiees": true,
+   "particules_seuil_source": 0.35,
+   "particules_scintillement": false,
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "C_rideau_metallique": {
+   "lut": "v5_nuit_ambre",
+   "fumee": 0.15,
+   "fumee_couleur": [
+    0.7,
+    0.4,
+    0.2
+   ],
+   "ambre_sources": 0.3,
+   "particules": 0.0,
+   "halos": 0.35,
+   "halation": 0.25,
+   "anamorphique": 0.15,
+   "rayons": 0.0,
+   "contre_jour": "ambre",
+   "contre_jour_force": 0.0,
+   "fumee_profondeur": "loin",
+   "sources_persistantes": true,
+   "rayons_source": "lampe",
+   "sources_marge_bord": 0.08
+  },
+  "A_jour_cite": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  },
+  "OUTRO_fondu": {
+   "lut": "v5_jour",
+   "fumee": 0.0,
+   "fumee_couleur": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "ambre_sources": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour": null,
+   "contre_jour_force": 0.0
+  }
+ },
+ "sans_effet": [
+  "X_effet_montage",
+  "NB"
+ ],
+ "confiance_masque": {
+  "_doc": "Reduction des effets si detourage incertain (data qualite.csv) : facteur = clip(1 - (instabilite - i0)/di) * clip(1 - (bord - b0)/db), borne basse 'min', lisse dans le temps.",
+  "i0": 0.03,
+  "di": 0.1,
+  "b0": 0.3,
+  "db": 0.6,
+  "min": 0.25
+ },
+ "transitions": {
+  "_doc": "Transition lumineuse entre deux PLANS REELS (>= 0,3 s, hors effets de montage) qui CHANGENT D'AMBIANCE, si : (1) impact musical a <= 80 ms ET section 'forte' ou frontiere de section a <= 0,3 s ; ou (2) kick/snare a <= 40 ms dans une section 'forte'.",
+  "tolerance_s": 0.08,
+  "force": 0.3,
+  "descente_s": 0.09,
+  "jour_exclu": true
+ },
+ "suffixe": "V5_1",
+ "video_masque": false,
+ "effets_duree_min_images": 2,
+ "plans": {
+  "_doc": "Reglages par plan (cle = image de debut). Couloir vert (decor du conteneur avec tubes LED verts, identifie visuellement sur 4 images par plan) : aucun effet, etalonnage harmonise seul. Conteneur rouge 5790/5793 (115,8-117,2 s) : reglages V5.1 conserves.",
+  "5790": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "115,80 s conteneur (micro)"
+  },
+  "5793": {
+   "particules": 0.0,
+   "fumee": 0.25,
+   "fumee_profondeur": "loin",
+   "ambre_sources": 0.2,
+   "rayons": 0.0,
+   "halos": 0.2,
+   "halation": 0.15,
+   "anamorphique": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "115,86-117,20 s conteneur rouge"
+  },
+  "5944": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "118.88-120.1 s couloir vert : etalonnage harmonise seul"
+  },
+  "6021": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "120.42-120.74 s couloir vert : etalonnage harmonise seul"
+  },
+  "1923": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "38.46-39.36 s couloir vert : etalonnage harmonise seul"
+  },
+  "2224": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "44.48-45.6 s couloir vert : etalonnage harmonise seul"
+  },
+  "3479": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "69.58-72.02 s couloir vert : etalonnage harmonise seul"
+  },
+  "3842": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "76.84-78.74 s couloir vert : etalonnage harmonise seul"
+  },
+  "4855": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "97.1-98.24 s couloir vert : etalonnage harmonise seul"
+  },
+  "5288": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "105.76-108.1 s couloir vert : etalonnage harmonise seul"
+  },
+  "6138": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "122.76-123.74 s couloir vert : etalonnage harmonise seul"
+  },
+  "6416": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "128.32-130.36 s couloir vert : etalonnage harmonise seul"
+  },
+  "2342": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "46.84-46.88 s couloir vert : etalonnage harmonise seul"
+  },
+  "2346": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "46.92-46.96 s couloir vert : etalonnage harmonise seul"
+  },
+  "2350": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "47.0-47.04 s couloir vert : etalonnage harmonise seul"
+  },
+  "2354": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "47.08-47.12 s couloir vert : etalonnage harmonise seul"
+  },
+  "4912": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "98.24-98.36 s couloir vert : etalonnage harmonise seul"
+  },
+  "4918": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "98.36-98.4 s couloir vert : etalonnage harmonise seul"
+  },
+  "4920": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "98.4-98.6 s couloir vert : etalonnage harmonise seul"
+  },
+  "6187": {
+   "fumee": 0.0,
+   "particules": 0.0,
+   "halos": 0.0,
+   "halation": 0.0,
+   "anamorphique": 0.0,
+   "rayons": 0.0,
+   "contre_jour_force": 0.0,
+   "_plan": "123.74-123.82 s couloir vert : etalonnage harmonise seul"
+  }
+ },
+ "artistes": {
+  "mode": "harmonise",
+  "lut": "v5_1_sujets",
+  "force": 1.0,
+  "_doc": "Choix fait apres comparaison strict / harmonise (doc 10)."
+ },
+ "audio_copie": true
+}
