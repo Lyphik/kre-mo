@@ -1,0 +1,18 @@
+{
+  "_doc": "Configuration du test V4. Images relatives au debut de l'extrait (50 i/s). Coupes VERIFIEES VISUELLEMENT (le detecteur a seuil 0.25 en manquait 5 sur cet extrait). exposure = gain d'affichage avant LUT (1.0 = neutre). Effets par plan : fumee/particules/contre-jour uniquement sur les decors de nuit.",
+  "source_start_s": 39.36,
+  "duration_s": 12.98,
+  "fps": 50,
+  "shots": [
+    {"plan": "28a", "f0": 0,   "f1": 62,  "famille": "C_rideau_metallique", "exposure": 1.00, "smoke": 0.0, "particles": 0.45, "backlight": "ambre", "halos": 0.6},
+    {"plan": "28b", "f0": 62,  "f1": 125, "famille": "B_scene_rouge",       "exposure": 1.00, "smoke": 1.0, "particles": 1.0,  "backlight": "rouge", "halos": 1.0},
+    {"plan": "28c", "f0": 125, "f1": 188, "famille": "B_scene_rouge",       "exposure": 1.00, "smoke": 1.0, "particles": 1.0,  "backlight": "rouge", "halos": 1.0},
+    {"plan": "29",  "f0": 188, "f1": 256, "famille": "A_cite_jour",         "exposure": 0.94, "smoke": 0.0, "particles": 0.0,  "backlight": null,    "halos": 0.0},
+    {"plan": "30a", "f0": 256, "f1": 312, "famille": "B_scene_rouge",       "exposure": 1.00, "smoke": 1.0, "particles": 1.0,  "backlight": "rouge", "halos": 1.0},
+    {"plan": "30b", "f0": 312, "f1": 374, "famille": "B_scene_rouge",       "exposure": 1.00, "smoke": 1.0, "particles": 1.0,  "backlight": "rouge", "halos": 1.0},
+    {"plan": "30c", "f0": 374, "f1": 439, "famille": "B_scene_rouge",       "exposure": 1.00, "smoke": 1.0, "particles": 1.0,  "backlight": "rouge", "halos": 1.0},
+    {"plan": "30d", "f0": 439, "f1": 526, "famille": "A_cite_jour",         "exposure": 1.00, "smoke": 0.0, "particles": 0.0,  "backlight": null,    "halos": 0.0},
+    {"plan": "31",  "f0": 526, "f1": 579, "famille": "A_cite_jour",         "exposure": 1.00, "smoke": 0.0, "particles": 0.0,  "backlight": null,    "halos": 0.0},
+    {"plan": "32",  "f0": 579, "f1": 649, "famille": "C_rideau_metallique", "exposure": 1.00, "smoke": 0.0, "particles": 0.45, "backlight": "ambre", "halos": 0.6}
+  ]
+}

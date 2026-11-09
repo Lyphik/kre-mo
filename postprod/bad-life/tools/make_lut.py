@@ -100,6 +100,24 @@ PRESETS['v3'] = dict(PRESETS['v2'],
     shadow_cool_only=True, shadow_amt=0.026,
     high_amt=0.014, high_start=0.55,
 )
+# --- V4 : deux LUT melangees par le matte des artistes (tools/v4/composite.py) ---
+# v4_decor : appliquee hors personnes. Contraste plus marque, noirs plus profonds (sans boucher :
+#            0.10 -> 0.090), rouges plus riches, cyan/petrole renforce dans les ombres froides.
+PRESETS['v4_decor'] = dict(PRESETS['v3'],
+    curve_x=[0.0, 0.035, 0.06, 0.10, 0.20, 0.45, 0.70, 0.90, 1.0],
+    curve_y=[0.0, 0.003, 0.022, 0.090, 0.190, 0.455, 0.745, 0.925, 0.985],
+    sat_global=1.34, red_gain=0.70, red_width=16,
+    shadow_amt=0.036, high_amt=0.016,
+)
+# v4_sujets : appliquee sur les personnes. Carnations et vetements proteges : pas de cyan, pas de
+#             rotation des verts (un maillot vert reste vert), saturation moderee, ambre tres leger.
+#             Noirs approfondis comme le decor, visages (0.10-0.25) conserves.
+PRESETS['v4_sujets'] = dict(PRESETS['v3'],
+    curve_x=[0.0, 0.035, 0.06, 0.10, 0.20, 0.45, 0.70, 0.90, 1.0],
+    curve_y=[0.0, 0.004, 0.026, 0.095, 0.200, 0.455, 0.725, 0.915, 0.985],
+    sat_global=1.22, vibrance=0.40, red_gain=0.50, red_width=16,
+    green_rot=0, shadow_amt=0.0, high_amt=0.008,
+)
 P = PRESETS['v3']
 
 

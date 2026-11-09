@@ -38,9 +38,17 @@ image par image, agrégées par segment (`tools/analyze.sh`, `tools/shots.py`).
 - **130 segments** détectés, dont **54 plans ≥ 0,5 s** et **76 micro-segments < 0,5 s**
   (7,0 s au total) : salves de strobe/flash du montage (27,6–28,9 s ; 66,0–67,1 s ;
   104,4–105,8 s ; 142,8–143,9 s), une image blanche pleine à 95,50 s et des coupes rapides.
-- Limite connue : un détecteur de scène peut produire de fausses coupes sur un mouvement rapide.
-  Les micro-segments n'ont pas été vérifiés un par un ; ils ne sont pas traités différemment du
-  plan qui les entoure, donc cette limite n'a pas d'impact sur l'étalonnage.
+- ⚠️ **Erratum (2026-11-09, V4)** : ce découpage **sous-segmente**. La vérification visuelle de
+  l'extrait de test 39,36–52,34 s a révélé **5 coupes manquées sur 9** (scores de scène entre 0,12
+  et 0,20, sous le seuil de 0,25) : 40,60 / 41,86 / 45,60 / 46,84 / 48,14 s. La version précédente
+  de ce document affirmait que la limite du détecteur était « sans impact sur l'étalonnage ». C'était
+  faux dès que les corrections et les effets se décident plan par plan (V4, doc 06 §6.5).
+- Un balayage à seuil bas (0,08–0,25, pic local) sur tout le clip donne **88 candidats**. Beaucoup
+  sont probablement des faux positifs : des scores réguliers d'environ 0,08 entourés d'images quasi
+  identiques évoquent des images dupliquées ou des ralentis (hypothèse non vérifiée).
+- **Conséquence** : `data/shots.csv` et le tableau des familles ci-dessous sont **provisoires**.
+  Avant l'étape 6, la liste des coupes du clip entier doit être refaite (détection à seuil bas,
+  puis validation visuelle de chaque candidat).
 
 Table complète : [`../data/shots.csv`](../data/shots.csv) (début/fin, luma moyenne, percentiles
 10/90, min/max, saturation moyenne, famille, notes).

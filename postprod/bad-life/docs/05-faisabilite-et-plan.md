@@ -51,6 +51,8 @@ mais il limite l'amplitude des corrections (risque de cassures dans les dégrad�
 
 ## 5.4 Plan des étapes 6 à 9 (après validation)
 
+0. **Préalable (ajouté en V4)** : refaire la liste des coupes du clip entier (détection à seuil
+   bas, puis validation visuelle de chaque candidat) ; recalculer `data/shots.csv` et les familles.
 1. **Étape 6 — Plan par plan** : table de corrections par plan (`data/grades.csv` : plan, correction
    d'exposition, réglage éventuel de la balance) à partir de `data/shots.csv`. Ces corrections
    s'appliquent avant la LUT, avec activation sur l'intervalle exact du plan, de sorte que les
