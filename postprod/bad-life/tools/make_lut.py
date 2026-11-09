@@ -145,6 +145,14 @@ PRESETS['v5_1_sujets'] = dict(PRESETS['v3'],
     sat_global=1.04, vibrance=0.06, sat_skin_max=1.01, red_gain=0.0, green_rot=0,
     shadow_amt=0.0, high_amt=0.0,
 )
+# --- V5.1 master : fondu de fin ---
+# v5_1_fondu : identique a v5_jour au-dessus de 0,20 ; NEUTRE en dessous (pas d'approfondissement des noirs),
+# pour que le fondu au noir garde exactement la courbe du montage (controle du master : la LUT jour faisait
+# atteindre le noir 0,48 s plus tot).
+PRESETS['v5_1_fondu'] = dict(PRESETS['v5_jour'],
+    curve_y=[0.0, 0.035, 0.06, 0.10, 0.200, 0.452, 0.715, 0.895, 0.970],
+    shadow_amt=0.0,
+)
 P = PRESETS['v3']
 
 

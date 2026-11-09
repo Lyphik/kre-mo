@@ -286,7 +286,7 @@ enc = {} if STILLS_ONLY else {'COMPLET': encoder_4k(f'{OUT}/{EID}_{SUFFIXE}_COMP
 if not STILLS_ONLY and VIDEO_MASQUE: enc['MASK'] = encoder_1080(f'{OUT}/{EID}_MASQUE.mp4')
 qa = csv.writer(open(f'{OUT}/qc_artistes.csv', 'w', newline='')); qa.writerow(['image', 'plan', 'famille', 'px_opaques', 'ecart_max_vs_source', 'reference'])
 CNAMES = ['fumee', 'rayons', 'contre_jour', 'particules', 'halos', 'halation', 'anamorphique']
-qe = csv.writer(open(f'{OUT}/qc_effets.csv', 'w', newline='')); qe.writerow(['image', 'famille', 'confiance', 'chroma_k', 'effet_moyen', 'transition'] + CNAMES + ['flash_montage', 'gain_effets'])
+qe = csv.writer(open(f'{OUT}/qc_effets.csv', 'w', newline='')); qe.writerow(['image', 'famille', 'confiance', 'chroma_k', 'effet_moyen', 'transition'] + CNAMES + ['flash_montage', 'gain_effets', 'luma_source', 'luma_sortie'])
 cam = Cam(); parts = None; a_prev = None; curp = None; conf_s = 1.0; fxg = 1.0; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None; cam_prev_off = np.zeros(2, np.float32); t0 = time.time()
 for n in range(NF):
     i = F0 + n
@@ -324,6 +324,7 @@ for n in range(NF):
         SUBJ = chroma_src_mix(SUBJ)
     else:
         SUBJ = SRCf
+    if P.get('artistes_mode') == 'source': SUBJ = SRCf     # master : fondu de fin, artistes = pixels source
     ETAL = am * SUBJ + (1 - am) * chroma_src_mix(D)      # D reste brut pour les effets (melange une seule fois)
     COMP = {}
     def _acc(name, before):
@@ -452,8 +453,9 @@ for n in range(NF):
     REF16 = S16 if SL16 is None else to16(SUBJ)
     dmax = int(np.abs(O16.astype(np.int32) - REF16.astype(np.int32))[opq].max()) if opq.any() else 0
     dmax_e = int(np.abs(E16.astype(np.int32) - REF16.astype(np.int32))[opq].max()) if opq.any() else 0
-    qa.writerow([i, p['plan'], fam, int(opq.sum()), max(dmax, dmax_e), 'source' if SL16 is None else 'source+LUT_globale'])
-    qe.writerow([i, fam, round(conf_s, 3), round(kc, 3), round(float(np.abs(OUTF - ETAL).mean()), 5), round(e, 3)] + [round(COMP.get(c, 0.0), 5) for c in CNAMES] + [int(flash), round(fxg, 3)])
+    qa.writerow([i, p['plan'], fam, int(opq.sum()), max(dmax, dmax_e), 'source' if (SL16 is None or P.get('artistes_mode') == 'source') else 'source+LUT_globale'])
+    qe.writerow([i, fam, round(conf_s, 3), round(kc, 3), round(float(np.abs(OUTF - ETAL).mean()), 5), round(e, 3)] + [round(COMP.get(c, 0.0), 5) for c in CNAMES] + [int(flash), round(fxg, 3),
+                round(ylum, 2), round(float(luma(cv2.resize(OUTF, (160, 90), interpolation=cv2.INTER_AREA)).mean()) * 255, 2)])
     if not STILLS_ONLY:
         enc['COMPLET'].stdin.write(O16.tobytes()); enc['ETAL'].stdin.write(E16.tobytes())
         ov = (np.clip(SRCf[..., ::-1], 0, 1) * 255).astype(np.uint8)

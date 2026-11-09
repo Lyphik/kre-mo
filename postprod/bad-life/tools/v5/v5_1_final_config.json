@@ -90,7 +90,7 @@
    "contre_jour_force": 0.0
   },
   "OUTRO_fondu": {
-   "lut": "v5_jour",
+   "lut": "v5_1_fondu",
    "fumee": 0.0,
    "fumee_couleur": [
     0.5,
@@ -104,7 +104,9 @@
    "anamorphique": 0.0,
    "rayons": 0.0,
    "contre_jour": null,
-   "contre_jour_force": 0.0
+   "contre_jour_force": 0.0,
+   "artistes_mode": "source",
+   "_doc": "Controle du master : la LUT jour + harmonisation des artistes ecrasaient la queue du fondu (noir atteint 0,48 s plus tot). Correction : noirs neutres et artistes = source sur le fondu seulement."
   }
  },
  "sans_effet": [
