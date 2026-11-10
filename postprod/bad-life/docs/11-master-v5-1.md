@@ -255,6 +255,14 @@ puis le contrôle a été relancé sur le master entier.
 | `BADLIFE_V5_1_MASTER_4K_ETALONNAGE_SEUL.mp4` | même master sans effets (étalonnage seul), référence et secours (653,3 Mo) | `df894828b26844dfd751261b67c858f7fa09021ab8b7f98297a08421113f86e2` |
 | `BADLIFE_V5_1_APERCU_1080p.mp4` | aperçu de visionnage, H.264 High 1080p 50 i/s CRF 20, issu du master COMPLET, audio original (138,7 Mo) | `c8c52959b1752a544ab057ebd30c64053464eeb6ce6de9691f69d04b2d9ab5cc` |
 
+Version de diffusion pour téléphone (`BADLIFE_V5_1_4K_IPHONE.mp4`, 377,8 Mo, SHA-256 `db2802764ef903b9b5c9c9e469b89300fa02e866275f9a45ac666736abd6fd92`) :
+l'utilisateur, qui n'avait qu'un iPhone, ne pouvait pas recoller les morceaux. Ce fichier unique, sous la
+limite de transfert, est réencodé depuis le master COMPLET : HEVC Main 10 4K 50 i/s, CRF 16, plafond
+21,5 Mb/s (moyenne 17,2 Mb/s). Il a 8760 images et 175,200 s, audio identique bit à bit à la source,
+départs vidéo et audio à 0. SSIM contre le master, une image sur 25 (351 images) : moyenne 0,9976,
+minimum 0,9952. Ce n'est **pas** le master (perte de compression faible, invisible à l'œil) ; c'est le
+fichier conseillé pour la mise en ligne sur YouTube depuis le téléphone.
+
 Transmission : les deux masters 4K dépassant la limite de transfert de 500 Mio, ils sont envoyés en deux
 morceaux (découpe binaire exacte, `.part1` / `.part2`) avec `LISEZMOI_REASSEMBLAGE.txt`. Le
 réassemblage a été vérifié : il redonne exactement les SHA-256 ci-dessus.
