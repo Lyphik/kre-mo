@@ -170,3 +170,95 @@ Le master est **re-rendu entièrement** (4 segments) avec cette correction. Les 
 précédents ne sont pas livrés.
 
 _Contrôles du master final : §11.6._
+
+## 11.6 Master final : contrôles et livraison
+
+Rendu : 4 segments (05:05 → 07:49 UTC), assemblés sans réencodage vidéo, piste audio de la source
+copiée. Contrôles exécutés sur les fichiers livrés eux-mêmes.
+
+### 11.6.1 Contrôles techniques
+
+| Contrôle | Outil | Résultat |
+|---|---|---|
+| Format (COMPLET et ÉTALONNAGE SEUL) | `qc_extract.py` | 3840×2160, SAR 1:1, 50 i/s, 8760 images, HEVC Main 10 `hvc1`, BT.709 plage TV, 29,7 Mb/s — **OK** |
+| Audio | `qc_master.py` | flux identique **bit à bit** à la source (SHA-256 des paquets `b567694f…bb1f4194`), y compris dans l'aperçu 1080p — **OK** |
+| Synchronisation (horodatage, image, audio) | `qc_master.py`, `qc_extract.py` | décalage vidéo − audio 0,000 s (source : 0,000 s) ; corrélation audio 0,00 ms ; échantillon image : SYNC_IMAGE — **OK** |
+| Durées | `qc_master.py` | vidéo et audio 175,200 s, 8760 images, comme la source — **OK** |
+| Montage, 8760 images | `qc_master.py` | 0 image mieux corrélée à une autre image source (fenêtre ±3) ; 329 images uniformes non décidables — **OK** |
+| Coupes | `qc_master.py` | 259 / 259 frontières validées, même saut source / master — **OK** |
+| Luminance par plan | `qc_luma.py` | 8319 images ; 4 au-dessus du seuil, toutes expliquées (réponse de la LUT fixe à un saut de lumière de la source, effets constants) ; 0 inexpliquée — **OK** |
+| Fondu de fin | `qc_luma.py` | 50 / 25 / 10 % atteints à 162,26 / 168,08 / 168,94 s, **identiques à la source** — **OK** |
+| N&B | `qc_extract.py` | U/V sortie = témoin à 0,07 près au maximum ; chroma brute max 3,07 (source) — **OK** |
+
+### 11.6.2 Contrôles des protections et des arbitrages
+
+| Contrôle | Résultat |
+|---|---|
+| Artistes : pixels opaques = source + LUT globale (source seule sur le fondu) | écart max **0** sur 8760 images (≈ 686 000 px opaques par image en moyenne) |
+| Contre-jour inventé | **0** sur 8760 images |
+| Couloir vert (18 plans, 750 images) | effet **0** sur les 710 images hors transitions |
+| Jour, N&B, effets de montage, fondu | effet **0** |
+| Transitions | 4 (72,02 / 76,84 / 88,51 / 148,82 s), 10 images de pic ; 62 images de flash de montage (effets suspendus) |
+| Halos sur images doublons (correctif §11.5.2) | 132 images doublons avec halos : variation max **0,7 %** (seuil 12 %) |
+| Scintillement | SCINT |
+| Comparaison avec le master précédent | tables artistes **identiques** ; tables d'effets différentes uniquement sur 13 plages (mouvements de caméra sur doublons), colonnes halos / halation / anamorphique / rayons ; fumée et particules : écarts au 5ᵉ chiffre décimal sur 10 images |
+
+### 11.6.3 Deux signalements du premier passage, analysés
+
+Le premier passage de `qc_extract.py` a rendu « À VÉRIFIER » sur deux points. Aucun ne révèle
+un défaut introduit par le traitement ; deux faiblesses de la méthode de mesure ont été corrigées,
+puis le contrôle a été relancé sur le master entier.
+
+1. **`sync_image`, 1 image sur 1251 (image 8543, 170,86 s).** C'est le noir de la fin du fondu.
+   L'image source est parfaitement uniforme (écart-type 0,0), donc sa corrélation est indéfinie.
+   `qc_master.py` exclut déjà ces images comme non décidables, mais `qc_extract.py` ne le faisait pas.
+   Même règle appliquée (écart-type < 2, images exclues comptées).
+2. **`scintillement`, image 2785 (plan 48, 55,64–55,84 s, 10 images).**
+   - **Biais de mesure trouvé.** Le niveau de référence « du plan » était moyenné sur une fenêtre
+     (début du plan → image + 50) qui débordait sur les plans suivants, sans effet. Sur ce plan court,
+     cela gonflait le pourcentage : 33,4 % au lieu de 16,2 %. Fenêtre désormais bornée au plan.
+   - **Cause réelle.** La source clignote image par image sur ce plan : alternance nette / flou,
+     flash cyan à 2785, luminance 68,7 → 81,3 → 74,7. La fumée éclairée suit cette lumière.
+     Rapportée à la luminance de la source, la variation de l'effet est de **2,5 %**.
+     À l'image, la couche d'effets reste stable ; sa contribution moyenne passe de 2,0 à 2,25 codes
+     sur 255.
+   - **Critère ajouté, sur le principe de `qc_luma.py`.** Une image au-dessus du seuil est
+     « expliquée » si l'écart, rapporté à la luminance source, reste sous le seuil.
+     Témoin : des pulsations de +30 à +40 % injectées sans variation de la source restent
+     **inexpliquées** (4 sur 4 détectées). Le critère ne masque donc pas une vraie pulsation.
+   - **Seconde image : 5804** (conteneur rouge, 116,08 s ; brut 13,1 % du niveau du plan, rapporté à la source 11,5 %).
+     Pendant un panoramique rapide, la porte du conteneur entre dans le cadre au premier plan et la
+     brume du décor s'y pose : jusqu'à 12 codes sur 1023 (≈ 3,6 % de la luminosité locale), puis un
+     palier. Ce n'est pas une pulsation répétée : l'effet suit le contenu qui entre dans l'image.
+     Ce plan appartient à l'extrait conteneur (114,1–120,7 s) validé en V5.1, avec ses réglages
+     conservés (arbitrage 1). Il n'a pas été modifié : pas de nouvelle exploration.
+
+### 11.6.4 Inspection visuelle
+
+`visuel_master.py` (planches dans le dossier de livraison, non versionnées) :
+
+- **84 plans réels** (≥ 0,3 s, hors effets de montage), source | master : cadrage et montage identiques, ambiances conformes aux
+  familles, passage N&B (75,2–76,8 s) resté N&B, fondu de fin fidèle.
+- **12 zones protégées** recadrées à 100 % en 4K (toutes les familles, dont le fondu) : écart
+  faible et uniforme, dû à la LUT globale et à la compression. Ni halo, ni démarcation, ni bord
+  de masque.
+- **4 transitions** (t − 0,10 à t + 0,20 s) : sobres, déclenchées sur la vraie coupe, sans speed ramp.
+
+### 11.6.5 Verdict et livrables
+
+VERDICT
+
+| Fichier | Contenu | SHA-256 |
+|---|---|---|
+| `BADLIFE_V5_1_MASTER_4K_COMPLET.mp4` | **master** : étalonnage + effets V5.1 finale, 4K 50 i/s HEVC Main 10, audio original (652,7 Mo) | `dba214d73bf69d3ce0fed28388544fdf004a7d1258a583fa5f801d5e31b60009` |
+| `BADLIFE_V5_1_MASTER_4K_ETALONNAGE_SEUL.mp4` | même master sans effets (étalonnage seul), référence et secours (653,3 Mo) | `df894828b26844dfd751261b67c858f7fa09021ab8b7f98297a08421113f86e2` |
+| `BADLIFE_V5_1_APERCU_1080p.mp4` | aperçu de visionnage, H.264 High 1080p 50 i/s CRF 20, issu du master COMPLET, audio original (138,7 Mo) | `c8c52959b1752a544ab057ebd30c64053464eeb6ce6de9691f69d04b2d9ab5cc` |
+
+Rapports versionnés : `data/master/` (`qc_master.json`, `qc_luma.json`, `qc_rapport.json`,
+`qc_effets.csv`, `qc_artistes.csv`, `SHA256SUMS.txt`). Les médias ne sont pas versionnés.
+
+**Point ouvert, à confirmer par vous.** L'arbitrage 1-bis (§11.1) étend le traitement « couloir
+vert » aux autres apparitions du même décor : 38,46 / 44,48 / 69,58 / 76,84 / 97,10 / 105,76 /
+122,76 / 128,32 s, plus les micro-plans des salves. C'est une interprétation de cohérence, pas une
+instruction explicite. Si vous préférez y garder la V5.1, il suffit de retirer ces plans de la
+section `plans` de la configuration et de re-rendre les segments concernés.

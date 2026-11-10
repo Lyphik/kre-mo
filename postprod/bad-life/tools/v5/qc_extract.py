@@ -5,10 +5,13 @@ Tests (criteres de rejet du cahier des charges V5, section 9) :
   1. Format : 3840x2160, SAR 1:1, 50 i/s, nombre d'images, HEVC Main10, BT.709 plage TV.
   2. Artistes : ecart max des pixels opaques vs source AVANT redimensionnement (qc_artistes.csv) = 0.
   3. Synchronisation image : pour un echantillon d'images, correlation (luma reduite) entre la sortie
-     et la source maximale a decalage 0 (et non +/-1, +/-2 images).
+     et la source maximale a decalage 0 (et non +/-1, +/-2 images) ; images uniformes (ecart-type < 2,
+     ex. noir du fondu) non decidables, exclues et comptees.
   4. Synchronisation audio : correlation croisee audio sortie / source : decalage 0 attendu.
   5. Scintillement : sauts d'intensite d'effet image a image A L'INTERIEUR d'un plan (hors coupes et
-     transitions) : rapport au niveau moyen de l'effet du plan.
+     transitions), sur les images source nouvelles : rapport au niveau moyen de l'effet du plan (fenetre bornee
+     au plan) ; une image au-dessus du seuil est expliquee si l'ecart rapporte a la luminance source reste sous
+     le seuil. Halos sur images doublons (source 25p doublee) : controle direct.
   6. N&B : pendant les passages N&B de la source, chroma de la sortie (decor compris) <= 3,0.
 Usage : qc_extract.py SOURCE EXTRAITS.json ID RENDU_DIR PLANS.csv NB.json
 """
@@ -52,12 +55,14 @@ def frames(path, ss=None, t=None, w=160, h=90):
 
 src = frames(SRC, F0 / 50, NF / 50); out = frames(f'{RD}/{EID}_{SUF}_COMPLET.mp4')
 n = min(len(src), len(out)); rep['images_source_vs_sortie'] = f'{len(src)} / {len(out)}'
-bad = 0; samples = list(range(3, n - 3, 7))
+bad = 0; samples = list(range(3, n - 3, 7)); unif = 0
 for i in samples:
+    # image uniforme (noir de fondu, ecran plein) : correlation indefinie, non decidable (meme regle que qc_master.py)
+    if min(float(src[i + d].std()) for d in (-2, -1, 0, 1, 2)) < 2.0 or float(out[i].std()) < 2.0: unif += 1; continue
     o = out[i].ravel() - out[i].mean()
     cs = [float(np.dot(o, src[i + d].ravel() - src[i + d].mean()) / (np.linalg.norm(o) * np.linalg.norm(src[i + d].ravel() - src[i + d].mean()) + 1e-6)) for d in (-2, -1, 0, 1, 2)]
     if int(np.argmax(cs)) != 2 and max(cs) - cs[2] > 0.002: bad += 1
-rep['sync_image'] = f'{len(samples)} images testees, {bad} meilleure correlation hors decalage 0 -> {"OK" if bad == 0 else "A VERIFIER"}'
+rep['sync_image'] = f'{len(samples) - unif} images testees ({unif} uniformes non decidables exclues), {bad} meilleure correlation hors decalage 0 -> {"OK" if bad == 0 else "A VERIFIER"}'
 ok &= bad == 0
 
 
@@ -84,12 +89,18 @@ for j in np.nonzero(fl)[0]:                       # flashs du montage : exclus c
 # ou un saut on/off est detecte, une variation progressive (source qui sort du cadre, fondu) ne l'est pas.
 # Version precedente (difference premiere) : signalait a tort la disparition naturelle d'une lumiere sortant
 # du cadre (extrait 1, image 4191, verifie visuellement).
+def fin_plan(im):
+    # niveau de reference = celui du PLAN : la fenetre (debut du plan -> image + 50) ne deborde pas sur les plans
+    # suivants (sur un plan court, elle moyennait des plans sans effet et gonflait le pourcentage, ex. plan 48)
+    return min([b for b in bounds if b > im] or [10 ** 9])
+
+
 def excluded(k):
     return imgs[k] in bounds or imgs[k] - 1 in bounds or (imgs[k] + 1) in bounds or tr[k] > 0.01
 worst = 0.0; worst_i = None; worst_d1 = 0.0; worst_d1_i = None
 for k in range(1, len(qe) - 1):
     if excluded(k) or excluded(k - 1) or excluded(k + 1): continue
-    j0 = max(b for b in bounds if b <= imgs[k]); seg = [eff[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < imgs[k] + 50]
+    j0 = max(b for b in bounds if b <= imgs[k]); seg = [eff[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < min(imgs[k] + 50, fin_plan(imgs[k]))]
     lvl = max(np.mean(seg), 0.004)
     d2 = abs(eff[k] - 0.5 * (eff[k - 1] + eff[k + 1])) / lvl; d1 = abs(eff[k] - eff[k - 1]) / lvl
     if d2 > worst: worst, worst_i = d2, imgs[k]
@@ -116,17 +127,33 @@ for q_, im in enumerate(imgs):
 rep['halos_sur_doublons'] = f'{nd} images doublons avec halos : variation max {100 * wd:.1f} % du niveau du plan (image {wd_i}) -> {"OK" if wd < 0.12 else "A VERIFIER"}'
 ok &= wd < 0.12
 new_idx = [q_ for q_, im in enumerate(imgs) if not (0 < im - F0 < n and dup[im - F0])]
-w25, w25_i = 0.0, None
+# EXPLICATION (meme principe que qc_luma.py) : les effets (fumee eclairee, rayons, halos) dependent du contenu lumineux
+# reel de l'image. Une image au-dessus du seuil est EXPLIQUEE si, rapporte a la luminance de la source (colonne
+# luma_source, tables du master), l'effet ne s'ecarte plus de sa tendance de plus du seuil : la variation vient alors
+# de la source (stroboscope, flash, element lumineux entrant dans le cadre) et non d'une pulsation propre a l'effet.
+# Verifie par un temoin : des pulsations de +30 a +40 % injectees sans variation de la source restent inexpliquees.
+ls_ = np.array([float(r['luma_source']) for r in qe]) if 'luma_source' in qe[0] else None
+w25, w25_i, over, inexpl, w25n = 0.0, None, [], [], 0.0
 for t_ in range(1, len(new_idx) - 1):
     a_, k_, b_ = new_idx[t_ - 1], new_idx[t_], new_idx[t_ + 1]
     if excluded(k_) or excluded(a_) or excluded(b_) or (imgs[b_] - imgs[a_]) > 4: continue
-    j0 = max(b for b in bounds if b <= imgs[k_]); seg = [eff[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < imgs[k_] + 50]
+    j0 = max(b for b in bounds if b <= imgs[k_]); seg = [eff[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < min(imgs[k_] + 50, fin_plan(imgs[k_]))]
     lvl = max(np.mean(seg), 0.004); v = abs(eff[k_] - 0.5 * (eff[a_] + eff[b_])) / lvl
     if v > w25: w25, w25_i = v, imgs[k_]
-rep['scintillement'] = (f'ecart max a la tendance sur les images source NOUVELLES (cadence reelle) = {100 * w25:.1f} % du niveau d\'effet du plan (image {w25_i}) '
-                        f'-> {"OK" if w25 < 0.12 else "A VERIFIER"} ; pour memoire, mesure image par image sans tenir compte des doublons = {100 * worst:.1f} % (image {worst_i}), '
+    if v < 0.12: continue
+    over.append(imgs[k_])
+    vn = None
+    if ls_ is not None:
+        e_ = eff / np.maximum(ls_ + 2.0, 1.0)
+        vn = abs(e_[k_] - 0.5 * (e_[a_] + e_[b_])) / max(np.mean([e_[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < min(imgs[k_] + 50, fin_plan(imgs[k_]))]), 1e-9)
+        w25n = max(w25n, vn)
+    if vn is None or vn >= 0.12: inexpl.append(imgs[k_])
+rep['scintillement'] = (f'ecart max a la tendance sur les images source NOUVELLES (cadence reelle) = {100 * w25:.1f} % du niveau d\'effet du plan (image {w25_i}) ; '
+                        f'{len(over)} image(s) au-dessus de 12 % {over[:10]}, dont {len(over) - len(inexpl)} expliquee(s) par la variation de la source '
+                        f'(ecart rapporte a la luminance source max {100 * w25n:.1f} %), {len(inexpl)} inexpliquee(s) {inexpl[:10]} '
+                        f'-> {"OK" if not inexpl else "A VERIFIER"} ; pour memoire, mesure image par image sans tenir compte des doublons = {100 * worst:.1f} % (image {worst_i}), '
                         f'variation progressive max = {100 * worst_d1:.1f} % (image {worst_d1_i}) ; {int(dup.sum())} images doublons dans la source')
-ok &= w25 < 0.12
+ok &= not inexpl
 rep['transitions'] = f"{int((np.array([float(r['transition']) for r in qe]) > 0.5).sum())} images de pic de transition ; {nfl} images de flash du montage (effets suspendus)"
 nbr = [r for r in json.load(open(NBP))['passages'] if r[1] >= F0 and r[0] < F1]
 if nbr:

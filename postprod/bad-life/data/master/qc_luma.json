@@ -1,7 +1,7 @@
 {
  "seuil_residu_log": 0.06,
  "images_analysees": 8319,
- "residu_p99": 0.006,
+ "residu_p99": 0.0057,
  "residu_max": 0.1205,
  "images_au_dessus_du_seuil": 4,
  "dont_expliquees_reponse_LUT_a_un_saut_source": 4,
