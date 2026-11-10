@@ -94,7 +94,29 @@ worst = max(cand, key=lambda i: d2[i]) if cand else None
 rep['scintillement'] = {'methode': 'ecart de luminance moyenne a la tendance (2e difference), codes 0-255, hors coupes, eclairs et apparitions de textes',
                         'max': round(float(d2[worst]), 2) if worst is not None else 0, 'image': worst,
                         'images_au_dessus_de_4_codes': [int(i) for i in cand if d2[i] > 4][:20]}
-rep['scintillement']['verdict'] = 'OK' if not rep['scintillement']['images_au_dessus_de_4_codes'] else 'A VERIFIER (comparer a la source)'
+# image signalee EXPLIQUEE si la source a, au meme instant, un saut relatif au moins moitie aussi fort (eclair d'origine)
+srcs_ = [int(r['image_source']) for r in rows]
+def lsrc(i):
+    b = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f'{i / FPS:.4f}', '-i', SRC, '-frames:v', '1', '-vf', 'scale=192:108:flags=area,format=gray',
+                        '-f', 'rawvideo', '-'], capture_output=True).stdout
+    return float(np.frombuffer(b, np.uint8).mean())
+det = []
+for i in rep['scintillement']['images_au_dessus_de_4_codes']:
+    a_, b_, c_ = (lsrc(srcs_[k]) for k in (i - 1, i, i + 1))
+    rs = abs(b_ - 0.5 * (a_ + c_)) / max(b_, 1); rt = d2[i] / max(m[i], 1)
+    det.append({'image': i, 't_s': round(i / FPS, 2), 'image_source': srcs_[i], 'saut_relatif_teaser': round(rt, 3), 'saut_relatif_source': round(rs, 3),
+                'explique_par_la_source': bool(rs >= 0.5 * rt)})
+rep['scintillement']['detail'] = det
+rep['scintillement']['verdict'] = 'OK' if all(x['explique_par_la_source'] for x in det) else 'A VERIFIER'
+tx = [r for r in rows if r.get('texte_x_min', '') != '']
+if tx:
+    xmin = min(int(r['texte_x_min']) for r in tx); xmax = max(int(r['texte_x_max']) for r in tx)
+    ymin = min(int(r['texte_y_min']) for r in tx); ymax = max(int(r['texte_y_max']) for r in tx)
+    tok = xmin >= 40 and xmax <= 1080 - 40 and ymin >= 100 and ymax <= 1650
+    rep['textes'] = {'images_avec_texte': len(tx), 'emprise_x': [xmin, xmax], 'emprise_y': [ymin, ymax],
+                     'regle': 'lettres a 40 px au moins des bords, entre y=100 et y=1650 (zones sures Reels / TikTok / Shorts)',
+                     'verdict': 'OK' if tok else 'ECHEC'}
+    ok &= tok
 rep['VERDICT'] = 'CONFORME' if ok and rep['scintillement']['verdict'] == 'OK' else 'A VERIFIER'
 json.dump(rep, open(OUTP, 'w'), indent=1, ensure_ascii=False)
 print(json.dumps(rep, indent=1, ensure_ascii=False))

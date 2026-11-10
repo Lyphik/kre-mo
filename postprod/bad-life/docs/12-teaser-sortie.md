@@ -42,9 +42,11 @@ Liste de montage : `tools/teaser/teaser_edl.json` (24 segments, vérifiés contr
   hors de la direction nocturne et rouge du brief. Ce sont des plans de nuit du clip, coupés sur les
   temps. Chaque insert reste à l'intérieur d'un seul plan source (aucune coupe d'origine franchie) et
   aucun plan n'est répété. Ces inserts courts (0,4 à 1,5 s) ne sont pas synchronisés sur les paroles.
-- **Final** : le plan P222 (LYPHIK et JAHSIK côte à côte devant « BIENVENUE ») joue de 25,2 à 26,0 s,
-  puis **se fige sans rupture** à 131,66 s jusqu'à 30 s. L'image arrêtée évite toute
-  désynchronisation labiale pendant la lecture des textes.
+- **Final** : le plan P222 (LYPHIK et JAHSIK côte à côte devant « BIENVENUE ») joue depuis sa première
+  image, de 25,20 à 25,74 s, puis **se fige** jusqu'à 30 s sur **l'image la plus nette du plan**
+  (130,90 s). La netteté est mesurée par la variance du laplacien sur les pixels des artistes ; l'image
+  d'abord prévue, à 131,66 s, était floue de bougé. L'image arrêtée évite toute désynchronisation
+  labiale pendant la lecture des textes.
 
 **Règle de cadrage vertical (cohérence)**
 
@@ -79,13 +81,16 @@ Formule identique à celle du master :
 | Moment | Texte | Typographie |
 |---|---|---|
 | 0,55–4,95 s | **LYPHIK** / présente… | Anton (titre), Inter Display SemiBold |
-| 7,70–12,0 s | **BAD LIFE** (apparition frappée sur le temps) | Anton, rouge |
+| 9,16–12,0 s | **BAD LIFE** (apparition frappée sur la coupe du duo) | Anton, rouge |
 | dès 20,0 s | **BAD LIFE** | Anton, rouge |
 | dès 20,37 s | **LYPHIK feat. JAHSIK** | Inter Display Black |
 | dès 23,11 s (kick + snare) | **MAINTENANT DISPONIBLE !** sur bandeau rouge | Anton, blanc |
 | dès 26,41 s | **DISPONIBLE SUR YOUTUBE** / **REGARDEZ LE CLIP !** | Inter Display Black |
 
 - **Durée de lecture** : « MAINTENANT DISPONIBLE ! » reste à l'écran 6,9 s, jusqu'à la dernière image.
+- **Animation « frappée »** : agrandissement de 1,10 à 1,0 en 0,18 s. Le texte agrandi reste dans les
+  marges, donc il n'est jamais coupé, même pendant l'animation.
+- **Bandeau rouge** : sa largeur est calculée d'après le texte, avec 40 px de chaque côté.
 - **Typographie française** : espace insécable avant « ! ».
 - **Appel à l'action** : il tient sur deux lignes. Le tiret cadratin du brief
   (« DISPONIBLE SUR YOUTUBE — REGARDEZ LE CLIP ! ») est remplacé par le retour à la ligne, c'est un
@@ -114,3 +119,25 @@ Formule identique à celle du master :
 
 Reproduction : `tools/teaser/teaser.py` (rendu image par image, sortie brute vers ffmpeg). Les commandes
 exactes et les contrôles sont donnés en §12.8.
+
+## 12.8 Contrôles et corrections
+
+`tools/teaser/qc_teaser.py` vérifie le format, les artistes, le son, les écrans noirs, le scintillement
+(une image signalée est « expliquée » si la source a le même saut au même instant) et l'emprise des
+textes. Le rendu enregistre, image par image, l'écart des artistes et la boîte englobante des lettres.
+
+**Premier rendu (v1)** : contrôle automatique CONFORME. La seule image signalée, 2,6 s, est expliquée
+par un éclair présent dans la source (72,18 s). L'inspection visuelle a toutefois relevé quatre défauts,
+corrigés en v2 :
+
+1. « MAINTENANT DISPONIBLE ! » débordait de son bandeau, et le « ! » touchait presque le bord de l'écran.
+   Le corps passe à 86 px et le bandeau est calculé d'après le texte.
+2. Le titre de la révélation (7,70 s) était à moitié caché derrière la tête de LYPHIK. Les textes étant
+   derrière les artistes, ils ne doivent pas se superposer à eux. Le titre apparaît donc à 9,16 s, sur la
+   bande du duo, où la zone haute est libre.
+3. L'insert de 5,89 s (P249) était sombre de bout en bout. Il est remplacé par LYPHIK au rideau
+   métallique (P232).
+4. L'image arrêtée du final était floue de bougé. Elle est remplacée par l'image la plus nette du plan.
+
+Le contrôle de l'emprise des textes a été ajouté à cette occasion (lettres à 40 px au moins des bords,
+entre y = 100 et y = 1650).

@@ -8,7 +8,7 @@
   {"t0": 0.0,    "t1": 2.44,   "src": 69.58,  "disposition": "bande", "cale": true,  "_": "couloir vert : JAHSIK (A) + LYPHIK (B)"},
   {"t0": 2.44,   "t1": 5.2,    "src": 72.02,  "disposition": "bande", "cale": true,  "_": "rideau metallique, nuit : LYPHIK (C) + JAHSIK (D)"},
   {"t0": 5.2,    "t1": 5.885,  "src": 45.9,   "disposition": "plein", "cale": false, "_": "insert JAHSIK (A) conteneur rouge, P34"},
-  {"t0": 5.885,  "t1": 6.489,  "src": 160.0,  "disposition": "plein", "cale": false, "_": "insert LYPHIK (B) gros plan BIENVENUE, P249"},
+  {"t0": 5.885,  "t1": 6.489,  "src": 145.5,  "disposition": "plein", "cale": false, "_": "insert LYPHIK (C) rideau metallique, P232 (P249 ecarte : plan trop sombre de bout en bout)"},
   {"t0": 6.489,  "t1": 7.26,   "src": 116.3,  "disposition": "plein", "cale": false, "_": "insert JAHSIK (A) mains, P188"},
   {"t0": 7.26,   "t1": 9.16,   "src": 76.84,  "disposition": "plein", "cale": true,  "_": "LYPHIK (B) conteneur sombre, P96 ; titre BAD LIFE"},
   {"t0": 9.16,   "t1": 10.96,  "src": 78.74,  "disposition": "bande", "cale": true,  "_": "duo nuit LYPHIK (C) + JAHSIK (D), P97-P109"},
@@ -27,12 +27,12 @@
   {"t0": 23.114, "t1": 23.72,  "src": 119.2,  "disposition": "bande", "cale": false, "_": "duo conteneur, P194"},
   {"t0": 23.72,  "t1": 24.82,  "src": 93.3,   "disposition": "bande", "cale": true,  "_": "JAHSIK (D) rideau metallique, P141"},
   {"t0": 24.82,  "t1": 25.204, "src": 56.98,  "disposition": "bande", "cale": false, "_": "duo nuit LYPHIK (C) + JAHSIK (D), P52"},
-  {"t0": 25.204, "t1": 26.0,   "src": 130.864,"disposition": "bande", "cale": false, "_": "FINAL (debut) : P222 joue puis se fige sans rupture a 131,66 s"},
-  {"t0": 26.0,   "t1": 30.0,   "src": 131.66, "disposition": "bande", "cale": false, "fige": true, "_": "FINAL : LYPHIK (B) + JAHSIK (A) cote a cote, P222, image arretee + lente avancee"}
+  {"t0": 25.204, "t1": 25.744, "src": 130.36, "disposition": "bande", "cale": false, "_": "FINAL (debut) : P222 joue depuis sa premiere image puis se fige sans rupture"},
+  {"t0": 25.744, "t1": 30.0,   "src": 130.9,  "disposition": "bande", "cale": false, "fige": true, "_": "FINAL : LYPHIK (B) + JAHSIK (A) cote a cote, P222, image la plus nette du plan (130,90 s), arretee + lente avancee"}
  ],
  "textes": {
   "presente": {"de": 0.55, "a": 4.95, "ligne1": "LYPHIK", "ligne2": "présente…"},
-  "titre_revelation": {"de": 7.696, "a": 12.0},
+  "titre_revelation": {"de": 9.16, "a": 12.0},
   "annonce_titre": {"de": 20.0},
   "annonce_artistes": {"de": 20.374},
   "disponible": {"de": 23.114, "texte": "MAINTENANT DISPONIBLE !"},

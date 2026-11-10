@@ -94,9 +94,10 @@ def ease_out(u): u = min(max(u, 0.0), 1.0); return 1 - (1 - u) ** 3
 def fen(t, a, d): return min(max((t - a) / d, 0.0), 1.0)
 
 
-def slam(t, t0):
-    """Apparition 'frappee' : echelle 1,35 -> 1,0 en 0,18 s, opacite 0 -> 1 en 0,06 s."""
-    return 1.35 - 0.35 * ease_out((t - t0) / 0.18), fen(t, t0, 0.06)
+def slam(t, t0, e0=1.10):
+    """Apparition 'frappee' : echelle e0 -> 1,0 en 0,18 s, opacite 0 -> 1 en 0,06 s. e0 = 1,10 : le texte agrandi
+    reste dans les marges de 60 px (aucun texte coupe, meme pendant l'animation)."""
+    return e0 - (e0 - 1) * ease_out((t - t0) / 0.18), fen(t, t0, 0.06)
 
 
 def calque_textes(t, disp):
@@ -121,14 +122,15 @@ def calque_textes(t, disp):
     td = TX['disponible']['de']
     if t >= td:
         wv = ease_out((t - td) / 0.15)                                   # bandeau rouge qui s'ouvre depuis le centre
-        bw = int(960 * wv); d.rectangle([W / 2 - bw / 2, 1312, W / 2 + bw / 2, 1442], fill=ROUGE + (240,))
-        sc = 1.25 - 0.25 * ease_out((t - td - 0.08) / 0.18)
-        texte(L, TX['disponible']['texte'], police(F_TITRE, 104 * sc), W / 2, 1377, BLANC, fen(t, td + 0.06, 0.08), 3)
+        fd = police(F_TITRE, 86); larg = fd.getlength(TX['disponible']['texte']) + 3 * (len(TX['disponible']['texte']) - 1)
+        bw = int((larg + 80) * wv); d.rectangle([W / 2 - bw / 2, 1318, W / 2 + bw / 2, 1436], fill=ROUGE + (240,))   # bandeau = texte + 40 px de chaque cote
+        sc = 1.10 - 0.10 * ease_out((t - td - 0.08) / 0.18)
+        texte(L, TX['disponible']['texte'], police(F_TITRE, 86 * sc), W / 2, 1377, BLANC, fen(t, td + 0.06, 0.08), 3)
     tc = TX['appel']['de']
     if t >= tc:
         u = ease_out((t - tc) / 0.3); a = fen(t, tc, 0.3)
-        texte(L, TX['appel']['ligne1'], police(F_TEXTE, 54), W / 2, 1508 + 24 * (1 - u), BLANC, a, 3)
-        texte(L, TX['appel']['ligne2'], police(F_TEXTE, 54), W / 2, 1578 + 24 * (1 - u), BLANC, a, 3)
+        texte(L, TX['appel']['ligne1'], police(F_TEXTE, 58), W / 2, 1510 + 24 * (1 - u), BLANC, a, 3)
+        texte(L, TX['appel']['ligne2'], police(F_TEXTE, 58), W / 2, 1584 + 24 * (1 - u), BLANC, a, 3)
     return np.asarray(L).astype(np.float32) / 255.0
 
 
@@ -186,7 +188,7 @@ def decode(src0, n):
 
 
 qc = open(QCP, 'w', newline=''); qw = csv.writer(qc)
-qw.writerow(['image', 't_s', 'image_source', 'disposition', 'px_artistes', 'ecart_max_artistes_vs_master', 'controle'])
+qw.writerow(['image', 't_s', 'image_source', 'disposition', 'px_artistes', 'ecart_max_artistes_vs_master', 'controle', 'texte_x_min', 'texte_x_max', 'texte_y_min', 'texte_y_max'])
 out = sys.stdout.buffer
 for s in segs:
     n = s['n1'] - s['n0']
@@ -220,7 +222,9 @@ for s in segs:
         m = AL[..., 0] >= 1.0
         ref = np.clip(SUB * 255 + 0.5, 0, 255).astype(np.uint8)
         dev = int(np.abs(O8[m].astype(np.int16) - ref[m]).max()) if m.any() else 0
-        qw.writerow([ni, f'{t:.3f}', si, s['disposition'], int(m.sum()), dev, 'transition (ouverture au noir)' if fade < 1 else 'strict'])
+        ys_, xs_ = np.nonzero(T[..., 3] > 0.5)                                  # emprise des lettres (hors ombre douce)
+        bb = [int(xs_.min()), int(xs_.max()), int(ys_.min()), int(ys_.max())] if len(xs_) else ['', '', '', '']
+        qw.writerow([ni, f'{t:.3f}', si, s['disposition'], int(m.sum()), dev, 'transition (ouverture au noir)' if fade < 1 else 'strict'] + bb)
         out.write(O8.tobytes())
         if ni % 100 == 0: print(f'teaser {ni}/{NF}', file=sys.stderr, flush=True)
 qc.close()
