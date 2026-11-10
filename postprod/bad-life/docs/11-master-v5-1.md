@@ -182,7 +182,7 @@ copiée. Contrôles exécutés sur les fichiers livrés eux-mêmes.
 |---|---|---|
 | Format (COMPLET et ÉTALONNAGE SEUL) | `qc_extract.py` | 3840×2160, SAR 1:1, 50 i/s, 8760 images, HEVC Main 10 `hvc1`, BT.709 plage TV, 29,7 Mb/s — **OK** |
 | Audio | `qc_master.py` | flux identique **bit à bit** à la source (SHA-256 des paquets `b567694f…bb1f4194`), y compris dans l'aperçu 1080p — **OK** |
-| Synchronisation (horodatage, image, audio) | `qc_master.py`, `qc_extract.py` | décalage vidéo − audio 0,000 s (source : 0,000 s) ; corrélation audio 0,00 ms ; échantillon image : SYNC_IMAGE — **OK** |
+| Synchronisation (horodatage, image, audio) | `qc_master.py`, `qc_extract.py` | décalage vidéo − audio 0,000 s (source : 0,000 s) ; corrélation audio 0,00 ms ; échantillon image : 1201 images testées (50 uniformes non décidables exclues), 0 décalée — **OK** |
 | Durées | `qc_master.py` | vidéo et audio 175,200 s, 8760 images, comme la source — **OK** |
 | Montage, 8760 images | `qc_master.py` | 0 image mieux corrélée à une autre image source (fenêtre ±3) ; 329 images uniformes non décidables — **OK** |
 | Coupes | `qc_master.py` | 259 / 259 frontières validées, même saut source / master — **OK** |
@@ -200,7 +200,7 @@ copiée. Contrôles exécutés sur les fichiers livrés eux-mêmes.
 | Jour, N&B, effets de montage, fondu | effet **0** |
 | Transitions | 4 (72,02 / 76,84 / 88,51 / 148,82 s), 10 images de pic ; 62 images de flash de montage (effets suspendus) |
 | Halos sur images doublons (correctif §11.5.2) | 132 images doublons avec halos : variation max **0,7 %** (seuil 12 %) |
-| Scintillement | SCINT |
+| Scintillement (images source nouvelles) | 2 images au-dessus de 12 % (2785 : 16,2 % ; 5804 : 13,1 %), toutes deux **expliquées par la variation de la source** (écart rapporté à la luminance source : max 11,5 %) ; 0 inexpliquée — **OK** (§11.6.3) |
 | Comparaison avec le master précédent | tables artistes **identiques** ; tables d'effets différentes uniquement sur 13 plages (mouvements de caméra sur doublons), colonnes halos / halation / anamorphique / rayons ; fumée et particules : écarts au 5ᵉ chiffre décimal sur 10 images |
 
 ### 11.6.3 Deux signalements du premier passage, analysés
@@ -246,7 +246,8 @@ puis le contrôle a été relancé sur le master entier.
 
 ### 11.6.5 Verdict et livrables
 
-VERDICT
+**Tous les contrôles passent** : `qc_master.py` CONFORME, `qc_luma.py` OK, `qc_extract.py` CONFORME
+(second passage, méthode corrigée, §11.6.3), inspection visuelle conforme. **Le master V5.1 est prêt.**
 
 | Fichier | Contenu | SHA-256 |
 |---|---|---|
@@ -254,7 +255,7 @@ VERDICT
 | `BADLIFE_V5_1_MASTER_4K_ETALONNAGE_SEUL.mp4` | même master sans effets (étalonnage seul), référence et secours (653,3 Mo) | `df894828b26844dfd751261b67c858f7fa09021ab8b7f98297a08421113f86e2` |
 | `BADLIFE_V5_1_APERCU_1080p.mp4` | aperçu de visionnage, H.264 High 1080p 50 i/s CRF 20, issu du master COMPLET, audio original (138,7 Mo) | `c8c52959b1752a544ab057ebd30c64053464eeb6ce6de9691f69d04b2d9ab5cc` |
 
-Rapports versionnés : `data/master/` (`qc_master.json`, `qc_luma.json`, `qc_rapport.json`,
+Rapports versionnés : `data/master/` (`qc_master.json`, `qc_luma.json`, `qc_rapport.json` = second passage,
 `qc_effets.csv`, `qc_artistes.csv`, `SHA256SUMS.txt`). Les médias ne sont pas versionnés.
 
 **Point ouvert, à confirmer par vous.** L'arbitrage 1-bis (§11.1) étend le traitement « couloir

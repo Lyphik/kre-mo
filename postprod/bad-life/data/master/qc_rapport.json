@@ -1,0 +1,16 @@
+{
+ "extrait": "MASTER",
+ "debut_s": 0.0,
+ "fin_s": 175.2,
+ "format_COMPLET": "3840x2160 1:1 50/1 8760 img hevc Main 10 bt709/tv 29.7 Mb/s -> OK",
+ "format_ETALONNAGE_SEUL": "3840x2160 1:1 50/1 8760 img hevc Main 10 bt709/tv 29.7 Mb/s -> OK",
+ "artistes": "8760 images, 685652 px opaques/image en moyenne, ecart max vs reference (source+LUT_globale) = 0 -> OK",
+ "images_source_vs_sortie": "8760 / 8760",
+ "sync_image": "1201 images testees (50 uniformes non decidables exclues), 0 meilleure correlation hors decalage 0 -> OK",
+ "sync_audio": "decalage audio mesure = 0.00 ms (resolution 0,125 ms ; AAC reencode pour les extraits) -> OK",
+ "halos_sur_doublons": "132 images doublons avec halos : variation max 0.7 % du niveau du plan (image 2058) -> OK",
+ "scintillement": "ecart max a la tendance sur les images source NOUVELLES (cadence reelle) = 16.2 % du niveau d'effet du plan (image 2785) ; 2 image(s) au-dessus de 12 % [2785, 5804], dont 2 expliquee(s) par la variation de la source (ecart rapporte a la luminance source max 11.5 %), 0 inexpliquee(s) [] -> OK ; pour memoire, mesure image par image sans tenir compte des doublons = 16.2 % (image 2785), variation progressive max = 17.0 % (image 5804) ; 2769 images doublons dans la source",
+ "transitions": "10 images de pic de transition ; 62 images de flash du montage (effets suspendus)",
+ "noir_et_blanc": "18.86-18.92 s : U/V sortie +0.72/-1.80 vs temoin +0.69/-1.86 (ecart max 0.05) ; 19.00-19.08 s : U/V sortie +0.72/-1.78 vs temoin +0.69/-1.85 (ecart max 0.07) ; 19.16-19.22 s : U/V sortie +0.72/-1.80 vs temoin +0.69/-1.88 (ecart max 0.07) ; 41.28-41.68 s : U/V sortie +0.62/-1.08 vs temoin +0.62/-1.10 (ecart max 0.01) ; 75.62-76.56 s : U/V sortie +0.77/-1.71 vs temoin +0.76/-1.72 (ecart max 0.01) ; chroma max brute 3.07 -> OK",
+ "VERDICT": "CONFORME"
+}

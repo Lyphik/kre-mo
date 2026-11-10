@@ -15,8 +15,8 @@ d'analyse et la documentation le sont.
 | 5. Validation colorimétrie + effets | 🔁 V3 → V4 (tests A / B / C) → **V5 définitive** ([`docs/07`](docs/07-cahier-des-charges-v5.md)) |
 | **V5 — étapes 1 à 3** (sécurisation, analyse complète, masques) | ✅ Fait — [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md), [`data/v5/`](data/v5/) |
 | **V5 — étapes 4 à 6** (étalonnage par famille, effets, contrôle) | ✅ Fait sur 5 extraits — [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) |
-| **V5 — étape 7** (validation des 5 extraits) | 🔁 V5 jugée trop chargée → **V5.1 passe de finition** ([`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md)) — ⏳ en attente de validation |
-| V5 — étape 8 (master 4K) | 🔒 Après validation uniquement |
+| **V5 — étape 7** (validation des 5 extraits) | ✅ V5 jugée trop chargée → **V5.1 passe de finition** ([`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md)) — validée le 2026-11-09 avec arbitrages définitifs |
+| **V5 — étape 8** (master 4K) | ✅ **Master V5.1 prêt** — 4K 50 i/s HEVC Main 10, audio original bit à bit, tous les contrôles passés ([`docs/11-master-v5-1.md`](docs/11-master-v5-1.md) §11.6, [`data/master/`](data/master/)) — ⏳ arbitrage 1-bis à confirmer |
 
 ## Documentation
 
@@ -41,8 +41,10 @@ postprod/bad-life/
 ├── data/
 │   ├── families.json      classification des plans par famille de lumière (éditable)
 │   ├── shots.csv          V1–V4 (OBSOLÈTE : sous-segmentation) — remplacé par data/v5/plans.csv
-│   └── v5/                plans.csv (204 segments validés), nb_images.json, musique.json,
+│   ├── v5/                plans.csv (204 segments validés), nb_images.json, musique.json,
 │                          cuts_validation.json, familles_overrides.json, masques_qualite_par_plan.csv
+│   └── master/            rapports de contrôle du master final (qc_master, qc_luma, qc_rapport,
+│                          tables par image, SHA256SUMS des livrables)
 ├── luts/
 │   ├── badlife_look_v1.cube   historique — rejeté (peaux foncées assombries/bleuies)
 │   ├── badlife_look_v2.cube   historique — rejeté (peaux quasi neutres bleuies)
@@ -121,6 +123,23 @@ python3 tools/v4/beats.py  "source.mov" 39.36 12.98 beats.json
 python3 tools/v4/composite.py "source.mov" tools/v4/test_segment.json matte/ beats.json \
         luts/badlife_look_v4_decor.cube luts/badlife_look_v4_sujets.cube rendus_v4/
 tools/v4/compare4.sh "source.mov" 39.36 12.98 rendus_v4/BADLIFE_V4_TEST_{A,B,C}.mp4 comparatif.mp4
+```
+
+### Master V5.1 (doc 11)
+
+Prérequis : masques du clip entier (`tools/v5/matte_full.py`) et profondeur (`tools/v5/depth.py`), voir docs 08–09.
+
+```bash
+python3 tools/make_lut.py --preset v5_1_fondu luts/badlife_look_v5_1_fondu.cube
+# rendu par segments, reprenable (segments termines conserves), assemblage sans reencodage + audio source copie
+tools/v5/rendu_segments.sh "source.mov" . scratch_master/ python3
+F=scratch_master/final
+python3 tools/v5/qc_master.py "source.mov" $F/BADLIFE_V5_1_MASTER_4K_COMPLET.mp4 data/v5/plans.csv qc_master.json
+python3 tools/v5/qc_luma.py $F/qc_effets.csv data/v5/plans.csv qc_luma.json
+# qc_extract attend {ID}_V5_1_COMPLET.mp4 / _ETALONNAGE_SEUL.mp4 + qc_*.csv dans un meme dossier (liens symboliques)
+python3 tools/v5/qc_extract.py "source.mov" tools/v5/master.json MASTER rendu_lien/ data/v5/plans.csv data/v5/nb_images.json V5_1
+python3 tools/v5/visuel_master.py "source.mov" $F/BADLIFE_V5_1_MASTER_4K_COMPLET.mp4 data/v5/plans.csv matte/ \
+        '[72.017, 76.812, 88.514, 148.817]' visuel/ 12
 ```
 
 La LUT `badlife_look_v3.cube` (Rec.709 / BT.1886, entrée et sortie RGB pleine échelle, 33³)
