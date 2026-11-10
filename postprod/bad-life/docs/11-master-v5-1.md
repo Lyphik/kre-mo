@@ -255,6 +255,10 @@ puis le contrôle a été relancé sur le master entier.
 | `BADLIFE_V5_1_MASTER_4K_ETALONNAGE_SEUL.mp4` | même master sans effets (étalonnage seul), référence et secours (653,3 Mo) | `df894828b26844dfd751261b67c858f7fa09021ab8b7f98297a08421113f86e2` |
 | `BADLIFE_V5_1_APERCU_1080p.mp4` | aperçu de visionnage, H.264 High 1080p 50 i/s CRF 20, issu du master COMPLET, audio original (138,7 Mo) | `c8c52959b1752a544ab057ebd30c64053464eeb6ce6de9691f69d04b2d9ab5cc` |
 
+Transmission : les deux masters 4K dépassant la limite de transfert de 500 Mio, ils sont envoyés en deux
+morceaux (découpe binaire exacte, `.part1` / `.part2`) avec `LISEZMOI_REASSEMBLAGE.txt`. Le
+réassemblage a été vérifié : il redonne exactement les SHA-256 ci-dessus.
+
 Rapports versionnés : `data/master/` (`qc_master.json`, `qc_luma.json`, `qc_rapport.json` = second passage,
 `qc_effets.csv`, `qc_artistes.csv`, `SHA256SUMS.txt`). Les médias ne sont pas versionnés.
 
