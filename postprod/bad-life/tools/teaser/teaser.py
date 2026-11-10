@@ -250,7 +250,7 @@ def debruitage_decor(O, AL, Lalpha, prev):
     uni (faible detail local), hors textes. (1) lissage bilateral leger (preserve les contours, ecart de couleur < 3 codes) ;
     (2) filtre temporel recursif, applique seulement la ou l'image n'a pas bouge depuis l'image precedente (ecart < 3 codes) :
     aucun trainage sur les mouvements. Les pixels opaques des artistes (alpha = 1) ne sont jamais modifies."""
-    lum = O.mean(axis=2)
+    O = O.astype(np.float32); lum = O.mean(axis=2)
     wd = np.clip((DN['seuil_luma'] / 255 - lum) / (24 / 255), 0, 1)
     det = cv2.GaussianBlur(np.abs(cv2.Laplacian(lum, cv2.CV_32F)), (0, 0), 2)
     wf = np.clip((0.020 - det) / 0.012, 0, 1)
