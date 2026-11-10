@@ -1,0 +1,9 @@
+{"_note": "Master V5.1 rendu par segments (PREROLL=1 au-dela du premier), bornes = debuts de plans sans flash ni transition a proximite ; voir doc 11 §11.4",
+ "extraits": [
+  {"id": "SEG1", "debut_s": 0.0,    "fin_s": 45.6},
+  {"id": "SEG2", "debut_s": 45.6,   "fin_s": 90.54},
+  {"id": "SEG3", "debut_s": 90.54,  "fin_s": 130.36},
+  {"id": "SEG4", "debut_s": 130.36, "fin_s": 175.2},
+  {"id": "TEST2", "debut_s": 45.6,  "fin_s": 47.6},
+  {"id": "TEST3", "debut_s": 90.54, "fin_s": 92.54}
+ ]}

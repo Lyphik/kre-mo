@@ -28,6 +28,12 @@ F0, F1 = int(round(ex['debut_s'] * FPS)), int(round(ex['fin_s'] * FPS)); NF = F1
 os.makedirs(f'{OUT}/stills', exist_ok=True)
 rng = np.random.default_rng(20261109)
 STILLS_ONLY = os.environ.get('STILLS_ONLY') == '1'
+# Rendu par segments du clip entier (reprise apres interruption). PREROLL=1 rejoue l'etat inter-plans
+# du rendu monolithique : tirages aleatoires des particules des plans precedents, moyenne glissante de
+# la confiance du masque, transitions calculees sur le clip entier (meme alternance). Le segment doit
+# commencer au debut d'un plan, a plus de 1 s d'une transition et apres >= 45 images sans flash de montage
+# (gain d'effets alors exactement 1). Sans PREROLL : comportement inchange.
+PREROLL = os.environ.get('PREROLL') == '1' and F0 > 0
 STILL_EVERY = int(os.environ.get('STILL_EVERY', '60'))
 
 # ---------------- plans, familles, references de chroma ----------------
@@ -80,9 +86,10 @@ def confidence(i):
 # ---------------- transitions musicales ----------------
 secs = mus['sections']; impacts = np.array(mus['impacts_s']); tol = cfg['transitions']['tolerance_s']
 TRANS = []
+TR_A, TR_B = (0, max(p['b'] for p in plans)) if PREROLL else (F0, F1)
 for k in range(1, len(plans)):
     p, q = plans[k - 1], plans[k]
-    if not (F0 < q['a'] < F1): continue
+    if not (TR_A < q['a'] < TR_B): continue
     # uniquement entre deux PLANS REELS (>= 0,3 s, hors effets de montage / N&B) : jamais sur un insert
     # d'une image ni dans une salve (sinon deux voiles lumineux a 20 ms d'intervalle)
     if p['micro'] == '1' or q['micro'] == '1' or p['famille'] in NOFX or q['famille'] in NOFX: continue
@@ -288,6 +295,16 @@ qa = csv.writer(open(f'{OUT}/qc_artistes.csv', 'w', newline='')); qa.writerow(['
 CNAMES = ['fumee', 'rayons', 'contre_jour', 'particules', 'halos', 'halation', 'anamorphique']
 qe = csv.writer(open(f'{OUT}/qc_effets.csv', 'w', newline='')); qe.writerow(['image', 'famille', 'confiance', 'chroma_k', 'effet_moyen', 'transition'] + CNAMES + ['flash_montage', 'gain_effets', 'luma_source', 'luma_sortie'])
 cam = Cam(); parts = None; a_prev = None; curp = None; conf_s = 1.0; fxg = 1.0; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None; cam_prev_off = np.zeros(2, np.float32); t0 = time.time()
+if PREROLL:
+    assert any(p['a'] == F0 for p in plans), 'PREROLL : le segment doit commencer au debut d un plan'
+    for k in sorted(range(len(plans)), key=lambda k: plans[k]['a']):
+        if plans[k]['a'] >= F0: break
+        Pk = FAMS[lut_family(k)]
+        if str(plans[k]['a']) in PLAN_OV: Pk = dict(Pk, **PLAN_OV[str(plans[k]['a'])])
+        Particles(int(Pk.get('particules_n', 300) * max(Pk['particules'], 0.01)))     # memes tirages, meme ordre
+    conf_s = confidence(0)
+    for j in range(1, F0): conf_s = 0.9 * conf_s + 0.1 * confidence(j)
+    print('PREROLL : etat rejoue jusqu a l image', F0, 'conf_s', round(conf_s, 6), 'transitions', TRANS)
 for n in range(NF):
     i = F0 + n
     S16 = read(dec_src); Dl = {l: read(p) for l, p in dec.items()}
@@ -335,8 +352,8 @@ for n in range(NF):
     # monteur) -> effets suspendus (fondu rapide) pour ne pas pulser avec le flash ni s'y superposer.
     ylum = float(luma(cv2.resize(SRCf, (160, 90), interpolation=cv2.INTER_AREA)).mean()) * 255
     flash = ylum > 1.30 * float(p['luma']) + 12
-    fxg = (0.4 * fxg + 0.6 * (0.0 if flash else 1.0)) if n else (0.0 if flash else 1.0)
-    conf_s = 0.9 * conf_s + 0.1 * confidence(i) if n else confidence(i)
+    fxg = (0.4 * fxg + 0.6 * (0.0 if flash else 1.0)) if (n or PREROLL) else (0.0 if flash else 1.0)
+    conf_s = 0.9 * conf_s + 0.1 * confidence(i) if (n or PREROLL) else confidence(i)
     camoff = cam.update(ETAL, prot)
     if efx:
         LD = luma(D); light = np.clip(blur(LD, 45) * 2.4, 0, 1)
