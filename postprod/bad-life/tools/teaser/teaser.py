@@ -56,26 +56,26 @@ def echantillon(frames): return frames[::max(1, len(frames) // 6)] + [frames[-1]
 
 
 def centre_x(frames, largeur):
-    """Fenetre de largeur donnee (1080p) : doit contenir la tete de chaque artiste (si c'est possible, sinon celle de
-    la plus grande personne) ; parmi les positions possibles, celle qui garde le plus de pixels d'artistes."""
-    acc = np.zeros(1920, np.float64); hx0, hx1 = 1e9, -1e9; big = None
+    """Fenetre de largeur donnee (1080p), cadre fixe par plan, choisie par un score calcule image par image :
+      score = 3 x (part des images ou la tete de l'artiste principal - la plus grande personne - est entiere)
+            - 1,5 x (nombre moyen de visages tranches par un bord)
+            + (pixels d'artistes visibles, normalises).
+    L'artiste principal est donc toujours privilegie ; on evite ensuite de couper un visage au bord ; enfin on garde
+    le plus d'artistes possible."""
+    L = int(round(largeur)); acc = np.zeros(1920, np.float64)
+    x0s = np.arange(1920 - L + 1); princ = np.zeros(len(x0s)); coupes = np.zeros(len(x0s)); n = 0
     for i in echantillon(frames):
-        acc += alpha_src(i).sum(axis=0)
-        for p in personnes(i):
-            hx0, hx1 = min(hx0, p[4]), max(hx1, p[5])
-        ps = personnes(i, 0.999)
-        if ps: big = ps[0] if big is None else (min(big[0], ps[0][0]), max(big[1], ps[0][1]), 0, 0, min(big[4], ps[0][4]), max(big[5], ps[0][5]))
-    L = int(round(largeur)); cs = np.concatenate([[0], np.cumsum(acc)])
-    masse = cs[L:] - cs[:-L]; x0s = np.arange(len(masse))
-    ok = np.ones(len(masse), bool)
-    if hx1 > hx0 and hx1 - hx0 <= L - 20:
-        ok = (x0s <= hx0 - 10) & (x0s + L >= hx1 + 10)
-    elif big is not None and big[5] - big[4] <= L - 20:
-        ok = (x0s <= big[4] - 10) & (x0s + L >= big[5] + 10)
-    if not ok.any(): ok[:] = True
-    pen = np.abs(x0s + L / 2 - 960) / 960 * 1e-3 * (masse.max() + 1)
-    sc = np.where(ok, masse - pen, -1e18)
-    return float(np.argmax(sc) + L / 2)
+        acc += alpha_src(i).sum(axis=0); ps = personnes(i); n += 1
+        if not ps: continue
+        g = max(ps, key=lambda p: (p[1] - p[0]) * (p[3] - p[2]))
+        princ += (x0s <= g[4] - 6) & (x0s + L >= g[5] + 6)
+        for p in ps:
+            a, b = p[4], p[5]
+            coupes += ((x0s > a - 6) & (x0s < b + 6)) | ((x0s + L > a - 6) & (x0s + L < b + 6))
+    cs = np.concatenate([[0], np.cumsum(acc)]); masse = cs[L:] - cs[:-L]
+    score = 3 * princ / max(n, 1) - 1.5 * coupes / max(n, 1) + masse / (masse.max() + 1e-9)
+    score -= np.abs(x0s + L / 2 - 960) / 960 * 1e-3
+    return float(np.argmax(score) + L / 2)
 
 
 def params_couverture(frames):
@@ -118,19 +118,23 @@ g_ly = G.Titre('LYPHIK', BB, 190, 'blanc', 0, 22, graine=21)
 g_pr = G.Titre('présente…', CZ7, 54, 'or', 0.21, 2, graine=22)
 g_badr = G.Titre('BAD', CZ9, 178, 'or', 0.21, -3, extrusion=8, lueur_force=0.5, graine=23)
 g_lifer = G.Titre('LIFE', CZ9, 178, 'or', 0.21, -3, extrusion=8, lueur_force=0.5, graine=24)
-g_bad = G.Titre('BAD', CZ9, 300, 'or', 0.21, -4, extrusion=12, lueur_force=0.55, graine=3)
-g_life = G.Titre('LIFE', CZ9, 300, 'or', 0.21, -4, extrusion=12, lueur_force=0.55, graine=4)
-g_ly2 = G.Titre('LYPHIK', BB, 78, 'blanc', 0, 4, graine=7)
-g_ja2 = G.Titre('JAHSIK', BB, 78, 'blanc', 0, 4, graine=8)
-g_ft = G.Titre('feat.', CZ7, 46, 'or', 0.21, 0, graine=9)
-g_md = G.Titre(TX['disponible']['texte'], BB, 108, 'metal', 0.0, 2, extrusion=12, coul_ext=(0.30, 0.02, 0.02),
-               lueur_coul=(0.9, 0.08, 0.05), lueur_force=0.35, graine=5)
-g_cta = G.Titre(TX['appel']['texte'], BB, 50, 'blanc', 0.0, 3, graine=6)
-# lettres de l'annonce (colonnes d'encre separees par des colonnes vides) pour l'entree en cascade
-_prof = (g_md.m > 0.05).any(axis=0); _x = np.nonzero(_prof)[0]; _bords = [_x[0]]
-for k in range(1, len(_x)):
-    if _x[k] - _x[k - 1] > 1: _bords.append((_x[k] + _x[k - 1]) // 2)
-_bords.append(_x[-1] + 1); MD_LETTRES = [(a + g_md.ox, b + g_md.ox) for a, b in zip(_bords[:-1], _bords[1:])]
+K = 0.75                                                         # fin : proportions validees a 75 % (zone libre au-dessus des tetes)
+g_bad = G.Titre('BAD', CZ9, int(300 * K), 'or', 0.21, -4, extrusion=10, lueur_force=0.55, graine=3)
+g_life = G.Titre('LIFE', CZ9, int(300 * K), 'or', 0.21, -4, extrusion=10, lueur_force=0.55, graine=4)
+g_ly2 = G.Titre('LYPHIK', BB, int(78 * K), 'blanc', 0, 4, graine=7)
+g_ja2 = G.Titre('JAHSIK', BB, int(78 * K), 'blanc', 0, 4, graine=8)
+g_ft = G.Titre('feat.', CZ7, int(46 * K), 'or', 0.21, 0, graine=9)
+g_md1 = G.Titre(TX['disponible']['ligne1'], BB, 150, 'metal', 0.0, 3, extrusion=12, coul_ext=(0.30, 0.02, 0.02),
+                lueur_coul=(0.9, 0.08, 0.05), lueur_force=0.35, graine=5)
+g_md2 = G.Titre(TX['disponible']['ligne2'], BB, 150, 'metal', 0.0, 3, extrusion=12, coul_ext=(0.30, 0.02, 0.02),
+                lueur_coul=(0.9, 0.08, 0.05), lueur_force=0.35, graine=15)
+def lettres(T):
+    """Bandes de colonnes (une par lettre) pour l'entree en cascade : colonnes d'encre separees par des colonnes vides."""
+    prof = (T.m > 0.05).any(axis=0); x = np.nonzero(prof)[0]; b = [x[0]]
+    for k in range(1, len(x)):
+        if x[k] - x[k - 1] > 1: b.append((x[k] + x[k - 1]) // 2)
+    b.append(x[-1] + 1); return [(a + T.ox, c + T.ox) for a, c in zip(b[:-1], b[1:])]
+L_MD1, L_MD2 = lettres(g_md1), lettres(g_md2)
 
 
 def ease(u): u = min(max(u, 0.0), 1.0); return 1 - (1 - u) ** 3
@@ -168,43 +172,41 @@ def calque_graphisme(t, L):
         if t >= t2:
             poser_centre(L, g_lifer, g_lifer.rendu(revele=ease((t - t2) / 0.26), chaleur=0.6 * np.exp(-(t - t2) / 0.15),
                                                    eclat=eclat(t, [r['de'] + 1.05])), W / 2, 480, out)
-    ta = TX['annonce_titre']['de']
-    if t >= ta:
-        G.dessiner_etincelles(L[..., :3], G.etincelles(t, ta, 70, W / 2, 560, 820, 21))
-        gl = [ta + 1.582 + k * BAR for k in range(5)]
-        poser_centre(L, g_bad, g_bad.rendu(revele=ease((t - ta) / 0.30), chaleur=0.55 * np.exp(-(t - ta) / 0.18), eclat=eclat(t, gl, 0.6)), W / 2, 392)
-        tl = TX['annonce_titre']['de2']
+    ta, tl, tf = TX['annonce_titre']['de'], TX['annonce_titre']['de2'], TX['annonce_titre']['a']
+    if ta <= t < tf:
+        sortie = 1 - fen(t, tf - 0.18, 0.18)                                 # le titre se dissipe juste avant l'annonce
+        chal = 0.5 * fen(t, tf - 0.18, 0.18)
+        G.dessiner_etincelles(L[..., :3], G.etincelles(t, ta, 40, W / 2, 330, 760, 21))
+        poser_centre(L, g_bad, g_bad.rendu(revele=ease((t - ta) / 0.30), chaleur=0.55 * np.exp(-(t - ta) / 0.18) + chal,
+                                           eclat=eclat(t, [ta + 1.582], 0.6)), W / 2, 280, sortie)
         if t >= tl:
-            poser_centre(L, g_life, g_life.rendu(revele=ease((t - tl) / 0.30), chaleur=0.55 * np.exp(-(t - tl) / 0.18),
-                                                 eclat=eclat(t, [g + 0.12 for g in gl], 0.6)), W / 2, 598)
-    tn = TX['annonce_artistes']['de']
-    if t >= tn:
-        u = ease((t - tn) / 0.35); a = fen(t, tn, 0.3); dy = 18 * (1 - u)
-        gap = 22; w1 = g_ly2.encre[1] - g_ly2.encre[0]; w2 = g_ft.encre[1] - g_ft.encre[0]; w3 = g_ja2.encre[1] - g_ja2.encre[0]
-        x = W / 2 - (w1 + w2 + w3 + 2 * gap) / 2
-        poser_encre(L, g_ly2, g_ly2.rendu(), x, 205 + dy, a)
-        poser_encre(L, g_ft, g_ft.rendu(), x + w1 + gap, 209 + dy, a)
-        poser_encre(L, g_ja2, g_ja2.rendu(), x + w1 + gap + w2 + gap, 205 + dy, a)
-    td = TX['disponible']['de']
-    if t >= td:
-        img = g_md.rendu(eclat=eclat(t, [td + 0.604, td + 0.604 + 2 * BAR], 0.6))
-        x0 = int(round(W / 2 - (g_md.encre[1] + g_md.encre[0]) / 2 - g_md.ox)) ; cy = 812
-        y0 = int(round(cy - g_md.oy - (g_md.encre[2] + g_md.encre[3]) / 2))
-        for k, (a_, b_) in enumerate(MD_LETTRES):                              # cascade lettre par lettre
-            tk = td + 0.018 * k;
-            if t < tk: continue
-            u = ease((t - tk) / 0.22); al = fen(t, tk, 0.10)
-            a2 = 0 if k == 0 else a_; b2 = img.shape[1] if k == len(MD_LETTRES) - 1 else b_   # bandes jointives, sans recouvrement
-            G.poser(L, img[:, a2:b2], x0 + a2, y0 - int(round(55 * (1 - u))), al)
-    tc = TX['appel']['de']
-    if t >= tc:
-        u = ease((t - tc) / 0.35)
-        poser_centre(L, g_cta, g_cta.rendu(), W / 2, 918 + 16 * (1 - u), fen(t, tc, 0.3))
+            poser_centre(L, g_life, g_life.rendu(revele=ease((t - tl) / 0.30), chaleur=0.55 * np.exp(-(t - tl) / 0.18) + chal,
+                                                 eclat=eclat(t, [ta + 1.70], 0.6)), W / 2, 435, sortie)
+        tn = TX['annonce_artistes']['de']
+        if t >= tn:
+            u = ease((t - tn) / 0.35); a = fen(t, tn, 0.3) * sortie; dy = 14 * (1 - u)
+            gap = 16; w1 = g_ly2.encre[1] - g_ly2.encre[0]; w2 = g_ft.encre[1] - g_ft.encre[0]; w3 = g_ja2.encre[1] - g_ja2.encre[0]
+            x = W / 2 - (w1 + w2 + w3 + 2 * gap) / 2
+            poser_encre(L, g_ly2, g_ly2.rendu(), x, 140 + dy, a)
+            poser_encre(L, g_ft, g_ft.rendu(), x + w1 + gap, 143 + dy, a)
+            poser_encre(L, g_ja2, g_ja2.rendu(), x + w1 + gap + w2 + gap, 140 + dy, a)
+    td, tq = TX['disponible']['de'], TX['disponible']['a']
+    if td <= t < tq:
+        sortie = 1 - fen(t, tq - 0.35, 0.35); mont = -12 * fen(t, tq - 0.35, 0.35)
+        for T, LL, cy, dt in ((g_md1, L_MD1, 255, 0.0), (g_md2, L_MD2, 415, 0.12)):
+            img = T.rendu(eclat=eclat(t, [td + 0.882 + dt, td + 1.486 + dt], 0.55))
+            x0 = int(round(W / 2 - (T.encre[1] + T.encre[0]) / 2 - T.ox)); y0 = int(round(cy + mont - T.oy - (T.encre[2] + T.encre[3]) / 2))
+            for k, (a_, b_) in enumerate(LL):                                     # cascade lettre par lettre
+                tk = td + dt + 0.022 * k
+                if t < tk: continue
+                u = ease((t - tk) / 0.22); al = fen(t, tk, 0.10) * sortie
+                a2 = 0 if k == 0 else a_; b2 = img.shape[1] if k == len(LL) - 1 else b_
+                G.poser(L, img[:, a2:b2], x0 + a2, y0 - int(round(55 * (1 - u))), al)
 
 
 def effets_decor(img, t, disp):
     """DECOR seulement : assombrissement, virage rouge des ombres, vignettage (plein), lumiere de coupe."""
-    k = 0.80 if t < 5.2 else (0.86 if t < 12 else (0.90 if t < 20 else 0.80))
+    k = 0.80 if t < 5.2 else (0.86 if t < 12 else (0.90 if t < 20 else 0.90))   # fin : decor lisible
     bg = img * k; lum = bg.mean(axis=2, keepdims=True)
     bg = bg * 0.78 + 0.22 * lum * np.array([1.45, 0.55, 0.50], np.float32)
     if disp == 'plein': bg = bg * VIGN[:bg.shape[0]]
@@ -241,9 +243,11 @@ def cadre(F, A1, cx, sc, ow, oh, ancre_bas=False):
 
 
 def tetes_coupees(si, vis):
+    """Tetes tranchees par un bord du cadre (a cheval : ni entierement dedans, ni entierement dehors)."""
     n = 0
     for p in personnes(si):
-        if p[4] < vis[0] - 1 or p[5] > vis[1] + 1: n += 1
+        dedans = p[4] >= vis[0] - 1 and p[5] <= vis[1] + 1; dehors = p[5] <= vis[0] + 1 or p[4] >= vis[1] - 1
+        if not dedans and not dehors: n += 1
     return n
 
 
@@ -273,7 +277,8 @@ for s in segs:
         if SEL and ni not in SEL: continue
         F = cache; cx = s['cx'][plan_of(si)] * 2; A1 = alpha_src(si); u = j / max(n - 1, 1)
         if s['disposition'] == 'plein':
-            SUB, AL, _, _, vis = cadre(F, A1, cx, H * (1.0 + 0.03 * u) / SH, W, H)
+            av = 0.03 * u if t < 20.0 else 0.0                                 # fin : mouvements reels uniquement
+            SUB, AL, _, _, vis = cadre(F, A1, cx, H * (1.0 + av) / SH, W, H)
             COMP = effets_decor(SUB, t, 'plein')
         elif s['disposition'] == 'bande':
             sb, ab, pres, _, vis = cadre(F, A1, 1920.0, W / SW, W, BAND_H)        # image entiere, sans avancee (rien ne sort du cadre)

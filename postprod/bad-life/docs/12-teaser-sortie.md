@@ -215,3 +215,58 @@ calcul est déterministe.
 | 20,98 s (temps) | « LYPHIK feat. JAHSIK » (fondu, montée de 18 px) |
 | 23,11 s (kick + snare) | « MAINTENANT DISPONIBLE ! » lettre par lettre, en cascade (18 ms par lettre), éclair de lumière sur le décor, éclat métallique au temps suivant |
 | 26,41 s (temps) | « DISPONIBLE SUR YOUTUBE — REGARDEZ LE CLIP ! » sur une ligne, avec le tiret du brief |
+
+## 12.10 Fin vivante (19,5–30 s) : décisions de l'utilisateur après l'aperçu premium
+
+| Décision | Mise en œuvre |
+|---|---|
+| Supprimer l'appel à l'action | supprimé, remplacé par aucun texte. Textes : « BAD LIFE », « LYPHIK FEAT. JAHSIK », « MAINTENANT DISPONIBLE ! » |
+| Cadrage des artistes, sans effet « découpé-collé » | disposition « couverture » abandonnée. La fin est en **plein écran vertical**, comme le reste du teaser, avec des cadrages naturels |
+| Supprimer la grosse fumée rouge | la fin n'utilise plus de fond généré. Dans les bandes du début, la fumée est réduite au quart |
+| Supprimer l'image figée | plus d'image arrêtée ni d'avancée sur la fin. Seuls les mouvements réels du clip sont utilisés, sans aucune interpolation |
+| Or plus noble | paillettes réduites de 35 % (densité de 0,35 % à 0,23 % des pixels) ; relief et grands reflets conservés |
+| Montage 0–20 s conservé | segments identiques. Seule la règle de cadrage est améliorée (voir ci-dessous) |
+
+**Constats sur les rushs**
+
+Ce sont des faits mesurés sur les masques, pas des hypothèses.
+
+- **Pieds jamais visibles** : dans tous les plans de nuit, le corps des artistes dépasse le bas de
+  l'image (bas des silhouettes à y = 1080). Montrer les artistes « entièrement » est impossible, et rien
+  n'est généré.
+- **Duos trop larges pour un cadre vertical** : en plein écran vertical, le cadre ne fait que 607 px de
+  large dans l'image 1080p, alors que les têtes des duos sont écartées de 640 à 800 px. Les deux têtes ne
+  tiennent ensemble que pendant 0,14 à 0,32 s (P194, P33, P87). Les deux artistes **alternent** donc au
+  rythme de la musique.
+- **Peu d'espace libre au-dessus des têtes** : dans les meilleurs plans, les têtes commencent à environ
+  480 px du haut de l'écran.
+  - Mesuré avec un cadrage naturel, le titre (noms et « BAD LIFE » à 75 % des proportions validées)
+    passe de 0 à 8 % derrière les artistes sur les plans retenus.
+  - Une ligne « MAINTENANT DISPONIBLE ! » placée sous le titre passerait de 25 à 84 % derrière les têtes.
+  - Les textes se succèdent donc dans la même zone haute : d'abord le titre et les noms, puis
+    l'annonce, sur deux lignes.
+
+**Règle de cadrage (plein écran)**
+
+Le cadre est fixe par plan, et sa position est choisie par un score calculé image par image :
+
+- 3 × (part des images où la tête de l'artiste principal est entière) ;
+- − 1,5 × (nombre moyen de visages tranchés par un bord) ;
+- \+ (pixels d'artistes visibles).
+
+Une première version, qui interdisait absolument toute coupe de visage, produisait des cadres sans
+artiste : elle a été écartée. Pour P237, le masque fusionne le groupe : le cadre est imposé sur LYPHIK,
+et le visage du voisin reste entièrement hors cadre.
+
+**Nouvelle fin**
+
+| Temps | Plan | Texte |
+|---|---|---|
+| 20,00–21,58 s | JAHSIK, P221 | « BAD » (20,00 s), « LIFE » (20,37 s), « LYPHIK FEAT. JAHSIK » (20,98 s) |
+| 21,58–23,11 s | LYPHIK, P237 | le titre se dissipe sur 0,18 s avant 23,11 s |
+| 23,11–24,60 s | JAHSIK de nuit, P236 | « MAINTENANT / DISPONIBLE ! » en cascade, lettre par lettre (kick + snare) |
+| 24,60–25,81 s | JAHSIK, P31 | l'annonce s'efface, avec une légère montée, sur 0,35 s jusqu'à 25,81 s |
+| 25,81–27,52 s | P194, P33 | aucun texte : conclusion entièrement vidéo |
+| 27,52–30,00 s | P149, couloir vert, P154 | **synchronisation labiale exacte**. Le teaser se termine sur la dernière image de P154, en mouvement réel |
+
+Le son se termine par un fondu de sortie de 1,8 s (28,2 → 30 s), calé sur le dernier plan.

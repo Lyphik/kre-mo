@@ -80,7 +80,7 @@ def matiere(m, style, graine=1):
         grain = bruit(H, W, (1, 2), graine + 7)
         xx_ = np.arange(W, dtype=np.float32)[None, :]
         stries = np.clip(np.sin((xx_ + yy * H * 0.9) / (0.075 * W) * 6.283) * 0.5 + 0.5, 0, 1) ** 6   # reflets diagonaux
-        g2 = np.random.default_rng(graine + 11); pail = (g2.random((H, W)) > 0.9965).astype(np.float32)
+        g2 = np.random.default_rng(graine + 11); pail = (g2.random((H, W)) > 0.99773).astype(np.float32)   # paillettes -35 % (or plus noble)
         pail = cv2.GaussianBlur(pail, (0, 0), 0.8) * 6
         base = np.dstack([0.98 - 0.25 * yy, 0.62 - 0.32 * yy + 0.10 * (1 - yy), 0.14 - 0.10 * yy]).astype(np.float32)
         base = base * (0.70 + 0.45 * nz[..., None]) * (0.85 + 0.25 * grain[..., None])
@@ -237,7 +237,7 @@ class Fond:
         fum = np.clip((f1 * 0.6 + f2 * 0.4 - 0.30) * 1.6, 0, 1) ** 1.5
         haut = np.linspace(0.55, 1.0, H, dtype=np.float32)[:, None]          # plus sombre en haut
         img = np.zeros((H, W, 3), np.float32) + 0.010
-        img += (fum * haut)[..., None] * np.array([0.60, 0.05, 0.035], np.float32) * 0.50
+        img += (fum * haut)[..., None] * np.array([0.60, 0.05, 0.035], np.float32) * 0.12   # fumee reduite drastiquement
         img += (self.rayons * (0.75 + 0.25 * np.sin(t * 0.7)))[..., None] * np.array([0.9, 0.25, 0.12], np.float32) * 0.16
         img = img * self.vign[..., None] + self.grain[..., None]
         return np.clip(img, 0, 1)

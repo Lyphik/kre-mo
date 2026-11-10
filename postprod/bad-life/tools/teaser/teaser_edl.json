@@ -139,68 +139,76 @@
   },
   {
    "t0": 20.0,
-   "t1": 20.978,
-   "src": 130.36,
-   "disposition": "couverture",
-   "cale": false,
-   "_": "duo LYPHIK (B) + JAHSIK (A) BIENVENUE, P222"
-  },
-  {
-   "t0": 20.978,
-   "t1": 22.185,
+   "t1": 21.582,
    "src": 128.4,
-   "disposition": "couverture",
+   "disposition": "plein",
    "cale": false,
-   "_": "duo conteneur, P221"
+   "_": "JAHSIK (A) conteneur rouge, P221 ; titre"
   },
   {
-   "t0": 22.185,
+   "t0": 21.582,
    "t1": 23.114,
-   "src": 122.76,
-   "disposition": "couverture",
+   "src": 157.4,
+   "disposition": "plein",
    "cale": false,
-   "_": "duo conteneur, P204"
+   "_": "LYPHIK (C) rideau metallique, P237 ; cadre impose sur LYPHIK (le masque fusionne le groupe ; le visage du voisin reste entierement hors cadre)",
+   "cx_1080": 1314
   },
   {
    "t0": 23.114,
-   "t1": 23.72,
-   "src": 119.2,
-   "disposition": "couverture",
+   "t1": 24.6,
+   "src": 155.7,
+   "disposition": "plein",
    "cale": false,
-   "_": "duo conteneur, P194"
+   "_": "JAHSIK (D) nuit, P236 ; MAINTENANT DISPONIBLE"
   },
   {
-   "t0": 23.72,
-   "t1": 24.82,
-   "src": 93.3,
-   "disposition": "couverture",
+   "t0": 24.6,
+   "t1": 25.808,
+   "src": 41.9,
+   "disposition": "plein",
+   "cale": false,
+   "_": "JAHSIK (A) mains jointes, P31 ; MAINTENANT DISPONIBLE"
+  },
+  {
+   "t0": 25.808,
+   "t1": 26.411,
+   "src": 118.88,
+   "disposition": "plein",
+   "cale": false,
+   "_": "conteneur, P194 ; conclusion video"
+  },
+  {
+   "t0": 26.411,
+   "t1": 27.52,
+   "src": 44.48,
+   "disposition": "plein",
+   "cale": false,
+   "_": "conteneur, P33"
+  },
+  {
+   "t0": 27.52,
+   "t1": 28.66,
+   "src": 97.1,
+   "disposition": "plein",
    "cale": true,
-   "_": "JAHSIK (D) rideau metallique, P141"
+   "_": "duo, P149 (synchro labiale)"
   },
   {
-   "t0": 24.82,
-   "t1": 25.204,
-   "src": 56.98,
-   "disposition": "couverture",
-   "cale": false,
-   "_": "duo nuit LYPHIK (C) + JAHSIK (D), P52"
+   "t0": 28.66,
+   "t1": 29.04,
+   "src": 98.24,
+   "disposition": "plein",
+   "cale": true,
+   "_": "couloir vert, P150-P153 (synchro labiale)"
   },
   {
-   "t0": 25.204,
-   "t1": 25.744,
-   "src": 98.9,
-   "disposition": "couverture",
-   "cale": false,
-   "_": "POCHETTE (debut) : P154 joue puis se fige sans rupture"
-  },
-  {
-   "t0": 25.744,
+   "t0": 29.04,
    "t1": 30.0,
-   "src": 99.44,
-   "disposition": "couverture",
-   "cale": false,
-   "fige": true,
-   "_": "POCHETTE : LYPHIK (B) + JAHSIK (A) cote a cote devant BIENVENUE, P154 a 99,44 s (les deux artistes entiers, image nette), arretee + lente avancee"
+   "src": 98.62,
+   "disposition": "plein",
+   "cale": true,
+   "_": "FIN : P154 jusqu'a sa derniere image (synchro labiale), mouvement reel"
   }
  ],
  "textes": {
@@ -214,18 +222,21 @@
   },
   "annonce_titre": {
    "de": 20.0,
-   "de2": 20.374
+   "de2": 20.374,
+   "a": 23.114
   },
   "annonce_artistes": {
    "de": 20.978
   },
   "disponible": {
    "de": 23.114,
-   "texte": "MAINTENANT DISPONIBLE !"
-  },
-  "appel": {
-   "de": 26.411,
-   "texte": "DISPONIBLE SUR YOUTUBE — REGARDEZ LE CLIP !"
+   "a": 25.808,
+   "ligne1": "MAINTENANT",
+   "ligne2": "DISPONIBLE !"
   }
+ },
+ "audio_fondu_sortie": {
+  "de": 28.2,
+  "duree": 1.8
  }
 }
