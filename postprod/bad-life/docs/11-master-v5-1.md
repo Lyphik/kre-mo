@@ -110,4 +110,63 @@ copié tel quel**. Chaque segment est encodé avec les mêmes réglages (x265 Ma
 80 Mb/s) et commence par une image clé : la qualité d'encodage est la même que celle d'un rendu
 d'un seul tenant. Seule la position des images clés change.
 
-_Contrôles du master final : §11.5._
+## 11.5 Contrôles du master assemblé : deux défauts trouvés et corrigés
+
+### 11.5.1 Décalage vidéo / audio de 21 ms à l'assemblage
+
+Premier assemblage : la vidéo démarrait à 0,021 s et l'audio à 0, contre 0 / 0 dans la source.
+La vidéo était donc **en retard d'une image** sur le son. Cause : le démultiplexeur `concat` calait le
+départ sur la piste AAC des segments (délai d'amorçage de −21 ms). Le contrôle image par image ne
+pouvait pas le voir : il compare des indices d'images, pas des horodatages.
+
+- Correction : concaténation des **seules pistes vidéo**, puis ajout de l'audio original de la
+  source (`rendu_segments.sh`). Aucun re-rendu : seul l'assemblage est refait.
+- Contrôle ajouté (`qc_master.py`, `synchro_horodatage`) : l'écart de départ vidéo − audio doit
+  être celui de la source. Il aurait signalé le fichier fautif (0,021 s contre 0).
+
+### 11.5.2 Pulsation à 25 Hz des halos sur la source 25p doublée
+
+Le contrôle du scintillement (`qc_extract.py`) a signalé plusieurs images au-dessus du seuil de 12 %.
+Leur examen a mis en évidence un **défaut réel, introduit par le traitement**. La source est en 25p
+doublée en 50p : une image sur deux est identique à la précédente. Sur ces images doublons, les
+halos, la halation et les flares anamorphiques changeaient quand même, alors que l'image ne bougeait
+pas. Le résultat était une **pulsation à 25 Hz** des halos pendant les mouvements de caméra.
+
+| Mesure (pixels du master, effet = COMPLET − ÉTALONNAGE SEUL, codes 10 bits) | Avant |
+|---|---|
+| Variation de l'effet sur une image doublon, p99,9 | 41 à 48 |
+| Variation maximale sur une image doublon | 90 à 118 (≈ 11 % de la pleine échelle) |
+| Images à halos sur doublon | 140, dans les 4 segments |
+
+Cause : la carte des sources lumineuses est lissée dans le temps avec compensation du mouvement
+caméra, puis seuillée de façon non linéaire. Sur un doublon, le mouvement mesuré est nul ; sur
+l'image suivante, il est double. La carte lissée se recale donc différemment d'une image sur l'autre
+et franchit le seuil différemment. La fumée et les rayons n'étaient pas touchés.
+
+Ce plan (30, 40,60–41,86 s) et le plan 46 (52,34–54,22 s) ne faisaient pas partie des 5 extraits de
+validation.
+
+Correction, minimale et réversible : option `sources_doublons_25p`, désactivée par défaut, donc V5 et
+V5.1 inchangées. Elle est activée dans `v5_1_final_config.json`. Sur une image source doublon, la
+carte des sources est **conservée** au lieu d'être relissée. Critère de doublon : différence < 0,006
+**et** < 35 % de celle de la dernière image nouvelle. Ce critère couvre les séries de 3 images
+identiques ou plus (pauses caméra) ; sur un plan fixe sans cadence 25p, il ne s'applique pas.
+
+| Vérification (fenêtres rendues avec la correction) | Résultat |
+|---|---|
+| Variation de l'effet sur doublon, pixels, p99,9 | 41–48 → **5–7** codes (résidu : fumée qui dérive lentement, bruit HEVC) |
+| Halos sur doublons, plan 30 / plan 46 | **0,7 % / 0,0 %** du niveau du plan (seuil 12 %) |
+| Même contrôle sur l'ancien master, plan 46 (témoin) | **34,9 % : signalé** |
+| Plan 34, sans doublon (non-régression) | **identique**, 0 cellule différente |
+| Artistes | écart **0** |
+
+Contrôles ajoutés à `qc_extract.py` :
+
+- `halos_sur_doublons` : contrôle direct, seuil 12 %. Le témoin montre que lui seul détecte ce défaut.
+- `scintillement` : mesuré sur les **images nouvelles**. Un effet qui suit la cadence de l'image forme
+  un escalier, ce qui n'est pas une pulsation. L'ancienne mesure image par image reste affichée.
+
+Le master est **re-rendu entièrement** (4 segments) avec cette correction. Les deux masters
+précédents ne sont pas livrés.
+
+_Contrôles du master final : §11.6._
