@@ -143,7 +143,8 @@
    "src": 128.4,
    "disposition": "plein",
    "cale": false,
-   "_": "JAHSIK (A) conteneur rouge, P221 ; titre"
+   "_": "JAHSIK (A) conteneur rouge, P221 ; titre ; cadre sur JAHSIK, visage de LYPHIK entierement hors cadre",
+   "cx_1080": 863
   },
   {
    "t0": 21.582,
@@ -176,7 +177,8 @@
    "src": 118.88,
    "disposition": "plein",
    "cale": false,
-   "_": "conteneur, P194 ; conclusion video"
+   "_": "LYPHIK (B) conteneur, P194 ; cadre sur LYPHIK, visage de JAHSIK entierement hors cadre ; conclusion video",
+   "cx_1080": 1384
   },
   {
    "t0": 26.411,
@@ -192,7 +194,8 @@
    "src": 97.1,
    "disposition": "plein",
    "cale": true,
-   "_": "duo, P149 (synchro labiale)"
+   "_": "JAHSIK (A), P149 (synchro labiale) ; cadre sur JAHSIK",
+   "cx_1080": 589
   },
   {
    "t0": 28.66,
@@ -208,7 +211,8 @@
    "src": 98.62,
    "disposition": "plein",
    "cale": true,
-   "_": "FIN : P154 jusqu'a sa derniere image (synchro labiale), mouvement reel"
+   "_": "FIN : LYPHIK (B) devant BIENVENUE, P154 jusqu'a sa derniere image (synchro labiale), mouvement reel ; cadre sur LYPHIK",
+   "cx_1080": 634
   }
  ],
  "textes": {
