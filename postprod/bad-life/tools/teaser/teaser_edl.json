@@ -80,9 +80,9 @@
    "t0": 9.16,
    "t1": 10.96,
    "src": 78.74,
-   "disposition": "bande",
+   "disposition": "plein",
    "cale": true,
-   "_": "duo nuit LYPHIK (C) + JAHSIK (D), P97-P109"
+   "_": "duo nuit LYPHIK (C) + JAHSIK (D), P97 puis salve d'origine P98-P109 (synchro labiale) ; plein ecran vertical (les deux tetes tiennent dans le cadre sur P97) ; titre retire"
   },
   {
    "t0": 10.96,
@@ -235,10 +235,6 @@
   }
  ],
  "textes": {
-  "titre_revelation": {
-   "de": 9.16,
-   "a": 10.96
-  },
   "annonce_titre": {
    "de": 20.0,
    "de2": 20.374,
@@ -265,5 +261,10 @@
  "fondu_entree_video": 0.0,
  "audio_fondu_entree": {
   "duree": 0.1
+ },
+ "debruitage_decor": {
+  "_doc": "Zones sombres et unies du DECOR seulement (artistes et textes exclus) : lissage preservant les contours + filtre temporel limite aux zones immobiles. Corrige les blocs de compression H.264 du rush, accentues par l'etalonnage (doc 12.13).",
+  "seuil_luma": 48,
+  "force": 1.0
  }
 }

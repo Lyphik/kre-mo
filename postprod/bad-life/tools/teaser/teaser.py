@@ -164,8 +164,8 @@ def calque_graphisme(t, L):
         out = 1 - fen(t, p['a'] - 0.30, 0.30)
         poser_centre(L, g_ly, g_ly.rendu(revele=ease((t - p['de']) / 0.7), eclat=eclat(t, [p['de'] + 1.4])), W / 2, p.get('y1', 400), out)
         poser_centre(L, g_pr, g_pr.rendu(), W / 2, p.get('y2', 545), fen(t, p['de'] + 0.5, 0.5) * out)
-    r = TX['titre_revelation']
-    if r['de'] <= t < r['a']:
+    r = TX.get('titre_revelation')                                         # retire dans la version definitive (passage en plein ecran)
+    if r and r['de'] <= t < r['a']:
         out = 1 - fen(t, r['a'] - 0.25, 0.25); t2 = r['de'] + 0.25
         G.dessiner_etincelles(L[..., :3], G.etincelles(t, r['de'], 26, W / 2, 380, 640, 31))
         poser_centre(L, g_badr, g_badr.rendu(revele=ease((t - r['de']) / 0.26), chaleur=0.6 * np.exp(-max(t - r['de'], 0) / 0.15),
@@ -225,6 +225,44 @@ VIGN = np.clip(1 - 0.42 * (((xx - W / 2) / (W / 2)) ** 2 * 0.8 + ((yy - H / 2) /
 OR_FILET = np.array([0.85, 0.62, 0.25], np.float32)
 
 
+BORDS_DECONTAMINES = E.get('bords_decontamines', True)
+
+
+def champ_fond(SUB, a, sigma=10.0):
+    """Champ de fond pour les effets de decor (correction du liseré clair, doc 12.13). Dans la bande de transition du
+    masque (0 < alpha < 0,97), le pixel observe melange l'artiste et le fond d'origine ; appliquer l'effet de decor a ce
+    melange n'assombrit que partiellement la part de fond et laisse un liseré plus clair que le decor voisin. On estime
+    donc la couleur du fond derriere l'artiste a partir du decor voisin (moyenne ponderee gaussienne des pixels de decor
+    pur) ; l'effet est calcule sur ce fond et applique a la seule part (1 - alpha) : sortie = pixel + (1 - alpha) x
+    (fond modifie - fond). Les pixels opaques de l'artiste (alpha = 1) restent strictement identiques ; le decor pur
+    (alpha ~ 0) est traite comme avant."""
+    w = (a < 0.03).astype(np.float32)
+    num = cv2.GaussianBlur(SUB * w[..., None], (0, 0), sigma); den = cv2.GaussianBlur(w, (0, 0), sigma)[..., None]
+    bh = np.where(den > 1e-3, num / np.maximum(den, 1e-3), SUB)
+    return np.where(w[..., None] > 0, SUB, bh).astype(np.float32)
+
+
+DN = E.get('debruitage_decor')
+
+
+def debruitage_decor(O, AL, Lalpha, prev):
+    """Debruitage local du DECOR (doc 12.13) : seulement ou le pixel est du decor (1 - alpha), sombre (luma < seuil) et
+    uni (faible detail local), hors textes. (1) lissage bilateral leger (preserve les contours, ecart de couleur < 3 codes) ;
+    (2) filtre temporel recursif, applique seulement la ou l'image n'a pas bouge depuis l'image precedente (ecart < 3 codes) :
+    aucun trainage sur les mouvements. Les pixels opaques des artistes (alpha = 1) ne sont jamais modifies."""
+    lum = O.mean(axis=2)
+    wd = np.clip((DN['seuil_luma'] / 255 - lum) / (24 / 255), 0, 1)
+    det = cv2.GaussianBlur(np.abs(cv2.Laplacian(lum, cv2.CV_32F)), (0, 0), 2)
+    wf = np.clip((0.020 - det) / 0.012, 0, 1)
+    m = (1 - AL[..., 0]) * (1 - Lalpha) * wd * wf * DN.get('force', 1.0)
+    if m.max() <= 0: return O
+    Ob = cv2.bilateralFilter(O.astype(np.float32), 7, 3 / 255, 5)
+    if prev is not None:
+        immobile = np.clip(1 - cv2.GaussianBlur(np.abs(Ob - prev).mean(axis=2), (0, 0), 2) / (3 / 255), 0, 1)
+        Ob = Ob + 0.5 * immobile[..., None] * (prev - Ob)
+    return O + m[..., None] * (Ob - O)
+
+
 def cadre(F, A1, cx, sc, ow, oh, ancre_bas=False):
     """Homothetie sc (par rapport au 4K) puis fenetre ow x oh centree sur cx (4K). Si l'image reduite est plus etroite
     ou plus basse que la fenetre, elle est centree (horizontalement) / ancree en bas, le reste est vide (masque 0)."""
@@ -267,7 +305,8 @@ qc = open(QCP, 'w', newline=''); qw = csv.writer(qc)
 qw.writerow(['image', 't_s', 'image_source', 'disposition', 'px_artistes', 'ecart_max_artistes_vs_master', 'controle',
              'texte_x_min', 'texte_x_max', 'texte_y_min', 'texte_y_max', 'tetes_coupees'])
 out = sys.stdout.buffer
-SEL = {int(x) for x in os.environ.get('TEASER_IMAGES', '').split(',') if x}   # apercu : images choisies -> PNG
+SEL = {int(x) for x in os.environ.get('TEASER_IMAGES', '').split(',') if x}
+PREV = {}                                                                      # image precedente du meme plan (filtre temporel)   # apercu : images choisies -> PNG
 for s in segs:
     n = s['n1'] - s['n0']
     if SEL and not any(s['n0'] <= k < s['n1'] for k in SEL): continue
@@ -280,7 +319,8 @@ for s in segs:
         if s['disposition'] == 'plein':
             av = 0.03 * u if t < 20.0 else 0.0                                 # fin : mouvements reels uniquement
             SUB, AL, _, _, vis = cadre(F, A1, cx, H * (1.0 + av) / SH, W, H)
-            COMP = effets_decor(SUB, t, 'plein')
+            CHAMP = champ_fond(SUB, np.where(AL >= 0.97, 1.0, AL)) if BORDS_DECONTAMINES else SUB
+            COMP = effets_decor(CHAMP, t, 'plein')
         elif s['disposition'] == 'bande':
             sb, ab, pres, _, vis = cadre(F, A1, 1920.0, W / SW, W, BAND_H)        # image entiere, sans avancee (rien ne sort du cadre)
             SUB = np.zeros((H, W, 3), np.float32); SUB[BAND_Y0:BAND_Y0 + BAND_H] = sb
@@ -303,7 +343,13 @@ for s in segs:
         AL = np.where(AL >= 0.97, 1.0, AL)[..., None]
         L = np.zeros((H, W, 4), np.float32); calque_graphisme(t, L)
         COMP = COMP * (1 - L[..., 3:]) + L[..., :3]
-        O = AL * SUB + (1 - AL) * COMP
+        if s['disposition'] == 'plein' and BORDS_DECONTAMINES:
+            O = np.clip(SUB + (1 - AL) * (COMP - CHAMP), 0, 1)                 # seule la part de fond des pixels de bord change
+        else:
+            O = AL * SUB + (1 - AL) * COMP
+        if DN and s['disposition'] == 'plein':
+            cle = (s['t0'], plan_of(si))
+            O = debruitage_decor(O, AL, L[..., 3], PREV.get(cle)); PREV.clear(); PREV[cle] = O
         fe = E.get('fondu_entree_video', 0.8)
         fade = min(1.0, t / fe) if fe > 0 else 1.0                              # ouverture au noir (supprimee dans la version definitive)
         fs = E.get('fondu_sortie_video')
