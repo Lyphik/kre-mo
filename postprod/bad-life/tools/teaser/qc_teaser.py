@@ -68,9 +68,10 @@ def luma(path, w=108, h=192):
 
 
 L = luma(TZ); m = L.mean(axis=(1, 2)); t = np.arange(len(m)) / FPS
-noirs = [int(i) for i in np.nonzero((m < 6) & (t >= 0.8))[0]]
-rep['ecrans_noirs'] = {'seuil_luma_moyenne': 6, 'images_noires_hors_ouverture': len(noirs), 'premieres': noirs[:10],
-                       'luma_min_hors_ouverture': round(float(m[t >= 0.8].min()), 1), 'verdict': 'OK' if not noirs else 'ECHEC'}
+fs = E.get('fondu_sortie_video'); t_fin = fs['de'] if fs else DUR + 1
+noirs = [int(i) for i in np.nonzero((m < 6) & (t >= 0.8) & (t < t_fin))[0]]
+rep['ecrans_noirs'] = {'seuil_luma_moyenne': 6, 'images_noires_hors_fondus': len(noirs), 'premieres': noirs[:10],
+                       'luma_min_hors_fondus': round(float(m[(t >= 0.8) & (t < t_fin)].min()), 1), 'verdict': 'OK' if not noirs else 'ECHEC'}
 ok &= not noirs
 
 cut_f = {int(round(s['t0'] * FPS)) for s in E['segments']}
@@ -86,10 +87,12 @@ volont = set()
 for c in cut_f:
     volont |= set(range(c - 1, c + 7))                                     # coupe + eclair de lumiere (decroissance 0,12 s)
 td = int(round(E['textes']['disponible']['de'] * FPS)); volont |= set(range(td - 1, td + 12))
-for k in ('titre_revelation', 'annonce_titre', 'annonce_artistes', 'appel'):
-    tk = int(round(E['textes'][k]['de'] * FPS)); volont |= set(range(tk - 1, tk + 16))   # apparitions de textes
+for k, v in E['textes'].items():                                                       # apparitions et sorties de textes
+    for cle in ('de', 'de2', 'a'):
+        if cle in v: tk = int(round(v[cle] * FPS)); volont |= set(range(tk - 20, tk + 16))
+volont |= set(range(int(round(t_fin * FPS)) - 1, NF))                                   # fondu de sortie
 d2 = np.zeros(len(m)); d2[1:-1] = np.abs(m[1:-1] - 0.5 * (m[:-2] + m[2:]))
-cand = [i for i in range(1, len(m) - 1) if i not in volont and t[i] >= 0.8]
+cand = [i for i in range(1, len(m) - 1) if i not in volont and 0.8 <= t[i] < t_fin]
 worst = max(cand, key=lambda i: d2[i]) if cand else None
 rep['scintillement'] = {'methode': 'ecart de luminance moyenne a la tendance (2e difference), codes 0-255, hors coupes, eclairs et apparitions de textes',
                         'max': round(float(d2[worst]), 2) if worst is not None else 0, 'image': worst,

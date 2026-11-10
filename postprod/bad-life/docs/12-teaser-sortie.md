@@ -283,3 +283,32 @@ une seule silhouette pour tout le groupe) ; la vérification a été faite à l'
 | 27,52–30,00 s | JAHSIK (P149), couloir vert, LYPHIK devant « BIENVENUE » (P154) | **synchronisation labiale exacte**. Le teaser se termine sur la dernière image de P154, en mouvement réel |
 
 Le son se termine par un fondu de sortie de 1,8 s (28,2 → 30 s), calé sur le dernier plan.
+
+## 12.11 Validation et export définitif
+
+L'aperçu V3 (19,5–30 s) a été validé par l'utilisateur le 2026-11-10. Il a donné son accord pour
+l'export complet, sans plus changer la composition, la typographie, les plans ou les effets.
+
+**Vérification demandée : flou entre 28,7 et 29,1 s**
+
+Le flou vient des rushs. Pour le montrer, la netteté (variance du laplacien, image 1080p entière) a été
+mesurée au même instant sur la source originale et sur le master :
+
+| Image du teaser | Image source | Source originale | Master V5.1 | Rapport |
+|---|---|---|---|---|
+| 1433 (28,66 s) | 4912 | 3,0 | 2,4 | 0,81 |
+| 1438 (28,76 s) | 4917 | 2,2 | 2,1 | 0,95 |
+| 1443 (28,86 s) | 4922 | 1,9 | 1,7 | 0,93 |
+| 1448 (28,96 s) | 4927 | 3,2 | 2,8 | 0,86 |
+| 1452 (29,04 s) | 4931 | 1,8 | 1,7 | 0,98 |
+
+- **La source est déjà floue** : 1,8 à 3,2, contre environ 20 à 40 sur un plan net. C'est un flou de
+  bougé de caméra.
+- **Le léger écart du master** vient de son étalonnage plus sombre, qui réduit le contraste. Ce n'est
+  pas un flou ajouté.
+- **Le teaser n'ajoute rien** : il reprend les pixels du master recadré, à l'identique (écart 0 sur les
+  artistes), sans traitement de netteté ni de flou.
+
+**Fondu de sortie** : un fondu visuel discret de 0,25 s (29,75 → 30 s) a été ajouté. Les mouvements
+continuent jusqu'à la dernière image. Comme l'ouverture au noir, c'est une transition : ces images sont
+exclues du contrôle strict et comptées à part.

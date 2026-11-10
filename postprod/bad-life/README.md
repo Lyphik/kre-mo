@@ -17,6 +17,7 @@ d'analyse et la documentation le sont.
 | **V5 — étapes 4 à 6** (étalonnage par famille, effets, contrôle) | ✅ Fait sur 5 extraits — [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) |
 | **V5 — étape 7** (validation des 5 extraits) | ✅ V5 jugée trop chargée → **V5.1 passe de finition** ([`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md)) — validée le 2026-11-09 avec arbitrages définitifs |
 | **V5 — étape 8** (master 4K) | ✅ **Master V5.1 prêt** — 4K 50 i/s HEVC Main 10, audio original bit à bit, tous les contrôles passés ([`docs/11-master-v5-1.md`](docs/11-master-v5-1.md) §11.6, [`data/master/`](data/master/)) — ⏳ arbitrage 1-bis à confirmer |
+| **Teaser de sortie** (30 s, vertical 9:16) | ⏳ Export définitif en cours de contrôle — version PREMIUM validée sur aperçu ([`docs/12-teaser-sortie.md`](docs/12-teaser-sortie.md)) |
 
 ## Documentation
 
@@ -31,13 +32,14 @@ d'analyse et la documentation le sont.
 9. [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) — V5 : étalonnage C hybride, effets, 5 extraits, rapport de contrôle qualité, décisions attendues.
 10. [`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md) — V5.1 : passe de finition (moins d'effets, plus de profondeur), mesures d'amélioration, conservé / réduit / supprimé par extrait, autocritique.
 11. [`docs/11-master-v5-1.md`](docs/11-master-v5-1.md) — master V5.1 : arbitrages définitifs, vérification courte, rendu par segments, défauts trouvés et corrigés (fondu, décalage d'assemblage, pulsation 25 Hz des halos), contrôles du master final, livrables.
+12. [`docs/12-teaser-sortie.md`](docs/12-teaser-sortie.md) — teaser de sortie 30 s vertical : passage musical, montage, respect des artistes, identité typographique du clip, graphisme procédural, fin vivante, contrôles.
 
 ## Arborescence
 
 ```
 postprod/bad-life/
 ├── README.md
-├── docs/                  documentation (01 → 11)
+├── docs/                  documentation (01 → 12)
 ├── data/
 │   ├── families.json      classification des plans par famille de lumière (éditable)
 │   ├── shots.csv          V1–V4 (OBSOLÈTE : sous-segmentation) — remplacé par data/v5/plans.csv
@@ -89,7 +91,12 @@ postprod/bad-life/
         ├── rendu_segments.sh  rendu du master par segments (reprenable) + assemblage sans réencodage
         ├── qc_master.py       contrôle du master : audio bit à bit, synchro, durées, coupes, montage
         ├── qc_luma.py         continuité de luminance par plan + fondu de fin
-        └── visuel_master.py   planches d'inspection : plans, zones protégées à 100 %, transitions
+        ├── visuel_master.py   planches d'inspection : plans, zones protégées à 100 %, transitions
+        └── teaser/            teaser de sortie (doc 12)
+            ├── teaser_edl.json  liste de montage (segments, textes, fondus)
+            ├── teaser.py        rendu 1080x1920 50 i/s : cadrage, effets décor, typographie derrière les artistes
+            ├── graphisme.py     matières procédurales (or, métal), atmosphère, braises
+            └── qc_teaser.py     contrôles : format, artistes, son, écrans noirs, scintillement, textes
 ```
 
 ## Reproduire

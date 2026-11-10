@@ -303,14 +303,16 @@ for s in segs:
         L = np.zeros((H, W, 4), np.float32); calque_graphisme(t, L)
         COMP = COMP * (1 - L[..., 3:]) + L[..., :3]
         O = AL * SUB + (1 - AL) * COMP
-        fade = min(1.0, t / 0.8)
+        fade = min(1.0, t / 0.8)                                               # ouverture au noir (0,8 s)
+        fs = E.get('fondu_sortie_video')
+        if fs and t > fs['de']: fade = min(fade, max(0.0, (E['duree_s'] - t) / fs['duree']))   # fondu de sortie discret
         if fade < 1: O = O * fade
         O8 = np.clip(O * 255 + 0.5, 0, 255).astype(np.uint8)
         m = AL[..., 0] >= 1.0; ref = np.clip(SUB * 255 + 0.5, 0, 255).astype(np.uint8)
         dev = int(np.abs(O8[m].astype(np.int16) - ref[m]).max()) if m.any() else 0
         ys_, xs_ = np.nonzero(L[..., 3] > 0.5)
         bb = [int(xs_.min()), int(xs_.max()), int(ys_.min()), int(ys_.max())] if len(xs_) else ['', '', '', '']
-        qw.writerow([ni, f'{t:.3f}', si, s['disposition'], int(m.sum()), dev, 'transition (ouverture au noir)' if fade < 1 else 'strict']
+        qw.writerow([ni, f'{t:.3f}', si, s['disposition'], int(m.sum()), dev, ('transition (ouverture au noir)' if t < 1 else 'transition (fondu de sortie)') if fade < 1 else 'strict']
                     + bb + [tetes_coupees(si, vis)])
         if SEL: cv2.imwrite(os.path.join(os.environ.get('TEASER_PNG_DIR', '.'), f'image_{ni:04d}.png'), cv2.cvtColor(O8, cv2.COLOR_RGB2BGR))
         else: out.write(O8.tobytes())

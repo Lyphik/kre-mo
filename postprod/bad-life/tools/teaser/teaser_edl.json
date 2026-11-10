@@ -242,5 +242,9 @@
  "audio_fondu_sortie": {
   "de": 28.2,
   "duree": 1.8
+ },
+ "fondu_sortie_video": {
+  "de": 29.75,
+  "duree": 0.25
  }
 }
