@@ -155,3 +155,63 @@ y = 178 à 1608). L'inspection visuelle a relevé deux défauts, corrigés en v3
 2. De 10,96 à 12 s, la main levée de JAHSIK passait devant « BAD LIFE », ce qui est normal puisque le
    texte est derrière les artistes. Le titre de la révélation s'arrête donc à la fin du plan du duo
    (10,96 s), après 1,8 s pleinement lisible.
+
+## 12.9 Version PREMIUM : refonte de la direction artistique
+
+Directive reçue après les premiers aperçus : la présentation graphique était jugée trop simple (bandeau
+rouge, pochette basique). Le montage de 0 à 20 s est **conservé**. La refonte porte sur la
+typographie, la pochette, l'annonce, l'écran final et la cohérence graphique. Livrable :
+`BAD_LIFE_TEASER_30S_PREMIUM.mp4`. Un aperçu est soumis à l'utilisateur avant l'export définitif.
+
+### Identité typographique reprise du clip
+
+| Élément du clip (0–7,4 s) | Analyse | Teaser |
+|---|---|---|
+| « BAD LIFE » | capitales à empattements triangulaires de type inscription romaine (famille Trajan), très grasses, inclinées, empilées sur deux lignes ; matière **or en fusion** (paillettes, reflets diagonaux, liseré sombre) | **Cinzel 900** inclinée de 12° (alternative la plus proche ; la police exacte n'est pas identifiable), empilée sur deux lignes, matière or recalculée |
+| « LYPHIK X JAHSIK » | capitales linéales condensées blanches | **Bebas Neue** (correspondance visuelle) |
+
+- **Polices du clip** : leur nom n'est consigné nulle part. L'identification repose sur une comparaison
+  visuelle, côte à côte (planche `comparaison_polices.jpg`, non versionnée).
+- **Polices du teaser** : Cinzel et Bebas Neue (SIL OFL 1.1), via les paquets npm `@fontsource/cinzel`
+  5.2.8 et `@fontsource/bebas-neue` 5.0.18. Ce sont **deux familles seulement**, comme dans le clip.
+- **« feat. »** : il est composé en Cinzel or, plus petit. Les deux familles de l'identité n'ont que des
+  capitales, donc « feat. » s'affiche en petites capitales.
+
+### Graphisme (`tools/teaser/graphisme.py`)
+
+Toutes les matières sont **procédurales** : elles sont calculées, aucune image n'est importée, et le
+calcul est déterministe.
+
+- **Or** : biseau calculé d'après la distance au bord, éclairage diffus et spéculaire, reflets
+  diagonaux, grain et paillettes, reflet **rouge** sur les faces tournées vers le bas (la lumière du
+  conteneur), liseré sombre, relief extrudé, ombre portée et lueur.
+- **Métal** (« MAINTENANT DISPONIBLE ! ») : métal clair brossé, bande de reflet rouge, biseau, relief
+  extrudé rouge sombre.
+- **Atmosphère** : fumée rouge veloutée qui dérive lentement, rayons de lumière venus du haut,
+  vignettage, grain fin, braises qui s'élèvent autour du titre.
+
+### Composition
+
+- **Introduction et duo de la révélation** : l'image 16:9 est placée **entière** dans une bande de
+  1080 × 608, aucune tête n'est coupée. Le décor se fond dans l'atmosphère aux bords, avec des filets or.
+- **Pochette (20–30 s)** : l'image est ancrée en bas de l'écran, donc aucune coupe du corps n'est
+  visible. L'échelle garde les artistes entiers en largeur quand le plan le permet ; sinon elle suit
+  leurs têtes, avec de larges marges. Les têtes restent toujours sous le bloc typographique (y ≥ 990).
+  Le décor se fond vers le haut dans l'atmosphère. Le bloc typographique reste fixe, et les plans
+  défilent dessous sur les temps.
+- **Image finale** : **P154 à 99,44 s**, LYPHIK et JAHSIK côte à côte devant « BIENVENUE ». C'est
+  l'une des images où les deux artistes sont entiers et nets (recherche automatique sur les plans de
+  duo : silhouettes entières, netteté). Avancée lente de 2 %.
+- **Plein écran** : la fenêtre doit contenir la **tête de chaque artiste**. Le contrôle compte les
+  têtes coupées image par image (colonne `tetes_coupees`).
+
+### Animations calées sur la musique
+
+| Temps | Animation |
+|---|---|
+| 0,55 s | « LYPHIK » dévoilé par un front lumineux, puis « présente… » |
+| 9,16 s (coupe) puis 9,41 s | « BAD », puis « LIFE », forgés par un front incandescent, avec braises |
+| 20,00 s (coupe) puis 20,37 s (temps) | « BAD », puis « LIFE », en grand ; éclats de lumière tous les 4 temps |
+| 20,98 s (temps) | « LYPHIK feat. JAHSIK » (fondu, montée de 18 px) |
+| 23,11 s (kick + snare) | « MAINTENANT DISPONIBLE ! » lettre par lettre, en cascade (18 ms par lettre), éclair de lumière sur le décor, éclat métallique au temps suivant |
+| 26,41 s (temps) | « DISPONIBLE SUR YOUTUBE — REGARDEZ LE CLIP ! » sur une ligne, avec le tiret du brief |
