@@ -20,9 +20,15 @@ for s in $SEGS; do
   touch "$out/OK"; echo "$s fin $(date -u +%H:%M:%S)"
 done
 F=$M/final; mkdir -p "$F"
+# Les segments contiennent une piste AAC reencodee (avec delai d'amorcage de -21 ms) : si on les concatene
+# tels quels, le demultiplexeur concat cale le depart sur cet audio et DECALE la video de +21 ms (1 image).
+# On extrait donc d'abord la seule piste video de chaque segment (copie sans reencodage).
 for v in COMPLET ETALONNAGE_SEUL; do
   : > "$F/liste_$v.txt"
-  for s in $SEGS; do echo "file '$M/seg/$s/${s}_V5_1_$v.mp4'" >> "$F/liste_$v.txt"; done
+  for s in $SEGS; do
+    ffmpeg -nostdin -v error -y -i "$M/seg/$s/${s}_V5_1_$v.mp4" -map 0:v:0 -c copy "$M/seg/$s/${s}_V5_1_${v}_video.mp4"
+    echo "file '$M/seg/$s/${s}_V5_1_${v}_video.mp4'" >> "$F/liste_$v.txt"
+  done
   ffmpeg -nostdin -v error -y -f concat -safe 0 -i "$F/liste_$v.txt" -i "$SRC" -map 0:v:0 -map 1:a:0 -c copy \
          -tag:v hvc1 -movflags +faststart "$F/BADLIFE_V5_1_MASTER_4K_$v.mp4"
 done

@@ -2,7 +2,8 @@
 """BAD LIFE V5.1 — controles specifiques du MASTER (complete qc_extract.py).
 
   1. Audio ORIGINAL copie bit a bit : empreinte SHA-256 des paquets audio (source contre master).
-  2. Durees des flux video et audio = 175,200 s ; 8760 images.
+  2. Durees des flux video et audio = 175,200 s ; 8760 images. Synchronisation par horodatage :
+     ecart de depart video - audio identique a celui de la source.
   3. Montage intact sur les 8760 images : aucune image du master n'est plus correlee a une image source
      d'un autre indice (fenetre +/- 3) qui differe reellement de la sienne -> aucun decalage, aucune image
      ajoutee ou perdue, coupes a leur place. Seules les images quasi uniformes (noir) sont non decidables.
@@ -22,6 +23,18 @@ def sh(cmd): return subprocess.run(cmd, capture_output=True, text=True).stdout.s
 ha = sh(['ffmpeg', '-nostdin', '-v', 'error', '-i', SRC, '-map', '0:a:0', '-c', 'copy', '-f', 'streamhash', '-hash', 'sha256', '-'])
 hb = sh(['ffmpeg', '-nostdin', '-v', 'error', '-i', MST, '-map', '0:a:0', '-c', 'copy', '-f', 'streamhash', '-hash', 'sha256', '-'])
 rep['audio_bit_a_bit'] = {'source': ha, 'master': hb, 'verdict': 'OK' if ha and ha.split('=')[-1] == hb.split('=')[-1] else 'ECHEC'}
+def starts(f):
+    out = {}
+    for line in sh(['ffprobe', '-v', 'error', '-show_entries', 'stream=codec_type,start_time', '-of', 'csv=p=0', f]).splitlines():
+        typ, st = line.split(',')[:2]
+        if typ in ('video', 'audio') and typ not in out: out[typ] = float(st)
+    return out
+# Synchronisation par horodatage : l'ecart de depart video - audio doit etre celui de la source
+# (une concatenation mal faite peut decaler la video d'une image sans changer l'ordre des images).
+ss, sm = starts(SRC), starts(MST)
+dv_s, dv_m = ss['video'] - ss['audio'], sm['video'] - sm['audio']
+rep['synchro_horodatage'] = {'source_video_moins_audio_s': round(dv_s, 6), 'master_video_moins_audio_s': round(dv_m, 6),
+                             'verdict': 'OK' if abs(dv_s - dv_m) < 0.0005 else 'ECHEC'}
 dur = lambda f, s: sh(['ffprobe', '-v', 'error', '-select_streams', s, '-show_entries', 'stream=duration,nb_frames,codec_name', '-of', 'csv=p=0', f])
 rep['durees'] = {'video_master': dur(MST, 'v:0'), 'audio_master': dur(MST, 'a:0'), 'video_source': dur(SRC, 'v:0'), 'audio_source': dur(SRC, 'a:0')}
 vm = rep['durees']['video_master'].split(','); am_ = rep['durees']['audio_master'].split(',')
@@ -66,6 +79,6 @@ for k in bounds:
     else: ko.append((k, round(s_jump, 3), round(m_jump, 3)))
 rep['coupes'] = {'frontieres_validees': len(bounds), 'meme_saut_source_master': ok_cut, 'ecarts': ko[:20],
                  'verdict': 'OK' if not ko else 'A VERIFIER'}
-rep['VERDICT_MASTER'] = 'CONFORME' if all(rep[k]['verdict'] == 'OK' for k in ('audio_bit_a_bit', 'durees', 'montage_8760_images', 'coupes')) else 'A VERIFIER'
+rep['VERDICT_MASTER'] = 'CONFORME' if all(rep[k]['verdict'] == 'OK' for k in ('audio_bit_a_bit', 'synchro_horodatage', 'durees', 'montage_8760_images', 'coupes')) else 'A VERIFIER'
 json.dump(rep, open(OUTP, 'w'), indent=1, ensure_ascii=False)
 print(json.dumps(rep, indent=1, ensure_ascii=False))
