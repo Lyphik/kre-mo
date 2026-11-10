@@ -1,5 +1,7 @@
 {
  "_doc": "V5.1 FINALE (master) : V5.1 validee (v5_1_config.json, inchangee) + arbitrages definitifs du 2026-11-09 : (1) couloir vert = etalonnage harmonise seul, sans brume ni VFX ; (2) particules : reduction actuelle conservee ; (3) contre-jour invente retire partout ; (4) artistes harmonises ; (5) 4 transitions a intensite reduite.",
+ "sources_doublons_25p": true,
+ "_doc_sources_doublons_25p": "Correction technique du master (doc 11 §11.5) : source 25p doublee en 50p -> carte des sources lumineuses conservee sur une image source identique a la precedente ; supprime la pulsation 25 Hz des halos, halation et flares pendant les mouvements de camera.",
  "familles": {
   "B_nuit_rouge": {
    "lut": "v5_nuit",

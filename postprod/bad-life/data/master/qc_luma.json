@@ -1,0 +1,107 @@
+{
+ "seuil_residu_log": 0.06,
+ "images_analysees": 8319,
+ "residu_p99": 0.006,
+ "residu_max": 0.1205,
+ "images_au_dessus_du_seuil": 4,
+ "dont_expliquees_reponse_LUT_a_un_saut_source": 4,
+ "inexpliquees": 0,
+ "detail": [
+  {
+   "image": 3481,
+   "t_s": 69.62,
+   "famille": "B_nuit_rouge",
+   "residu": -0.068,
+   "luma_src": [
+    42.75,
+    31.52
+   ],
+   "luma_out": [
+    39.94,
+    27.36
+   ],
+   "effet": [
+    0.0,
+    0.0
+   ],
+   "explique": true
+  },
+  {
+   "image": 3487,
+   "t_s": 69.74,
+   "famille": "B_nuit_rouge",
+   "residu": -0.085,
+   "luma_src": [
+    47.3,
+    31.24
+   ],
+   "luma_out": [
+    44.87,
+    27.02
+   ],
+   "effet": [
+    0.0,
+    0.0
+   ],
+   "explique": true
+  },
+  {
+   "image": 5929,
+   "t_s": 118.58,
+   "famille": "D_nuit_exterieure",
+   "residu": 0.12,
+   "luma_src": [
+    30.09,
+    55.34
+   ],
+   "luma_out": [
+    26.74,
+    55.93
+   ],
+   "effet": [
+    0.00742,
+    0.00811
+   ],
+   "explique": true
+  },
+  {
+   "image": 6003,
+   "t_s": 120.06,
+   "famille": "B_nuit_rouge",
+   "residu": 0.076,
+   "luma_src": [
+    28.57,
+    37.14
+   ],
+   "luma_out": [
+    24.82,
+    35.05
+   ],
+   "effet": [
+    0.0,
+    0.0
+   ],
+   "explique": true
+  }
+ ],
+ "transitions_et_flashs": {
+  "images": 181,
+  "residu_max": 0.1073
+ },
+ "fondu_fin": {
+  "0.5": {
+   "source_s": 162.26,
+   "master_s": 162.26
+  },
+  "0.25": {
+   "source_s": 168.08,
+   "master_s": 168.08
+  },
+  "0.1": {
+   "source_s": 168.94,
+   "master_s": 168.94
+  },
+  "verdict": "OK"
+ },
+ "verdict": "OK"
+}

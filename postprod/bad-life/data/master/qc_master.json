@@ -1,0 +1,80 @@
+{
+ "audio_bit_a_bit": {
+  "source": "0,a,SHA256=b567694fac2c286359749d7f3e7ecf452b3781f00941cb5786fabb43bb1f4194",
+  "master": "0,a,SHA256=b567694fac2c286359749d7f3e7ecf452b3781f00941cb5786fabb43bb1f4194",
+  "verdict": "OK"
+ },
+ "synchro_horodatage": {
+  "source_video_moins_audio_s": 0.0,
+  "master_video_moins_audio_s": 0.0,
+  "verdict": "OK"
+ },
+ "durees": {
+  "video_master": "hevc,175.200000,8760",
+  "audio_master": "aac,175.200000,8215",
+  "video_source": "h264,175.200000,8760",
+  "audio_source": "aac,175.200000,8215",
+  "verdict": "OK"
+ },
+ "images": {
+  "source": 8760,
+  "master": 8760
+ },
+ "montage_8760_images": {
+  "images_meilleure_correlation_hors_indice": 0,
+  "images_uniformes_non_decidables": 329,
+  "images_uniformes_indices": [
+   4653,
+   4655,
+   4657,
+   4659,
+   4661,
+   4663,
+   4775,
+   8438,
+   8439,
+   8440,
+   8441,
+   8442,
+   8443,
+   8444,
+   8445,
+   8446,
+   8447,
+   8448,
+   8449,
+   8450,
+   8451,
+   8452,
+   8453,
+   8454,
+   8455,
+   8456,
+   8457,
+   8458,
+   8459,
+   8460,
+   8461,
+   8462,
+   8463,
+   8464,
+   8465,
+   8466,
+   8467,
+   8468,
+   8469,
+   8470
+  ],
+  "correlation_moyenne_meme_image": 0.9968,
+  "correlation_min_meme_image_hors_uniformes": 0.9123,
+  "images_signalees": [],
+  "verdict": "OK"
+ },
+ "coupes": {
+  "frontieres_validees": 259,
+  "meme_saut_source_master": 259,
+  "ecarts": [],
+  "verdict": "OK"
+ },
+ "VERDICT_MASTER": "CONFORME"
+}

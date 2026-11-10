@@ -34,6 +34,13 @@ STILLS_ONLY = os.environ.get('STILLS_ONLY') == '1'
 # commencer au debut d'un plan, a plus de 1 s d'une transition et apres >= 45 images sans flash de montage
 # (gain d'effets alors exactement 1). Sans PREROLL : comportement inchange.
 PREROLL = os.environ.get('PREROLL') == '1' and F0 > 0
+# Master : source 25p doublee en 50p -> sur une image source IDENTIQUE a la precedente, la carte des sources
+# lumineuses (halos, halation, flares) est conservee telle quelle au lieu d'etre relissee. Sans cela, le
+# lissage compense en mouvement + le seuil non lineaire faisaient pulser les halos a 25 Hz pendant les
+# mouvements de camera (doc 11 §11.5). Desactive par defaut : V5 / V5.1 inchangees.
+# Doublon = image tres proche de la precedente (bruit de compression H.264 seulement) ET nettement plus proche
+# que la precedente ne l'etait de la sienne (cadence 25p) : |d| < 0,006 et |d| < 0,35 x |d precedent|.
+DOUBLONS_25P = bool(cfg.get('sources_doublons_25p', False)); DOUBLON_SEUIL, DOUBLON_RAPPORT = 0.006, 0.35
 STILL_EVERY = int(os.environ.get('STILL_EVERY', '60'))
 
 # ---------------- plans, familles, references de chroma ----------------
@@ -295,6 +302,7 @@ qa = csv.writer(open(f'{OUT}/qc_artistes.csv', 'w', newline='')); qa.writerow(['
 CNAMES = ['fumee', 'rayons', 'contre_jour', 'particules', 'halos', 'halation', 'anamorphique']
 qe = csv.writer(open(f'{OUT}/qc_effets.csv', 'w', newline='')); qe.writerow(['image', 'famille', 'confiance', 'chroma_k', 'effet_moyen', 'transition'] + CNAMES + ['flash_montage', 'gain_effets', 'luma_source', 'luma_sortie'])
 cam = Cam(); parts = None; a_prev = None; curp = None; conf_s = 1.0; fxg = 1.0; bl_prev = None; bl2 = None; rays_s = None; key_s = None; src_mode = None; presence = 0.0; scol_s = None; cam_prev_off = np.zeros(2, np.float32); t0 = time.time()
+src_small_prev = None; curp_prev_dbl = None; dsrc_prev = None
 if PREROLL:
     assert any(p['a'] == F0 for p in plans), 'PREROLL : le segment doit commencer au debut d un plan'
     for k in sorted(range(len(plans)), key=lambda k: plans[k]['a']):
@@ -350,7 +358,11 @@ for n in range(NF):
     if (p['b'] - p['a']) <= DUREE_MIN_FX: efx = False   # V5.1 : inserts de 1-2 images -> aucun effet procedural
     # FLASH DU MONTAGE : image nettement plus claire que la mediane de son plan (salve surexposee du
     # monteur) -> effets suspendus (fondu rapide) pour ne pas pulser avec le flash ni s'y superposer.
-    ylum = float(luma(cv2.resize(SRCf, (160, 90), interpolation=cv2.INTER_AREA)).mean()) * 255
+    src_small = cv2.resize(SRCf, (160, 90), interpolation=cv2.INTER_AREA)
+    ylum = float(luma(src_small).mean()) * 255
+    dsrc = float(np.abs(src_small - src_small_prev).mean()) if (src_small_prev is not None and k == curp_prev_dbl) else None
+    doublon = DOUBLONS_25P and dsrc is not None and dsrc_prev is not None and dsrc < DOUBLON_SEUIL and dsrc < DOUBLON_RAPPORT * dsrc_prev
+    src_small_prev = src_small; curp_prev_dbl = k; dsrc_prev = dsrc
     flash = ylum > 1.30 * float(p['luma']) + 12
     fxg = (0.4 * fxg + 0.6 * (0.0 if flash else 1.0)) if (n or PREROLL) else (0.0 if flash else 1.0)
     conf_s = 0.9 * conf_s + 0.1 * confidence(i) if (n or PREROLL) else confidence(i)
@@ -362,6 +374,7 @@ for n in range(NF):
         # lissage temporel COMPENSE EN MOUVEMENT : la carte precedente est recalee sur le deplacement
         # camera avant moyenne -> halos stables, qui suivent la source sans trainer
         if key_s is None: key_s = key_raw
+        elif doublon: pass          # image source identique a la precedente : carte des sources inchangee
         else:
             dmv = camoff - cam_prev_off
             key_s = 0.6 * cv2.warpAffine(key_s, np.float32([[1, 0, -dmv[0]], [0, 1, -dmv[1]]]), (W, H), borderMode=cv2.BORDER_CONSTANT) + 0.4 * key_raw
