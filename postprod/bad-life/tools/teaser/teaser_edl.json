@@ -11,19 +11,38 @@
  "segments": [
   {
    "t0": 0.0,
+   "t1": 0.927,
+   "src": 130.36,
+   "disposition": "plein",
+   "cale": false,
+   "cx_1080": 404,
+   "_": "INTRO : LYPHIK (B) masque devant BIENVENUE, P222 ; bouche couverte (pas d'incoherence labiale) ; cadre sur LYPHIK, visage de JAHSIK hors cadre ; coupe sur la caisse claire (0,93 s), avant que LYPHIK ne quitte le cadre"
+  },
+  {
+   "t0": 0.927,
+   "t1": 1.833,
+   "src": 122.76,
+   "disposition": "plein",
+   "cale": false,
+   "cx_1080": 1204,
+   "_": "INTRO : LYPHIK (B) masque, plus serre, P204"
+  },
+  {
+   "t0": 1.833,
    "t1": 2.44,
-   "src": 69.58,
-   "disposition": "bande",
-   "cale": true,
-   "_": "couloir vert : JAHSIK (A) + LYPHIK (B)"
+   "src": 55.03,
+   "disposition": "plein",
+   "cale": false,
+   "_": "INTRO : JAHSIK (A) conteneur rouge, P47 ; coupe sur la premiere attaque forte (1,83 s) ; tete tournee de profil (insert court, 0,6 s)"
   },
   {
    "t0": 2.44,
    "t1": 5.2,
    "src": 72.02,
-   "disposition": "bande",
+   "disposition": "plein",
    "cale": true,
-   "_": "rideau metallique, nuit : LYPHIK (C) + JAHSIK (D)"
+   "cx_1080": 950,
+   "_": "INTRO : LYPHIK (C) rideau metallique, P88 (synchro labiale) ; visages de JAHSIK et du voisin hors cadre"
   },
   {
    "t0": 5.2,
@@ -216,10 +235,6 @@
   }
  ],
  "textes": {
-  "presente": {
-   "de": 0.55,
-   "a": 4.95
-  },
   "titre_revelation": {
    "de": 9.16,
    "a": 10.96
@@ -246,5 +261,9 @@
  "fondu_sortie_video": {
   "de": 29.75,
   "duree": 0.25
+ },
+ "fondu_entree_video": 0.0,
+ "audio_fondu_entree": {
+  "duree": 0.1
  }
 }

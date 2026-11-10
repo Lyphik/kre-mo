@@ -330,3 +330,45 @@ exclues du contrôle strict et comptées à part.
 
 Livrable : `BAD_LIFE_TEASER_30S_PREMIUM.mp4`, 40,9 Mo, SHA-256
 `30621a9a11c0fffcd1e256be688c56b36f95be48944c2532b882dc105e104b2b`. Le fichier n'est pas versionné.
+
+## 12.12 Version définitive : nouvelle introduction (0–5,2 s)
+
+Le constat transmis par l'utilisateur : l'ouverture était trop sombre, avec une petite image et beaucoup
+de noir, ce qui affaiblit l'impact sur téléphone. Ses décisions :
+
+- reconstruire l'introduction en plein écran vertical dès la première image ;
+- supprimer le carton « LYPHIK présente… », sans le remplacer par aucun texte ;
+- supprimer l'ouverture au noir ;
+- ne pas modifier la suite validée ;
+- livrer un seul teaser définitif.
+
+**Archive** : la version précédente est conservée sans modification. Le fichier, ses rapports et sa
+liste de montage sont dans le dossier d'archive interne (lecture seule, SHA-256
+`30621a9a…5e104b2b`). Sa liste de montage est aussi versionnée :
+`tools/teaser/teaser_edl_premium_v1_archive.json`.
+
+**Analyse de l'audio, 0 à 5 s** (`data/v5/musique.json`, temps du teaser) :
+
+- 0 à 1,66 s : fin d'une section moyenne ;
+- 1,66 s : début de la section « forte » (E), avec la **première attaque forte** à 1,83 s ;
+- ensuite : kick et caisse claire à 2,87 s, impacts à 3,92 et 4,23 s, kick à 5,28 s (la coupe existante
+  à 5,20 s est celle du montage d'origine du clip).
+
+**Synchronisation labiale** : LYPHIK porte, dans plusieurs plans, une cagoule qui couvre la bouche.
+Ces plans peuvent être placés à n'importe quel instant sans incohérence labiale. Pour JAHSIK, dont les
+lèvres sont visibles, la nouvelle introduction n'utilise qu'un insert de 0,6 s, tête tournée de profil.
+C'est la durée des inserts déjà validés de 5,2 à 20 s.
+
+| Temps | Plan | Raison |
+|---|---|---|
+| 0,00–0,93 s | **P222**, LYPHIK masqué devant « BIENVENUE », lumière rouge et bleue | plan saisissant dès la première image, en mouvement réel ; cadre imposé sur LYPHIK, visage de JAHSIK hors cadre ; coupe sur la **caisse claire** (0,93 s), avant que LYPHIK ne quitte le cadre fixe (position mesurée image par image) |
+| 0,93–1,83 s | **P204**, LYPHIK masqué, plus serré, bras levé | resserrement dans la même scène |
+| 1,83–2,44 s | **P47**, JAHSIK s'avançant dans le conteneur rouge | coupe sur la **première attaque forte** ; alternance des artistes |
+| 2,44–5,20 s | **P88**, LYPHIK au rideau métallique | **synchronisation labiale exacte** (image du même instant que le son) ; c'est la coupe d'origine, et le raccord avec la suite (5,20 s) est inchangé |
+
+- **Plans de l'ancienne introduction** : les bandes noires et les plans du couloir vert (P87, trop
+  sombre) sont retirés.
+- **Répétitions** : aucun plan n'apparaît deux fois dans le teaser (vérifié sur la table des plans).
+- **Ouverture** : il n'y a plus d'ouverture au noir. Le son garde un fondu d'entrée de 0,1 s, seulement
+  pour éviter un claquement, au lieu de 0,8 s.
+- **Fin** : la conclusion, le fondu visuel de 0,25 s et le fondu sonore de 1,8 s sont inchangés.

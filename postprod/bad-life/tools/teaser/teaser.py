@@ -114,8 +114,9 @@ for s in segs:
 
 # ---------- graphisme (pre-calcule) ----------
 FOND = G.Fond(W, H)
-g_ly = G.Titre('LYPHIK', BB, 190, 'blanc', 0, 22, graine=21)
-g_pr = G.Titre('présente…', CZ7, 54, 'or', 0.21, 2, graine=22)
+_ep = TX.get('presente', {}).get('echelle', 1.0)
+g_ly = G.Titre('LYPHIK', BB, int(190 * _ep), 'blanc', 0, int(22 * _ep), graine=21)
+g_pr = G.Titre('présente…', CZ7, int(54 * _ep), 'or', 0.21, 2, graine=22)
 g_badr = G.Titre('BAD', CZ9, 178, 'or', 0.21, -3, extrusion=8, lueur_force=0.5, graine=23)
 g_lifer = G.Titre('LIFE', CZ9, 178, 'or', 0.21, -3, extrusion=8, lueur_force=0.5, graine=24)
 K = 0.75                                                         # fin : proportions validees a 75 % (zone libre au-dessus des tetes)
@@ -158,11 +159,11 @@ def eclat(t, t0s, d=0.55):
 BAR = 4 * 0.6037
 def calque_graphisme(t, L):
     """Typographie et braises poses sur le decor (calque L, RGBA plein ecran)."""
-    p = TX['presente']
-    if p['de'] <= t < p['a']:
+    p = TX.get('presente')                                                 # carton supprime dans la version definitive
+    if p and p['de'] <= t < p['a']:
         out = 1 - fen(t, p['a'] - 0.30, 0.30)
-        poser_centre(L, g_ly, g_ly.rendu(revele=ease((t - p['de']) / 0.7), eclat=eclat(t, [p['de'] + 1.4])), W / 2, 400, out)
-        poser_centre(L, g_pr, g_pr.rendu(), W / 2, 545, fen(t, p['de'] + 0.5, 0.5) * out)
+        poser_centre(L, g_ly, g_ly.rendu(revele=ease((t - p['de']) / 0.7), eclat=eclat(t, [p['de'] + 1.4])), W / 2, p.get('y1', 400), out)
+        poser_centre(L, g_pr, g_pr.rendu(), W / 2, p.get('y2', 545), fen(t, p['de'] + 0.5, 0.5) * out)
     r = TX['titre_revelation']
     if r['de'] <= t < r['a']:
         out = 1 - fen(t, r['a'] - 0.25, 0.25); t2 = r['de'] + 0.25
@@ -303,7 +304,8 @@ for s in segs:
         L = np.zeros((H, W, 4), np.float32); calque_graphisme(t, L)
         COMP = COMP * (1 - L[..., 3:]) + L[..., :3]
         O = AL * SUB + (1 - AL) * COMP
-        fade = min(1.0, t / 0.8)                                               # ouverture au noir (0,8 s)
+        fe = E.get('fondu_entree_video', 0.8)
+        fade = min(1.0, t / fe) if fe > 0 else 1.0                              # ouverture au noir (supprimee dans la version definitive)
         fs = E.get('fondu_sortie_video')
         if fs and t > fs['de']: fade = min(fade, max(0.0, (E['duree_s'] - t) / fs['duree']))   # fondu de sortie discret
         if fade < 1: O = O * fade

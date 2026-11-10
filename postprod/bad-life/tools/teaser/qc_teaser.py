@@ -69,9 +69,10 @@ def luma(path, w=108, h=192):
 
 L = luma(TZ); m = L.mean(axis=(1, 2)); t = np.arange(len(m)) / FPS
 fs = E.get('fondu_sortie_video'); t_fin = fs['de'] if fs else DUR + 1
-noirs = [int(i) for i in np.nonzero((m < 6) & (t >= 0.8) & (t < t_fin))[0]]
+t_deb = E.get('fondu_entree_video', 0.8)
+noirs = [int(i) for i in np.nonzero((m < 6) & (t >= t_deb) & (t < t_fin))[0]]
 rep['ecrans_noirs'] = {'seuil_luma_moyenne': 6, 'images_noires_hors_fondus': len(noirs), 'premieres': noirs[:10],
-                       'luma_min_hors_fondus': round(float(m[(t >= 0.8) & (t < t_fin)].min()), 1), 'verdict': 'OK' if not noirs else 'ECHEC'}
+                       'luma_min_hors_fondus': round(float(m[(t >= t_deb) & (t < t_fin)].min()), 1), 'verdict': 'OK' if not noirs else 'ECHEC'}
 ok &= not noirs
 
 cut_f = {int(round(s['t0'] * FPS)) for s in E['segments']}
@@ -92,7 +93,7 @@ for k, v in E['textes'].items():                                                
         if cle in v: tk = int(round(v[cle] * FPS)); volont |= set(range(tk - 20, tk + 16))
 volont |= set(range(int(round(t_fin * FPS)) - 1, NF))                                   # fondu de sortie
 d2 = np.zeros(len(m)); d2[1:-1] = np.abs(m[1:-1] - 0.5 * (m[:-2] + m[2:]))
-cand = [i for i in range(1, len(m) - 1) if i not in volont and 0.8 <= t[i] < t_fin]
+cand = [i for i in range(1, len(m) - 1) if i not in volont and t_deb <= t[i] < t_fin]
 worst = max(cand, key=lambda i: d2[i]) if cand else None
 rep['scintillement'] = {'methode': 'ecart de luminance moyenne a la tendance (2e difference), codes 0-255, hors coupes, eclairs et apparitions de textes',
                         'max': round(float(d2[worst]), 2) if worst is not None else 0, 'image': worst,

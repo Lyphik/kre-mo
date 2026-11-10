@@ -1,0 +1,250 @@
+{
+ "_doc": "Teaser de sortie BAD LIFE (doc 12). Temps 't0','t1' en secondes dans le teaser ; 'src' = instant du master au debut du segment. Segments 'cale' : src = t0 + audio_debut_s (synchro labiale exacte). 'disposition' : 'plein' = recadrage vertical 9:16 plein ecran sur l'artiste (fenetre fixe par plan source contenant la tete de chaque artiste et gardant le plus de pixels d'artistes visibles) ; 'bande' = image 16:9 a la hauteur de la bande centrale (1080 x 720, 84 % de la largeur), sur atmosphere generee ; 'couverture' = composition de pochette (20-30 s) : image ancree en bas, artistes entiers, typographie fixe au-dessus. 'fige' = image arretee (pixels identiques au master). 'cx_1080' = centre horizontal impose (coordonnees 1080p) quand le centrage automatique ne peut pas montrer les deux artistes.",
+ "audio_debut_s": 69.58,
+ "duree_s": 30.0,
+ "fps": 50,
+ "identification": {
+  "LYPHIK": "B (cagoule noire, sacoche) et C (dreadlocks, doudoune rouge)",
+  "JAHSIK": "A (maillot rouge Manchester Athletics) et D (casquette L, maillot gris)",
+  "_source": "indiquee par l'utilisateur le 2026-11-10 sur la planche des personnes recurrentes"
+ },
+ "segments": [
+  {
+   "t0": 0.0,
+   "t1": 2.44,
+   "src": 69.58,
+   "disposition": "bande",
+   "cale": true,
+   "_": "couloir vert : JAHSIK (A) + LYPHIK (B)"
+  },
+  {
+   "t0": 2.44,
+   "t1": 5.2,
+   "src": 72.02,
+   "disposition": "bande",
+   "cale": true,
+   "_": "rideau metallique, nuit : LYPHIK (C) + JAHSIK (D)"
+  },
+  {
+   "t0": 5.2,
+   "t1": 5.885,
+   "src": 45.9,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert JAHSIK (A) conteneur rouge, P34"
+  },
+  {
+   "t0": 5.885,
+   "t1": 6.489,
+   "src": 145.5,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert LYPHIK (C) rideau metallique, P232 (P249 ecarte : plan trop sombre de bout en bout)"
+  },
+  {
+   "t0": 6.489,
+   "t1": 7.26,
+   "src": 116.3,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert JAHSIK (A) mains, P188"
+  },
+  {
+   "t0": 7.26,
+   "t1": 9.16,
+   "src": 76.84,
+   "disposition": "plein",
+   "cale": true,
+   "_": "LYPHIK (B) conteneur sombre, P96 ; titre BAD LIFE"
+  },
+  {
+   "t0": 9.16,
+   "t1": 10.96,
+   "src": 78.74,
+   "disposition": "bande",
+   "cale": true,
+   "_": "duo nuit LYPHIK (C) + JAHSIK (D), P97-P109"
+  },
+  {
+   "t0": 10.96,
+   "t1": 12.0,
+   "src": 80.54,
+   "disposition": "plein",
+   "cale": true,
+   "_": "rideau metallique, P110"
+  },
+  {
+   "t0": 12.0,
+   "t1": 13.28,
+   "src": 81.58,
+   "disposition": "plein",
+   "cale": true,
+   "_": "JAHSIK (A) conteneur rouge, P111"
+  },
+  {
+   "t0": 13.28,
+   "t1": 14.48,
+   "src": 82.86,
+   "disposition": "plein",
+   "cale": true,
+   "_": "LYPHIK (B) BIENVENUE, P112"
+  },
+  {
+   "t0": 14.48,
+   "t1": 14.941,
+   "src": 41.0,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert JAHSIK (A) mains jointes, P30"
+  },
+  {
+   "t0": 14.941,
+   "t1": 15.544,
+   "src": 149.9,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert LYPHIK (B) BIENVENUE, P234"
+  },
+  {
+   "t0": 15.544,
+   "t1": 15.92,
+   "src": 47.3,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert JAHSIK (A) conteneur rouge, P42"
+  },
+  {
+   "t0": 15.92,
+   "t1": 18.14,
+   "src": 85.5,
+   "disposition": "plein",
+   "cale": true,
+   "_": "salve conteneur / rideau + LYPHIK (C), P114-P125"
+  },
+  {
+   "t0": 18.14,
+   "t1": 18.92,
+   "src": 87.72,
+   "disposition": "plein",
+   "cale": true,
+   "_": "LYPHIK (B) BIENVENUE rouge, P126"
+  },
+  {
+   "t0": 18.92,
+   "t1": 20.0,
+   "src": 52.8,
+   "disposition": "plein",
+   "cale": false,
+   "_": "insert JAHSIK (A) gros plan, P46"
+  },
+  {
+   "t0": 20.0,
+   "t1": 21.582,
+   "src": 128.4,
+   "disposition": "plein",
+   "cale": false,
+   "_": "JAHSIK (A) conteneur rouge, P221 ; titre ; cadre sur JAHSIK, visage de LYPHIK entierement hors cadre",
+   "cx_1080": 863
+  },
+  {
+   "t0": 21.582,
+   "t1": 23.114,
+   "src": 157.4,
+   "disposition": "plein",
+   "cale": false,
+   "_": "LYPHIK (C) rideau metallique, P237 ; cadre impose sur LYPHIK (le masque fusionne le groupe ; le visage du voisin reste entierement hors cadre)",
+   "cx_1080": 1314
+  },
+  {
+   "t0": 23.114,
+   "t1": 24.6,
+   "src": 155.7,
+   "disposition": "plein",
+   "cale": false,
+   "_": "JAHSIK (D) nuit, P236 ; MAINTENANT DISPONIBLE"
+  },
+  {
+   "t0": 24.6,
+   "t1": 25.808,
+   "src": 41.9,
+   "disposition": "plein",
+   "cale": false,
+   "_": "JAHSIK (A) mains jointes, P31 ; MAINTENANT DISPONIBLE"
+  },
+  {
+   "t0": 25.808,
+   "t1": 26.411,
+   "src": 118.88,
+   "disposition": "plein",
+   "cale": false,
+   "_": "LYPHIK (B) conteneur, P194 ; cadre sur LYPHIK, visage de JAHSIK entierement hors cadre ; conclusion video",
+   "cx_1080": 1384
+  },
+  {
+   "t0": 26.411,
+   "t1": 27.52,
+   "src": 44.48,
+   "disposition": "plein",
+   "cale": false,
+   "_": "conteneur, P33"
+  },
+  {
+   "t0": 27.52,
+   "t1": 28.66,
+   "src": 97.1,
+   "disposition": "plein",
+   "cale": true,
+   "_": "JAHSIK (A), P149 (synchro labiale) ; cadre sur JAHSIK",
+   "cx_1080": 589
+  },
+  {
+   "t0": 28.66,
+   "t1": 29.04,
+   "src": 98.24,
+   "disposition": "plein",
+   "cale": true,
+   "_": "couloir vert, P150-P153 (synchro labiale)"
+  },
+  {
+   "t0": 29.04,
+   "t1": 30.0,
+   "src": 98.62,
+   "disposition": "plein",
+   "cale": true,
+   "_": "FIN : LYPHIK (B) devant BIENVENUE, P154 jusqu'a sa derniere image (synchro labiale), mouvement reel ; cadre sur LYPHIK",
+   "cx_1080": 634
+  }
+ ],
+ "textes": {
+  "presente": {
+   "de": 0.55,
+   "a": 4.95
+  },
+  "titre_revelation": {
+   "de": 9.16,
+   "a": 10.96
+  },
+  "annonce_titre": {
+   "de": 20.0,
+   "de2": 20.374,
+   "a": 23.114
+  },
+  "annonce_artistes": {
+   "de": 20.978
+  },
+  "disponible": {
+   "de": 23.114,
+   "a": 25.808,
+   "ligne1": "MAINTENANT",
+   "ligne2": "DISPONIBLE !"
+  }
+ },
+ "audio_fondu_sortie": {
+  "de": 28.2,
+  "duree": 1.8
+ },
+ "fondu_sortie_video": {
+  "de": 29.75,
+  "duree": 0.25
+ }
+}
