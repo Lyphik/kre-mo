@@ -39,7 +39,8 @@ PREROLL = os.environ.get('PREROLL') == '1' and F0 > 0
 # lissage compense en mouvement + le seuil non lineaire faisaient pulser les halos a 25 Hz pendant les
 # mouvements de camera (doc 11 §11.5). Desactive par defaut : V5 / V5.1 inchangees.
 # Doublon = image tres proche de la precedente (bruit de compression H.264 seulement) ET nettement plus proche
-# que la precedente ne l'etait de la sienne (cadence 25p) : |d| < 0,006 et |d| < 0,35 x |d precedent|.
+# que la derniere image NOUVELLE ne l'etait de la sienne (cadence 25p, y compris les series de 3+ images
+# identiques lors d'une pause camera) : |d| < 0,006 et |d| < 0,35 x |d de la derniere image nouvelle|.
 DOUBLONS_25P = bool(cfg.get('sources_doublons_25p', False)); DOUBLON_SEUIL, DOUBLON_RAPPORT = 0.006, 0.35
 STILL_EVERY = int(os.environ.get('STILL_EVERY', '60'))
 
@@ -362,7 +363,8 @@ for n in range(NF):
     ylum = float(luma(src_small).mean()) * 255
     dsrc = float(np.abs(src_small - src_small_prev).mean()) if (src_small_prev is not None and k == curp_prev_dbl) else None
     doublon = DOUBLONS_25P and dsrc is not None and dsrc_prev is not None and dsrc < DOUBLON_SEUIL and dsrc < DOUBLON_RAPPORT * dsrc_prev
-    src_small_prev = src_small; curp_prev_dbl = k; dsrc_prev = dsrc
+    src_small_prev = src_small; curp_prev_dbl = k
+    if not doublon: dsrc_prev = dsrc          # reference = derniere image nouvelle (None a la 1re image du plan)
     flash = ylum > 1.30 * float(p['luma']) + 12
     fxg = (0.4 * fxg + 0.6 * (0.0 if flash else 1.0)) if (n or PREROLL) else (0.0 if flash else 1.0)
     conf_s = 0.9 * conf_s + 0.1 * confidence(i) if (n or PREROLL) else confidence(i)

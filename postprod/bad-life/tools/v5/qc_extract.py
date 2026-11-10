@@ -94,9 +94,39 @@ for k in range(1, len(qe) - 1):
     d2 = abs(eff[k] - 0.5 * (eff[k - 1] + eff[k + 1])) / lvl; d1 = abs(eff[k] - eff[k - 1]) / lvl
     if d2 > worst: worst, worst_i = d2, imgs[k]
     if d1 > worst_d1: worst_d1, worst_d1_i = d1, imgs[k]
-rep['scintillement'] = (f'ecart max a la tendance (pic / saut) = {100 * worst:.1f} % du niveau d\'effet du plan (image {worst_i}) ; '
-                        f'variation progressive max = {100 * worst_d1:.1f} % (image {worst_d1_i}) -> {"OK" if worst < 0.12 else "A VERIFIER"}')
-ok &= worst < 0.12
+# Cadence 25p doublee en 50p : sur une image source DOUBLON (quasi identique a la precedente et nettement plus
+# proche d'elle que la derniere image nouvelle ne l'etait de la sienne), l'image ne bouge pas : un effet qui change alors
+# est une pulsation. (1) controle direct sur les doublons ; (2) scintillement mesure sur la suite des seules
+# images NOUVELLES (un effet qui suit la cadence de l'image forme un escalier, pas une pulsation).
+dS = np.full(n, 99.0); dS[1:] = np.abs(np.diff(src[:n], axis=0)).mean(axis=(1, 2))
+dup = np.zeros(n, bool); last_new = 99.0                     # reference = derniere image nouvelle
+for j in range(1, n):
+    dup[j] = dS[j] < 0.5 and dS[j] < 0.35 * last_new
+    if not dup[j]: last_new = dS[j]
+hl = np.array([float(r['halos']) + float(r['halation']) + float(r['anamorphique']) for r in qe])
+pos = {im: q_ for q_, im in enumerate(imgs)}
+wd, wd_i, nd = 0.0, None, 0
+for q_, im in enumerate(imgs):
+    j = im - F0
+    if not (0 < j < n) or not dup[j] or q_ == 0 or excluded(q_): continue
+    j0 = max(b for b in bounds if b <= im); lv = max(np.mean([hl[pos[x]] for x in range(j0, im + 1) if x in pos]), 3e-4)
+    if hl[q_] < 1e-5 and hl[q_ - 1] < 1e-5: continue
+    nd += 1; v = abs(hl[q_] - hl[q_ - 1]) / lv
+    if v > wd: wd, wd_i = v, im
+rep['halos_sur_doublons'] = f'{nd} images doublons avec halos : variation max {100 * wd:.1f} % du niveau du plan (image {wd_i}) -> {"OK" if wd < 0.12 else "A VERIFIER"}'
+ok &= wd < 0.12
+new_idx = [q_ for q_, im in enumerate(imgs) if not (0 < im - F0 < n and dup[im - F0])]
+w25, w25_i = 0.0, None
+for t_ in range(1, len(new_idx) - 1):
+    a_, k_, b_ = new_idx[t_ - 1], new_idx[t_], new_idx[t_ + 1]
+    if excluded(k_) or excluded(a_) or excluded(b_) or (imgs[b_] - imgs[a_]) > 4: continue
+    j0 = max(b for b in bounds if b <= imgs[k_]); seg = [eff[q_] for q_ in range(len(qe)) if j0 <= imgs[q_] < imgs[k_] + 50]
+    lvl = max(np.mean(seg), 0.004); v = abs(eff[k_] - 0.5 * (eff[a_] + eff[b_])) / lvl
+    if v > w25: w25, w25_i = v, imgs[k_]
+rep['scintillement'] = (f'ecart max a la tendance sur les images source NOUVELLES (cadence reelle) = {100 * w25:.1f} % du niveau d\'effet du plan (image {w25_i}) '
+                        f'-> {"OK" if w25 < 0.12 else "A VERIFIER"} ; pour memoire, mesure image par image sans tenir compte des doublons = {100 * worst:.1f} % (image {worst_i}), '
+                        f'variation progressive max = {100 * worst_d1:.1f} % (image {worst_d1_i}) ; {int(dup.sum())} images doublons dans la source')
+ok &= w25 < 0.12
 rep['transitions'] = f"{int((np.array([float(r['transition']) for r in qe]) > 0.5).sum())} images de pic de transition ; {nfl} images de flash du montage (effets suspendus)"
 nbr = [r for r in json.load(open(NBP))['passages'] if r[1] >= F0 and r[0] < F1]
 if nbr:
