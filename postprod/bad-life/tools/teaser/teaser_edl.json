@@ -1,5 +1,5 @@
 {
- "_doc": "Teaser de sortie BAD LIFE (doc 12). Temps 't0','t1' en secondes dans le teaser ; 'src' = instant du master au debut du segment. Segments 'cale' : src = t0 + audio_debut_s (synchro labiale exacte). 'disposition' : 'plein' = recadrage vertical 9:16 plein ecran sur l'artiste (centre automatique par plan source, d'apres les masques) ; 'bande' = image 16:9 entiere dans une bande cinema centrale (duos : les deux artistes restent visibles, textes au-dessus et au-dessous). 'fige' = image arretee (pixels identiques au master).",
+ "_doc": "Teaser de sortie BAD LIFE (doc 12). Temps 't0','t1' en secondes dans le teaser ; 'src' = instant du master au debut du segment. Segments 'cale' : src = t0 + audio_debut_s (synchro labiale exacte). 'disposition' : 'plein' = recadrage vertical 9:16 plein ecran sur l'artiste (cadre automatique par plan source : position qui garde le plus de pixels d'artistes visibles, d'apres les masques) ; 'bande' = image 16:9 a la hauteur de la bande cinema centrale (1080 x 720, soit 84 % de la largeur de l'image), cadree pour garder le plus d'artistes visibles ; textes au-dessus et au-dessous. 'fige' = image arretee (pixels identiques au master). 'cx_1080' = centre horizontal impose (coordonnees 1080p) quand le centrage automatique ne peut pas montrer les deux artistes.",
  "audio_debut_s": 69.58,
  "duree_s": 30.0,
  "fps": 50,
@@ -27,12 +27,12 @@
   {"t0": 23.114, "t1": 23.72,  "src": 119.2,  "disposition": "bande", "cale": false, "_": "duo conteneur, P194"},
   {"t0": 23.72,  "t1": 24.82,  "src": 93.3,   "disposition": "bande", "cale": true,  "_": "JAHSIK (D) rideau metallique, P141"},
   {"t0": 24.82,  "t1": 25.204, "src": 56.98,  "disposition": "bande", "cale": false, "_": "duo nuit LYPHIK (C) + JAHSIK (D), P52"},
-  {"t0": 25.204, "t1": 25.744, "src": 130.36, "disposition": "bande", "cale": false, "_": "FINAL (debut) : P222 joue depuis sa premiere image puis se fige sans rupture"},
-  {"t0": 25.744, "t1": 30.0,   "src": 130.9,  "disposition": "bande", "cale": false, "fige": true, "_": "FINAL : LYPHIK (B) + JAHSIK (A) cote a cote, P222, image la plus nette du plan (130,90 s), arretee + lente avancee"}
+  {"t0": 25.204, "t1": 25.744, "src": 130.36, "disposition": "bande", "cale": false, "cx_1080": 810, "_": "FINAL (debut) : P222 joue depuis sa premiere image puis se fige sans rupture"},
+  {"t0": 25.744, "t1": 30.0,   "src": 130.9,  "disposition": "bande", "cale": false, "fige": true, "cx_1080": 810, "_": "FINAL (cadre impose x 0-1620 : les deux artistes entiers ; seule la main tendue de JAHSIK sort du cadre) : LYPHIK (B) + JAHSIK (A) cote a cote, P222, image la plus nette du plan (130,90 s), arretee + lente avancee"}
  ],
  "textes": {
   "presente": {"de": 0.55, "a": 4.95, "ligne1": "LYPHIK", "ligne2": "présente…"},
-  "titre_revelation": {"de": 9.16, "a": 12.0},
+  "titre_revelation": {"de": 9.16, "a": 10.96},
   "annonce_titre": {"de": 20.0},
   "annonce_artistes": {"de": 20.374},
   "disponible": {"de": 23.114, "texte": "MAINTENANT DISPONIBLE !"},

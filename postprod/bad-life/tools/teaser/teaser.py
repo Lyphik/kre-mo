@@ -29,7 +29,7 @@ def alpha_src(i):
     return cv2.imread(f'{MATTE}/alpha_{i:05d}.png', cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
 
 
-def persons(i):
+def persons(i):  # (diagnostic)
     """Composantes 'personne' du masque (coordonnees 1080p) : liste (x0, x1, surface)."""
     a = (alpha_src(i) > 0.5).astype(np.uint8)
     n, lab, st, _ = cv2.connectedComponentsWithStats(a, 8)
@@ -38,15 +38,17 @@ def persons(i):
 
 
 def centre_x(frames, largeur):
-    """Centre horizontal (coordonnees 1080p) d'une fenetre de largeur donnee : tous les artistes s'ils tiennent
-    dedans, sinon la plus grande personne. Mediane sur quelques images du plan (cadre fixe par plan)."""
-    cs = []
+    """Centre horizontal (coordonnees 1080p) de la fenetre de largeur donnee qui garde le PLUS de pixels d'artistes
+    visibles (somme des masques par colonne sur quelques images du plan ; cadre fixe par plan). A egalite, la
+    fenetre la plus proche du centre de l'image."""
+    acc = np.zeros(1920, np.float64)
     for i in frames[::max(1, len(frames) // 6)]:
-        ps = persons(i)
-        if not ps: continue
-        x0, x1 = min(p[0] for p in ps), max(p[1] for p in ps)
-        cs.append((x0 + x1) / 2 if x1 - x0 <= largeur * 0.92 else (ps[0][0] + ps[0][1]) / 2)
-    return float(np.median(cs)) if cs else 960.0
+        acc += alpha_src(i).sum(axis=0)
+    if acc.sum() == 0: return 960.0
+    L = int(round(largeur)); cs = np.concatenate([[0], np.cumsum(acc)])
+    masse = cs[L:] - cs[:-L]                                         # masse visible pour chaque position x0
+    x0s = np.arange(len(masse)); pen = np.abs(x0s + L / 2 - 960) / 960 * 1e-3 * masse.max()
+    return float(np.argmax(masse - pen) + L / 2)
 
 
 # ---------- plan de rendu image par image ----------
@@ -63,7 +65,7 @@ for s in segs:
     for p in sorted({plan_of(i) for i in s['srcs']}):
         fr = [i for i in s['srcs'] if plan_of(i) == p]
         larg = (SH * 9 / 16) / 2 if s['disposition'] == 'plein' else 1620.0
-        s['cx'][p] = centre_x(fr, larg)
+        s['cx'][p] = float(s['cx_1080']) if 'cx_1080' in s else centre_x(fr, larg)   # cadrage impose (EDL) ou automatique
 
 polices = {}
 def police(path, size):

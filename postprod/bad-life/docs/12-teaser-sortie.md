@@ -50,11 +50,15 @@ Liste de montage : `tools/teaser/teaser_edl.json` (24 segments, vérifiés contr
 
 **Règle de cadrage vertical (cohérence)**
 
-- **Plans d'un artiste seul** : recadrage 9:16 **plein écran**. Le centre est calculé automatiquement
-  par plan source, d'après les masques, et le cadre reste fixe dans chaque plan.
-- **Plans de duo** : l'image 16:9 est placée dans une **bande cinéma** centrale (1080 × 720), sur fond
-  noir et rouge généré. Les deux artistes restent entièrement visibles, et les textes occupent les
-  zones au-dessus et au-dessous de la bande.
+- **Plans d'un artiste seul** : recadrage 9:16 **plein écran**.
+- **Plans de duo** : l'image 16:9 est placée dans une **bande cinéma** centrale de 1080 × 720, soit
+  84 % de la largeur de l'image, sur un fond noir et rouge généré. Les textes occupent les zones
+  au-dessus et au-dessous de la bande.
+- **Position du cadre** : elle est automatique et reste fixe dans chaque plan source. C'est la fenêtre
+  qui garde **le plus de pixels d'artistes visibles**, d'après les masques, sur quelques images du plan.
+- **Final** : le cadre est imposé (x = 0 à 1620 en coordonnées 1080p), car le masque couvre presque toute
+  la largeur à cause du bras tendu de JAHSIK. Les deux artistes sont entiers, seule la main tendue sort
+  du cadre ; le cadrage automatique donne d'ailleurs la même fenêtre.
 - **Mouvement** : seule une lente avancée (homothétie de 2 à 6 %) est appliquée. Aucune déformation,
   aucun changement de vitesse.
 
@@ -81,7 +85,7 @@ Formule identique à celle du master :
 | Moment | Texte | Typographie |
 |---|---|---|
 | 0,55–4,95 s | **LYPHIK** / présente… | Anton (titre), Inter Display SemiBold |
-| 9,16–12,0 s | **BAD LIFE** (apparition frappée sur la coupe du duo) | Anton, rouge |
+| 9,16–10,96 s | **BAD LIFE** (apparition frappée sur la coupe du duo, durée du plan du duo) | Anton, rouge |
 | dès 20,0 s | **BAD LIFE** | Anton, rouge |
 | dès 20,37 s | **LYPHIK feat. JAHSIK** | Inter Display Black |
 | dès 23,11 s (kick + snare) | **MAINTENANT DISPONIBLE !** sur bandeau rouge | Anton, blanc |
@@ -141,3 +145,13 @@ corrigés en v2 :
 
 Le contrôle de l'emprise des textes a été ajouté à cette occasion (lettres à 40 px au moins des bords,
 entre y = 100 et y = 1650).
+
+**Deuxième rendu (v2)** : contrôle automatique CONFORME, textes compris (emprise x = 59 à 1021,
+y = 178 à 1608). L'inspection visuelle a relevé deux défauts, corrigés en v3 :
+
+1. Sur les bandes de duo, le cadre se centrait sur la plus grande personne : LYPHIK était coupé au bord
+   gauche sur l'image arrêtée du final, et JAHSIK sur le plan P204. Le cadre garde désormais le plus de
+   pixels d'artistes visibles, et celui du final est imposé.
+2. De 10,96 à 12 s, la main levée de JAHSIK passait devant « BAD LIFE », ce qui est normal puisque le
+   texte est derrière les artistes. Le titre de la révélation s'arrête donc à la fin du plan du duo
+   (10,96 s), après 1,8 s pleinement lisible.
