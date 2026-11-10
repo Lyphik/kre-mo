@@ -17,7 +17,7 @@ d'analyse et la documentation le sont.
 | **V5 — étapes 4 à 6** (étalonnage par famille, effets, contrôle) | ✅ Fait sur 5 extraits — [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) |
 | **V5 — étape 7** (validation des 5 extraits) | ✅ V5 jugée trop chargée → **V5.1 passe de finition** ([`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md)) — validée le 2026-11-09 avec arbitrages définitifs |
 | **V5 — étape 8** (master 4K) | ✅ **Master V5.1 prêt** — 4K 50 i/s HEVC Main 10, audio original bit à bit, tous les contrôles passés ([`docs/11-master-v5-1.md`](docs/11-master-v5-1.md) §11.6, [`data/master/`](data/master/)) — ⏳ arbitrage 1-bis à confirmer |
-| **Teaser de sortie** (30 s, vertical 9:16) | ✅ **`BAD_LIFE_TEASER_30S_PREMIUM.mp4` livré** — 1080×1920 50 i/s, 1 500 images, H.264 + AAC, tous les contrôles passés ([`docs/12-teaser-sortie.md`](docs/12-teaser-sortie.md) §12.11, [`data/teaser/`](data/teaser/)) |
+| **Teaser de sortie** (30 s, vertical 9:16) | ✅ **`BAD_LIFE_TEASER_30S_PREMIUM.mp4` définitif livré** — nouvelle introduction plein écran, 1080×1920 50 i/s, 1 500 images, H.264 + AAC, tous les contrôles passés ([`docs/12-teaser-sortie.md`](docs/12-teaser-sortie.md) §12.12, [`data/teaser/`](data/teaser/)) |
 
 ## Documentation
 
@@ -94,7 +94,7 @@ postprod/bad-life/
         ├── qc_luma.py         continuité de luminance par plan + fondu de fin
         ├── visuel_master.py   planches d'inspection : plans, zones protégées à 100 %, transitions
         └── teaser/            teaser de sortie (doc 12)
-            ├── teaser_edl.json  liste de montage (segments, textes, fondus)
+            ├── teaser_edl.json  liste de montage definitive (segments, textes, fondus) ; teaser_edl_premium_v1_archive.json = version precedente
             ├── teaser.py        rendu 1080x1920 50 i/s : cadrage, effets décor, typographie derrière les artistes
             ├── graphisme.py     matières procédurales (or, métal), atmosphère, braises
             └── qc_teaser.py     contrôles : format, artistes, son, écrans noirs, scintillement, textes

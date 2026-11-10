@@ -6,9 +6,9 @@
  },
  "artistes": {
   "images": 1500,
-  "images_strictes": 1448,
-  "images_transition_ouverture": 52,
-  "px_artistes_moyen_par_image": 825201,
+  "images_strictes": 1488,
+  "images_transition_ouverture": 12,
+  "px_artistes_moyen_par_image": 1001945,
   "ecart_max_vs_master_recadre": 0,
   "verdict": "OK"
  },
@@ -22,22 +22,40 @@
   "seuil_luma_moyenne": 6,
   "images_noires_hors_fondus": 0,
   "premieres": [],
-  "luma_min_hors_fondus": 9.9,
+  "luma_min_hors_fondus": 10.0,
   "verdict": "OK"
  },
  "scintillement": {
   "methode": "ecart de luminance moyenne a la tendance (2e difference), codes 0-255, hors coupes, eclairs et apparitions de textes",
-  "max": 4.4,
-  "image": 130,
+  "max": 13.95,
+  "image": 120,
   "images_au_dessus_de_4_codes": [
+   120,
+   129,
    130
   ],
   "detail": [
    {
+    "image": 120,
+    "t_s": 2.4,
+    "image_source": 2780,
+    "saut_relatif_teaser": 0.29,
+    "saut_relatif_source": 0.25,
+    "explique_par_la_source": true
+   },
+   {
+    "image": 129,
+    "t_s": 2.58,
+    "image_source": 3608,
+    "saut_relatif_teaser": 0.087,
+    "saut_relatif_source": 0.054,
+    "explique_par_la_source": true
+   },
+   {
     "image": 130,
     "t_s": 2.6,
     "image_source": 3609,
-    "saut_relatif_teaser": 0.193,
+    "saut_relatif_teaser": 0.261,
     "saut_relatif_source": 0.226,
     "explique_par_la_source": true
    }
@@ -45,14 +63,14 @@
   "verdict": "OK"
  },
  "textes": {
-  "images_avec_texte": 569,
+  "images_avec_texte": 359,
   "emprise_x": [
    236,
    849
   ],
   "emprise_y": [
    120,
-   569
+   559
   ],
   "regle": "lettres a 40 px au moins des bords, entre y=100 et y=1650 (zones sures Reels / TikTok / Shorts)",
   "verdict": "OK"

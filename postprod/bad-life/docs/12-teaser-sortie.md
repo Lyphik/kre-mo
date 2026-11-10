@@ -372,3 +372,30 @@ C'est la durée des inserts déjà validés de 5,2 à 20 s.
 - **Ouverture** : il n'y a plus d'ouverture au noir. Le son garde un fondu d'entrée de 0,1 s, seulement
   pour éviter un claquement, au lieu de 0,8 s.
 - **Fin** : la conclusion, le fondu visuel de 0,25 s et le fondu sonore de 1,8 s sont inchangés.
+
+**Contrôles du fichier définitif**
+
+Ils ont été faits sur toute la vidéo (`tools/teaser/qc_teaser.py` ; rapports dans `data/teaser/`, qui
+remplacent ceux de la version archivée).
+
+| Contrôle | Résultat |
+|---|---|
+| Format | H.264 High, 1080 × 1920, 50 i/s, **1 500 images**, 30,000 s ; AAC 48 kHz stéréo ; départs vidéo et audio à 0 — **OK** |
+| Artistes | écart **0** avec le master recadré sur 1 488 images ; les 12 autres sont le fondu de sortie de 0,25 s, seule transition restante — **OK** |
+| Son | décalage 0 ms, corrélation 0,9992 avec l'extrait original. Aucun claquement au départ (5 premières ms ≤ 0,015). La montée de −12 à −6 dBFS à 1,66 s est la dynamique du morceau (début de la section « forte »). Le fondu final est régulier : −9 dBFS à 28,2 s, −54 dBFS à 29,9 s — **OK** |
+| Écrans noirs | aucun (luminance moyenne minimale 10,0) — **OK** |
+| Scintillement | 3 images au-dessus du seuil (2,40 / 2,58 / 2,60 s), toutes expliquées par un saut de lumière présent dans la source — **OK** |
+| Textes | emprise x = 236–849, y = 120–559 ; aucun texte dans l'introduction — **OK** |
+| Trois premières secondes | plans réels en plein écran dès l'image 0 (vérification à l'œil, image par image). Luminance moyenne de 0 à 3 s : **32,7**, contre **11,6** dans l'introduction archivée (environ × 2,8), cohérente avec le reste du teaser (30,5) — **OK** |
+| Raccord à 5,20 s | LYPHIK au rideau, puis JAHSIK au conteneur rouge : c'est la coupe du montage validé, inchangée — **OK** |
+| Dernières images | mouvement réel jusqu'au fondu de 0,25 s, identique à la version validée — **OK** |
+| Smartphone | simulation d'un écran de 6,1 pouces avec les zones d'interface : textes hors interface, « BAD LIFE » et « MAINTENANT DISPONIBLE ! » bien lisibles — **OK** |
+
+**Verdict : CONFORME.**
+
+Livrable unique : `BAD_LIFE_TEASER_30S_PREMIUM.mp4`, 43,9 Mo, SHA-256
+`97e4db30b69787b777c8aaeb9442d4c14abe74eddb8eb94a3bfb2868a91ce395`.
+
+**Remarque** : le duo de la révélation, de 9,16 à 10,96 s, est encore présenté dans une bande sur fond
+sombre. Ce passage appartient au montage validé, que la consigne demandait de conserver, et il n'a donc
+pas été modifié.
