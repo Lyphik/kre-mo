@@ -72,4 +72,42 @@ décidables.
 
 Le premier rendu est conservé hors dépôt, à titre de traçabilité ; il n'est pas livré.
 
-_Second rendu et contrôles complets : §11.4._
+## 11.4 Second rendu : interruption du conteneur, rendu par segments
+
+Le second rendu monolithique a été **interrompu à l'image 5050 / 8760** par un redémarrage du
+conteneur de travail (incident d'infrastructure, sans lien avec les réglages). Le MP4 écrit avec
+`faststart` n'a son index qu'en fin de fichier : il était tronqué et **inexploitable**. Pour qu'une
+nouvelle interruption ne fasse perdre qu'un segment, le master est désormais rendu en **4 segments
+reprenables**, puis assemblé sans réencodage.
+
+**Condition : le résultat doit être identique au rendu monolithique.** Le compositeur remet son
+état à zéro à chaque coupe (caméra, masque lissé, sources lumineuses, particules), sauf quatre
+éléments qui traversent les plans. L'option `PREROLL=1` (désactivée par défaut, comportement
+inchangé sans elle) les rejoue :
+
+| État inter-plans | Rejoué par |
+|---|---|
+| Générateur aléatoire des particules (un tirage par plan) | mêmes tirages, dans le même ordre, pour tous les plans précédant le segment |
+| Moyenne glissante de la confiance du masque | recalculée sur toutes les images précédentes (table de qualité des masques) |
+| Transitions musicales (alternance gauche / droite) | calculées sur le clip entier |
+| Gain des effets lors des flashs du montage | bornes choisies après ≥ 45 images sans flash : le gain vaut alors exactement 1 |
+
+Bornes retenues (débuts de plans, à plus de 1 s de toute transition, sans flash avant) :
+**45,60 s** (image 2280), **90,54 s** (4527), **130,36 s** (6518).
+
+**Preuve d'équivalence**, avant de lancer le rendu, contre les tables par image écrites par le
+rendu interrompu (images 0–5007) :
+
+| Fenêtre | Contenu | Écarts (qc_effets 17 colonnes + qc_artistes) |
+|---|---|---|
+| 45,60–47,60 s, avec `PREROLL` | nuit rouge, avec fumée, rayons, halos, flares, particules ; franchit une coupe | **0** sur 100 images |
+| 90,54–92,54 s, avec `PREROLL` | jour | **0** sur 100 images |
+| 45,60–47,60 s, **sans** `PREROLL` (témoin) | — | **311** cellules sur 1700 |
+
+Le témoin montre que le test est sensible. L'assemblage (`tools/v5/rendu_segments.sh`)
+concatène les flux vidéo **sans réencodage**. Il y ajoute le flux audio **original de la source,
+copié tel quel**. Chaque segment est encodé avec les mêmes réglages (x265 Main10, CRF 16, VBV
+80 Mb/s) et commence par une image clé : la qualité d'encodage est la même que celle d'un rendu
+d'un seul tenant. Seule la position des images clés change.
+
+_Contrôles du master final : §11.5._
