@@ -312,3 +312,21 @@ mesurée au même instant sur la source originale et sur le master :
 **Fondu de sortie** : un fondu visuel discret de 0,25 s (29,75 → 30 s) a été ajouté. Les mouvements
 continuent jusqu'à la dernière image. Comme l'ouverture au noir, c'est une transition : ces images sont
 exclues du contrôle strict et comptées à part.
+
+**Contrôles du fichier livré** (`tools/teaser/qc_teaser.py` ; rapports dans `data/teaser/`)
+
+| Contrôle | Résultat |
+|---|---|
+| Format | H.264 High, 1080 × 1920, 50 i/s, **1 500 images**, 30,000 s ; AAC 48 kHz stéréo 30,000 s ; départs vidéo et audio à 0 — **OK** |
+| Artistes | écart **0** avec le master recadré sur les 1 448 images strictes ; 52 images de fondu (40 en ouverture, 12 en sortie) comptées à part — **OK** |
+| Son | décalage 0 ms avec l'extrait original (69,58–99,58 s), corrélation 0,9992 hors fondus — **OK** |
+| Écrans noirs | aucun hors fondus (luminance moyenne minimale 9,9) — **OK** |
+| Scintillement | 1 image au-dessus du seuil (2,6 s), expliquée par l'éclair présent dans la source — **OK** |
+| Textes | emprise x = 236–849, y = 120–569 : dans les zones sûres — **OK** |
+| Début et fin | ouverture au noir (0,8 s) puis « LYPHIK présente… » ; mouvement réel de LYPHIK jusqu'à la dernière image, fondu de 0,25 s — **OK** (vérification à l'œil) |
+| Smartphone | simulation à 390 points de large (écran de 6,1 pouces) avec les zones d'interface de TikTok, Reels et Shorts : textes hors interface. « BAD LIFE » (capitales d'environ 10 mm) et « MAINTENANT DISPONIBLE ! » (environ 6,7 mm) se lisent bien. « LYPHIK FEAT. JAHSIK » (environ 2,6 mm) est lisible mais discret ; sa taille n'a pas été modifiée, conformément à la consigne de ne plus changer la typographie. |
+
+**Verdict : CONFORME.**
+
+Livrable : `BAD_LIFE_TEASER_30S_PREMIUM.mp4`, 40,9 Mo, SHA-256
+`30621a9a11c0fffcd1e256be688c56b36f95be48944c2532b882dc105e104b2b`. Le fichier n'est pas versionné.
