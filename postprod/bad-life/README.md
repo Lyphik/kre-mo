@@ -30,13 +30,14 @@ d'analyse et la documentation le sont.
 8. [`docs/08-v5-analyse.md`](docs/08-v5-analyse.md) — V5 : sécurisation, coupes refaites et validées, plans réels, ambiances, N&B, musique, masques.
 9. [`docs/09-v5-tests-et-qc.md`](docs/09-v5-tests-et-qc.md) — V5 : étalonnage C hybride, effets, 5 extraits, rapport de contrôle qualité, décisions attendues.
 10. [`docs/10-v5-1-finition.md`](docs/10-v5-1-finition.md) — V5.1 : passe de finition (moins d'effets, plus de profondeur), mesures d'amélioration, conservé / réduit / supprimé par extrait, autocritique.
+11. [`docs/11-master-v5-1.md`](docs/11-master-v5-1.md) — master V5.1 : arbitrages définitifs, vérification courte, rendu par segments, défauts trouvés et corrigés (fondu, décalage d'assemblage, pulsation 25 Hz des halos), contrôles du master final, livrables.
 
 ## Arborescence
 
 ```
 postprod/bad-life/
 ├── README.md
-├── docs/                  documentation (01 → 05)
+├── docs/                  documentation (01 → 11)
 ├── data/
 │   ├── families.json      classification des plans par famille de lumière (éditable)
 │   ├── shots.csv          V1–V4 (OBSOLÈTE : sous-segmentation) — remplacé par data/v5/plans.csv
@@ -51,7 +52,8 @@ postprod/bad-life/
 │   ├── badlife_look_v5_nuit.cube        V5 — décor des scènes nocturnes rouges
 │   ├── badlife_look_v5_nuit_ambre.cube  V5 — décor rideau métallique / nuit extérieure
 │   ├── badlife_look_v5_jour.cube        V5 — décor des scènes de jour
-│   └── badlife_look_v5_1_sujets.cube    V5.1 — harmonisation très légère et globale des artistes
+│   ├── badlife_look_v5_1_sujets.cube    V5.1 — harmonisation très légère et globale des artistes
+│   └── badlife_look_v5_1_fondu.cube     V5.1 master — fondu de fin (noirs neutres, fondu non écrasé)
 └── tools/
     ├── analyze.sh         étape 1 : détection des coupes + statistiques signal
     ├── shots.py           agrégation des statistiques par plan
@@ -79,7 +81,13 @@ postprod/bad-life/
         ├── v5_config.json / v5_config_V5_fige.json   réglages V5 (copie figée de référence)
         ├── v5_1_config.json   réglages V5.1 (surcharges par famille et par plan, artistes harmonisés)
         ├── metrics_v51.py     mesures d'amélioration (effets, détail, noirs, profondeur)
-        └── compare_v51.sh     comparatif SOURCE | ÉTALONNAGE | V5 | V5.1 + compilation
+        ├── compare_v51.sh     comparatif SOURCE | ÉTALONNAGE | V5 | V5.1 + compilation
+        ├── v5_1_final_config.json   réglages du master (V5.1 + arbitrages définitifs, doc 11)
+        ├── master.json / master_segments.json   clip entier ; découpage du rendu en 4 segments
+        ├── rendu_segments.sh  rendu du master par segments (reprenable) + assemblage sans réencodage
+        ├── qc_master.py       contrôle du master : audio bit à bit, synchro, durées, coupes, montage
+        ├── qc_luma.py         continuité de luminance par plan + fondu de fin
+        └── visuel_master.py   planches d'inspection : plans, zones protégées à 100 %, transitions
 ```
 
 ## Reproduire
