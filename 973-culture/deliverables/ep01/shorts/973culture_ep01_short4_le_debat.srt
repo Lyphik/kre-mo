@@ -1,37 +1,41 @@
 1
-00:00:00,120 --> 00:00:01,959
+00:00:00,120 --> 00:00:01,939
 Et c'est ce qui me plaît chez lui :
 
 2
-00:00:01,959 --> 00:00:03,956
+00:00:01,959 --> 00:00:03,936
 il ne reste pas enfermé dans une case.
 
 3
-00:00:03,956 --> 00:00:05,269
+00:00:03,956 --> 00:00:05,249
 Sa bio le dit elle-même :
 
 4
 00:00:05,269 --> 00:00:08,054
-il est à l'aise sur du hardcore comme sur de la mélo.
+il est à l'aise sur du
+hardcore comme sur de la mélo.
 
 5
-00:00:08,314 --> 00:00:10,173
+00:00:08,314 --> 00:00:10,153
 Je vais être un peu provocateur :
 
 6
-00:00:10,173 --> 00:00:13,554
-trop de polyvalence, est-ce que ça ne brouille pas l'image ?
+00:00:10,173 --> 00:00:13,534
+trop de polyvalence, est-ce que
+ça ne brouille pas l'image ?
 
 7
 00:00:13,554 --> 00:00:16,258
-Le public aime bien savoir où ranger un artiste.
+Le public aime bien savoir
+où ranger un artiste.
 
 8
-00:00:16,518 --> 00:00:21,336
-Ou alors, c'est le public qui doit arrêter de vouloir ranger les artistes !
+00:00:16,518 --> 00:00:21,316
+Ou alors, c'est le public qui doit
+arrêter de vouloir ranger les artistes !
 
 9
-00:00:21,336 --> 00:00:23,585
+00:00:21,336 --> 00:00:23,565
 Regarde les influences qu'il cite :
 
 10

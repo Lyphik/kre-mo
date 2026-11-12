@@ -5,7 +5,21 @@
 
 ## 1. Contrôles techniques
 
-<!-- TECH_TABLE -->
+Mesures sur les fichiers livrés (`production/src/qc.py`), après corrections :
+
+| Fichier | Durée | Format | Taille | Loudness | True peak | Plans figés > 2,5 s | Images noires | SRT (ligne max / chevauchements) |
+|---|---|---|---|---|---|---|---|---|
+| Master `…_master_1080p25.mp4` | 7:41,5 | H.264 1920×1080 25 i/s · AAC 48 kHz stéréo | 95,9 Mo | −14,4 LUFS | −1,0 dBTP | 0 | 0 | 42 car. / 0 (159 sous-titres, durée max 5,4 s) |
+| Bande-annonce 16:9 | 0:54,6 | 1920×1080 | 12,1 Mo | −14,7 LUFS | −0,9 dBTP | 0 | 0 | 41 / 0 |
+| Short 1 « Lyphik en 55 s » | 0:54,6 | 1080×1920 | 9,3 Mo | −14,3 LUFS | −1,1 dBTP | 0 | 0 | 41 / 0 |
+| Short 2 « Le paradoxe » | 0:24,3 | 1080×1920 | 3,7 Mo | −14,1 LUFS | −1,6 dBTP | 0 | 0 | 42 / 0 |
+| Short 3 « P.M.L » | 0:26,1 | 1080×1920 | 4,9 Mo | −14,8 LUFS | −1,0 dBTP | 0 | 0 | 41 / 0 |
+| Short 4 « Le débat » | 0:27,4 | 1080×1920 | 5,8 Mo | −14,4 LUFS | −1,7 dBTP | 0 | 0 | 40 / 0 |
+| Short 5 « Bad Life » | 0:39,2 | 1080×1920 | 7,5 Mo | −14,6 LUFS | −1,8 dBTP | 0 | 0 | 39 / 0 |
+
+Historique des corrections techniques :
+- **v1.0 → v1.1** : 34 plans figés supprimés (mouvement continu des habillages) ; silence d'ouverture de 2 s comblé par l'ambiance ; true peak du master ramené de +0,1 à −1,0 dBTP (limiteur) ; SRT des Shorts recoupés à 42 caractères ; master réencodé en 2 passes (113 Mo → 95,9 Mo) pour respecter la limite de 100 Mo par fichier de GitHub.
+- Le master a été réencodé à partir d'un rendu intermédiaire (CRF 20) : une génération de compression en plus, sans perte visible sur les planches de contrôle.
 
 ## 2. Contrôles éditoriaux (fiabilité)
 
@@ -41,14 +55,14 @@
 | Graphe des featurings illisible (croisements) | ✅ Corrigé (disposition en étoile) |
 | Traits parasites (bug de chemin Cairo après un texte) | ✅ Corrigé à la source (`draw.text`) |
 | Chevauchement médaillon / texte (fact-check, encart Kourou) | ✅ Corrigé |
-| Plans figés > 2,5 s sur les habillages (34 détections en v1.0) | ✅ Corrigé : mouvement de caméra continu sur tous les habillages (voir mesure §1) |
+| Plans figés > 2,5 s sur les habillages (34 détections en v1.0) | ✅ Corrigé : 0 détection sur tous les fichiers |
 | Banding (paliers) dans les dégradés sombres | ⚠️ **Atténué, pas supprimé** (`aq-mode=3`). Le grain anti-banding est disponible (`GRAIN=True`) mais multiplie la taille par 2,5 ; à activer pour l'envoi à YouTube si l'on accepte un fichier d'environ 150 Mo |
 
 ## 4. Contrôles audio
 
 | Contrôle | Résultat |
 |---|---|
-| Loudness intégrée (cible YouTube −14 LUFS) | Voir §1 |
+| Loudness intégrée (cible YouTube −14 LUFS) | ✅ Entre −14,8 et −14,1 LUFS selon les fichiers ; true peak ≤ −0,9 dBTP |
 | Homogénéité des voix (niveau RMS par réplique) | ✅ Écart-type 0,45 dB (−17,2 à −15,3 dBFS avant traitement) |
 | Rapport voix / musique pendant les dialogues | ✅ Lit musical à environ −16 à −19 dB sous la voix (atténuation automatique) |
 | Silence en ouverture (2,1 s en v1.0) | ✅ Corrigé : ambiance extérieure (feuillage, grillons qui s'intensifient avec la nuit) |

@@ -22,7 +22,7 @@ from compositor import CAMS, cam_for
 from config import BUILD, DELIVER, FPS, H, SR, W
 from draw import P, ease_out, lin, prog, rrect, set_src, text, text_width, wrap
 from render import Renderer
-from subtitles import split_text, tc
+from subtitles import split_text, tc, two_lines
 
 SHORTS = [
     {"id": "short1_lyphik_en_55s", "vertical": True, "title": ["LYPHIK", "EN 55 SECONDES"],
@@ -311,7 +311,7 @@ def render_short(spec, workers=4):
                     "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(dst)], check=True)
     # SRT du format court
     srt = dst.with_suffix(".srt")
-    lines = [f"{i}\n{tc(a)} --> {tc(min(e, sr_.dur))}\n{s}\n" for i, (a, e, s) in enumerate(sr_.cues, 1)]
+    lines = [f"{i}\n{tc(a)} --> {tc(min(e, sr_.dur))}\n{two_lines(s)}\n" for i, (a, e, s) in enumerate(sr_.cues, 1)]
     srt.write_text("\n".join(lines), encoding="utf-8")
     print(f"{dst.name} : {sr_.dur:.1f}s")
 
