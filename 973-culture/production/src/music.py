@@ -223,14 +223,14 @@ def build():
     from scipy.signal import butter, lfilter
     n_all = buf.shape[1]
     b_, a_ = butter(2, [250 / (SR / 2), 1800 / (SR / 2)], btype="band")
-    wind = lfilter(b_, a_, rng.standard_normal(n_all)) * 0.035
+    wind = lfilter(b_, a_, rng.standard_normal(n_all)) * 0.05
     tt = np.arange(n_all) / SR
     wind *= 0.6 + 0.4 * np.sin(tt * 0.21) * np.sin(tt * 0.073 + 1)
     night = np.clip(tt / tl["duration"], 0, 1) ** 1.1
     chirp = np.sin(2 * np.pi * 4300 * tt) * (np.sin(2 * np.pi * 28 * tt) > 0.55) * (np.sin(2 * np.pi * 0.9 * tt) > 0.2)
     chirp2 = np.sin(2 * np.pi * 3900 * tt) * (np.sin(2 * np.pi * 31 * tt + 1) > 0.6) * (np.sin(2 * np.pi * 0.7 * tt + 2) > 0.35)
     crick = (chirp * 0.010 + chirp2 * 0.008) * (0.25 + 0.75 * night)
-    fade_in = np.clip(tt / 1.5, 0, 1)
+    fade_in = np.clip(tt / 0.25, 0, 1)
     buf[0] += (wind + crick) * fade_in
     buf[1] += (np.roll(wind, 4800) + np.roll(crick, 2400)) * fade_in
     # effets
