@@ -1,0 +1,923 @@
+{
+  "episode": {
+    "id": "EP01",
+    "show": "973 CULTURE – LE PODCAST",
+    "slogan": "Les talents d'ici méritent une audience mondiale.",
+    "title": "LYPHIK : de Matoury à la scène, un parcours à découvrir",
+    "version": "1.1",
+    "facts_snapshot": "docs/01-recherche/data/snapshot-2026-11-12.json"
+  },
+  "cast": {
+    "K": {
+      "name": "Kenzo",
+      "role": "Présentateur",
+      "voice": "fr_FR-tom-medium",
+      "speaker": 0,
+      "length_scale": 0.93
+    },
+    "M": {
+      "name": "Maëva",
+      "role": "Présentatrice",
+      "voice": "fr_FR-siwis-medium",
+      "speaker": 0,
+      "length_scale": 0.94
+    }
+  },
+  "pronunciation": {
+    "Lyphik": "Lifik",
+    "LYPHIK": "Lifik",
+    "Jahsik": "Djasik",
+    "HYT": "H Y T",
+    "DADADA": "Dadada",
+    "BDMW": "B D M W",
+    "1K 5K": "un K cinq K",
+    "FA7": "F A sept",
+    "Allnice": "Ol naïce",
+    "BHP": "B H P",
+    "Rawniii": "Rawni",
+    "Vybz": "Vaïbze",
+    "Manhimselff": "Mane-im-self",
+    "LaTrelle": "La Trelle",
+    "Linlin": "Linline",
+    "Gazo": "Gazo",
+    "Three7": "Thri sévène",
+    "tout moun": "toute moune",
+    "Mèsi": "Mèssi",
+    "P.M.L": "P M L",
+    "street clip": "strite clip",
+    "visualizer": "vijualaïzeur",
+    "Shaquille": "Chakil",
+    "featurings": "fitchurings",
+    "featuring": "fitchuring",
+    "Brigistone": "Brigistône",
+    "Encaisser": "Encaisser",
+    "Bad Life": "Bad Laïfe",
+    "drill": "drill",
+    "Spotify": "Spotifaï",
+    "Josman": "Josmane",
+    "Migos": "Migoss",
+    "Future": "Fioutcheur",
+    "Niska": "Niska",
+    "Kourou": "Kourou",
+    "Matoury": "Matouri",
+    "Larivot": "Larivo",
+    "Copaya": "Copaïa",
+    "Yana 2": "Yana deux",
+    "Moucou Moucou": "Moucou Moucou",
+    "Link Up": "Linkeup",
+    "Focus": "Faucusse",
+    "Guest Stars": "Gueste Stars",
+    "973": "neuf sept trois",
+    "EP": "i-pi",
+    "vignette": "vignette"
+  },
+  "beats": [
+    {
+      "id": "S0-01",
+      "seq": 0,
+      "type": "visual",
+      "duration": 3.2,
+      "scene": "cold_open",
+      "data": {
+        "kicker": "CAYENNE · GUYANE",
+        "line": "Place des Palmistes, à la tombée du jour"
+      }
+    },
+    {
+      "id": "S0-02",
+      "seq": 0,
+      "type": "line",
+      "who": "K",
+      "text": "Cinq cent quatre-vingt-quinze mille vues.",
+      "scene": "stat",
+      "data": {
+        "value": 595204,
+        "unit": "vues",
+        "label": "Brigi ft. Lyphik — « La zone »",
+        "source": "YouTube · chaîne Niska Officiel · relevé du 12/11/2026"
+      }
+    },
+    {
+      "id": "S0-03",
+      "seq": 0,
+      "type": "line",
+      "who": "M",
+      "text": "Sur un clip où il n'est même pas l'artiste principal.",
+      "scene": "stat",
+      "data": {
+        "value": 595204,
+        "unit": "vues",
+        "label": "Brigi ft. Lyphik — « La zone »",
+        "source": "YouTube · chaîne Niska Officiel · relevé du 12/11/2026",
+        "hold": true
+      }
+    },
+    {
+      "id": "S0-04",
+      "seq": 0,
+      "type": "line",
+      "who": "K",
+      "text": "Et pourtant, beaucoup de gens ne connaissent pas encore son nom.",
+      "scene": "set_wide"
+    },
+    {
+      "id": "S0-05",
+      "seq": 0,
+      "type": "visual",
+      "duration": 5.5,
+      "scene": "logo",
+      "music": "sting"
+    },
+    {
+      "id": "S1-01",
+      "seq": 1,
+      "type": "line",
+      "who": "M",
+      "text": "Bonsoir tout moun, et bienvenue dans 973 Culture ! On est installés Place des Palmistes, à Cayenne, pour le tout premier épisode.",
+      "scene": "two_shot",
+      "lower_third": "M"
+    },
+    {
+      "id": "S1-02",
+      "seq": 1,
+      "type": "line",
+      "who": "K",
+      "text": "Moi, c'est Kenzo. Et ici, on a une seule règle : les talents d'ici méritent une audience mondiale.",
+      "scene": "single",
+      "lower_third": "K"
+    },
+    {
+      "id": "S1-03",
+      "seq": 1,
+      "type": "line",
+      "who": "M",
+      "text": "Petite précision : nous deux, on est des personnages animés. Par contre, tout ce qu'on va vous dire est vérifié, et les sources sont en description.",
+      "scene": "disclaimer"
+    },
+    {
+      "id": "S1-04",
+      "seq": 1,
+      "type": "line",
+      "who": "K",
+      "text": "Ce soir, on parle d'un rappeur de Matoury, avec déjà plus de dix ans de musique derrière lui.",
+      "scene": "two_shot"
+    },
+    {
+      "id": "S1-05",
+      "seq": 1,
+      "type": "line",
+      "who": "M",
+      "text": "Drill, trap, dancehall, des featurings en pagaille… et un nouveau son qui vient tout juste de sortir.",
+      "scene": "single"
+    },
+    {
+      "id": "S1-06",
+      "seq": 1,
+      "type": "line",
+      "who": "K",
+      "text": "On parle de… Lyphik !",
+      "scene": "single"
+    },
+    {
+      "id": "S1-07",
+      "seq": 1,
+      "type": "visual",
+      "duration": 4.0,
+      "scene": "name_reveal",
+      "music": "hit"
+    },
+    {
+      "id": "S2-01",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "Alors, Lyphik, c'est qui ? D'après sa biographie officielle, il a grandi à Copaya, à Matoury.",
+      "scene": "map",
+      "data": {
+        "focus": "matoury",
+        "pins": [
+          "cayenne",
+          "matoury"
+        ]
+      },
+      "chapter": "Qui est Lyphik ?"
+    },
+    {
+      "id": "S2-02",
+      "seq": 2,
+      "type": "line",
+      "who": "K",
+      "text": "Puis, à quinze ans, il part au Larivot. Et c'est là, toujours selon sa bio, qu'il commence la musique.",
+      "scene": "map",
+      "data": {
+        "focus": "larivot",
+        "pins": [
+          "cayenne",
+          "matoury",
+          "larivot"
+        ]
+      }
+    },
+    {
+      "id": "S2-03",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "Et la musique, il l'a un peu dans le sang : il se présente comme le fils d'un père musicien et d'une mère danseuse.",
+      "scene": "quote",
+      "data": {
+        "quote": "Fils d'un père musicien, et d'une mère danseuse, il est issu d'un foyer où la musique est très présente.",
+        "source": "Biographie officielle de l'artiste · Spotify"
+      }
+    },
+    {
+      "id": "S2-04",
+      "seq": 2,
+      "type": "line",
+      "who": "K",
+      "text": "Et retenez bien ces trois lettres : P.M.L, pour Pa Mélé. C'est le nom de sa première mixtape, et c'est resté collé à son nom : Lyphik PML.",
+      "scene": "pml"
+    },
+    {
+      "id": "S2-05",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "Pa mélé… Tu vas nous la placer tout l'épisode, celle-là ?",
+      "scene": "single",
+      "emotion": "laugh"
+    },
+    {
+      "id": "S2-06",
+      "seq": 2,
+      "type": "line",
+      "who": "K",
+      "text": "Peut-être bien !",
+      "scene": "single",
+      "emotion": "laugh"
+    },
+    {
+      "id": "S2-07",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "Ses vrais débuts, il les situe en 2015, avec Allnice et BHP. Sur la chaîne Allnice Production, on trouve par exemple La Rage, à presque cent mille vues.",
+      "scene": "timeline",
+      "data": {
+        "era": 0
+      }
+    },
+    {
+      "id": "S2-08",
+      "seq": 2,
+      "type": "line",
+      "who": "K",
+      "text": "Et vers 2016, il y a ce fameux clip : La Zone, de Brigi, en featuring avec Lyphik. Publié sur la chaîne de Niska. Aujourd'hui : près de six cent mille vues.",
+      "scene": "clip_slot",
+      "data": {
+        "title": "Brigi ft. Lyphik — La zone",
+        "meta": "Clip officiel · chaîne Niska Officiel · ≈ 2016",
+        "views": "595 204 vues",
+        "slot": "EX-01"
+      }
+    },
+    {
+      "id": "S2-09",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "C'est la plus vue de toutes les vidéos qu'on a recensées. Sauf que ce n'est pas son morceau à lui.",
+      "scene": "two_shot"
+    },
+    {
+      "id": "S2-10",
+      "seq": 2,
+      "type": "line",
+      "who": "K",
+      "text": "Et c'est toute la question : comment on passe d'un gros featuring… à une identité bien à soi ?",
+      "scene": "single"
+    },
+    {
+      "id": "S2-11",
+      "seq": 2,
+      "type": "line",
+      "who": "M",
+      "text": "Réponse, toujours d'après sa bio : en 2018, il commence à travailler avec le producteur HYT. Et là, tout s'accélère.",
+      "scene": "timeline",
+      "data": {
+        "era": 1
+      }
+    },
+    {
+      "id": "S3-01",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Juillet 2020. Sortie de DADADA. Étiquette drill. Trois cent quatre-vingt-quatre mille vues sur sa chaîne.",
+      "scene": "clip_slot",
+      "data": {
+        "title": "Lyphik — DADADA",
+        "meta": "Clip officiel · #Drill · 24/07/2020",
+        "views": "≈ 384 000 vues",
+        "slot": "EX-02"
+      },
+      "chapter": "Les clips"
+    },
+    {
+      "id": "S3-02",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "Et sur Spotify, c'est toujours son titre le plus écouté : plus de cinquante-deux mille écoutes.",
+      "scene": "stat",
+      "data": {
+        "value": 52771,
+        "unit": "écoutes",
+        "label": "Lyphik — « Dadada »",
+        "source": "Spotify · relevé du 12/11/2026"
+      }
+    },
+    {
+      "id": "S3-03",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Et derrière, il enchaîne : Link Up, BDMW, Moucou Moucou… En moins d'un an.",
+      "scene": "cards",
+      "data": {
+        "items": [
+          [
+            "LINK UP",
+            "18/11/2020"
+          ],
+          [
+            "BDMW",
+            "17/02/2021"
+          ],
+          [
+            "MOUCOU MOUCOU",
+            "21/04/2021"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S3-04",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "Ce qui me frappe, c'est la cadence. Ça, c'est une vraie stratégie : battre le fer tant qu'il est chaud.",
+      "scene": "single"
+    },
+    {
+      "id": "S3-05",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Et visuellement, ça bouge. Rien que la miniature de Moucou Moucou joue la carte du caméscope rétro, avec l'horodatage et tout.",
+      "scene": "clip_slot",
+      "data": {
+        "title": "Lyphik — Moucou Moucou",
+        "meta": "Clip officiel · #Drill · 2021",
+        "views": "≈ 32 000 vues",
+        "slot": "EX-03",
+        "style": "vhs"
+      }
+    },
+    {
+      "id": "S3-06",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "Puis tu as 1K 5K, réalisé par Rawniii, sur une prod de HYT Beatz. Sa miniature est très froide, toute en bleu-vert.",
+      "scene": "clip_slot",
+      "data": {
+        "title": "Lyphik — 1K 5K",
+        "meta": "Réal. Rawniii · Prod. HYT_Beatz · ≈ 2022",
+        "views": "≈ 30 000 vues",
+        "slot": "EX-04",
+        "style": "teal"
+      }
+    },
+    {
+      "id": "S3-07",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Et Diss, avec Stone Vybz : cent soixante-sept mille vues. Le deuxième plus gros score de sa chaîne.",
+      "scene": "stat",
+      "data": {
+        "value": 167000,
+        "unit": "vues",
+        "approx": true,
+        "label": "Lyphik x Stone Vybz — « Diss » (2021)",
+        "source": "YouTube · chaîne @LyphikPML · relevé du 12/11/2026"
+      }
+    },
+    {
+      "id": "S3-08",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "En 2022, il sort son EP, FA7. Sept titres, dont Scream, avec Flémo Santana.",
+      "scene": "ep",
+      "data": {
+        "title": "FA7",
+        "date": "17/03/2022",
+        "tracks": [
+          "YSL",
+          "FA/JN",
+          "Niveau",
+          "Scream (feat. Flémo)",
+          "Le très haut",
+          "PMU",
+          "Gogo mat&"
+        ],
+        "highlight": 3
+      }
+    },
+    {
+      "id": "S3-09",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Après, on sent un autre virage. La miniature de Forward affiche la signature Shaquille Design Films. Et Cataracte sort en street clip, avec du graffiti et du madras sur la vignette…",
+      "scene": "cards",
+      "data": {
+        "items": [
+          [
+            "FORWARD",
+            "Shaquille Design Films"
+          ],
+          [
+            "CATARACTE",
+            "Street clip · 2024"
+          ],
+          [
+            "RENTA",
+            "feat. La Mala · 2023"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S3-10",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "Et c'est ce qui me plaît chez lui : il ne reste pas enfermé dans une case. Sa bio le dit elle-même : il est à l'aise sur du hardcore comme sur de la mélo.",
+      "scene": "two_shot"
+    },
+    {
+      "id": "S3-11",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Je vais être un peu provocateur : trop de polyvalence, est-ce que ça ne brouille pas l'image ? Le public aime bien savoir où ranger un artiste.",
+      "scene": "single",
+      "emotion": "tease"
+    },
+    {
+      "id": "S3-12",
+      "seq": 3,
+      "type": "line",
+      "who": "M",
+      "text": "Ou alors, c'est le public qui doit arrêter de vouloir ranger les artistes ! Regarde les influences qu'il cite : Future, Migos, Booba, Josman.",
+      "scene": "single",
+      "emotion": "argue"
+    },
+    {
+      "id": "S3-13",
+      "seq": 3,
+      "type": "line",
+      "who": "K",
+      "text": "Bon. Un point pour toi.",
+      "scene": "two_shot",
+      "emotion": "laugh"
+    },
+    {
+      "id": "S4-01",
+      "seq": 4,
+      "type": "line",
+      "who": "M",
+      "text": "Parlons featurings, parce que là, la carte est impressionnante.",
+      "scene": "network",
+      "data": {
+        "step": 0
+      },
+      "chapter": "Featurings"
+    },
+    {
+      "id": "S4-02",
+      "seq": 4,
+      "type": "line",
+      "who": "K",
+      "text": "Au centre, il y a HYT. Lyphik apparaît sur ses albums : Yana, en 2020, et Yana 2, en 2026.",
+      "scene": "network",
+      "data": {
+        "step": 1
+      }
+    },
+    {
+      "id": "S4-03",
+      "seq": 4,
+      "type": "line",
+      "who": "M",
+      "text": "Autour, tu as Donfly : Guest Stars en 2020, puis Malus en 2025, avec La Mala et Banos.",
+      "scene": "network",
+      "data": {
+        "step": 2
+      }
+    },
+    {
+      "id": "S4-04",
+      "seq": 4,
+      "type": "line",
+      "who": "K",
+      "text": "La Mala, qu'on avait déjà sur Renta en 2023. Et Stone Vybz, avec Diss et Encaisser. Encaisser, c'est d'ailleurs son deuxième titre le plus écouté sur Spotify.",
+      "scene": "network",
+      "data": {
+        "step": 3
+      }
+    },
+    {
+      "id": "S4-05",
+      "seq": 4,
+      "type": "line",
+      "who": "M",
+      "text": "Focus, avec Nesty Manhimselff : plus de soixante-trois mille vues. Et Impulsif, avec LaTrelle, sorti en septembre.",
+      "scene": "network",
+      "data": {
+        "step": 4
+      }
+    },
+    {
+      "id": "S4-06",
+      "seq": 4,
+      "type": "line",
+      "who": "K",
+      "text": "Sans oublier Brigistone, Flémo Santana, Dasinga, Pompis…",
+      "scene": "network",
+      "data": {
+        "step": 5
+      }
+    },
+    {
+      "id": "S4-07",
+      "seq": 4,
+      "type": "line",
+      "who": "M",
+      "text": "Pour moi, ça raconte un artiste ancré dans un écosystème. Ce ne sont pas des coups isolés : on retrouve les mêmes noms sur les projets de HYT ou d'AZ Sound.",
+      "scene": "network",
+      "data": {
+        "step": 6
+      }
+    },
+    {
+      "id": "S4-08",
+      "seq": 4,
+      "type": "line",
+      "who": "K",
+      "text": "Attention quand même : on parle de projets en commun. Qui est ami avec qui, on n'en sait rien. Et on ne va pas l'inventer.",
+      "scene": "single"
+    },
+    {
+      "id": "S4-09",
+      "seq": 4,
+      "type": "line",
+      "who": "M",
+      "text": "Exactement. Pa mélé !",
+      "scene": "single",
+      "emotion": "laugh"
+    },
+    {
+      "id": "S4-10",
+      "seq": 4,
+      "type": "line",
+      "who": "K",
+      "text": "Ah ! Tu vois, ça s'attrape !",
+      "scene": "two_shot",
+      "emotion": "laugh"
+    },
+    {
+      "id": "S5-01",
+      "seq": 5,
+      "type": "line",
+      "who": "K",
+      "text": "Maintenant, l'humain derrière l'artiste. Et honnêtement, on a trouvé très peu d'infos publiques sur sa vie.",
+      "scene": "set_wide",
+      "chapter": "L'humain derrière l'artiste"
+    },
+    {
+      "id": "S5-02",
+      "seq": 5,
+      "type": "line",
+      "who": "M",
+      "text": "Ce qu'on sait, c'est qu'en septembre 2021, l'humoriste Linlin lance un concept de caméras cachées. Et sa toute première victime…",
+      "scene": "press",
+      "data": {
+        "outlet": "France-Guyane",
+        "date": "03/09/2021",
+        "headline": "L'humoriste Linlin piège le rappeur Lyphik en caméra cachée",
+        "author": "Marlène Cléoma"
+      }
+    },
+    {
+      "id": "S5-03",
+      "seq": 5,
+      "type": "line",
+      "who": "K",
+      "text": "…c'est Lyphik. Tournée dans le quartier Césaire, à Cayenne. France-Guyane parle de plus de quinze mille vues en une seule journée.",
+      "scene": "press",
+      "data": {
+        "outlet": "France-Guyane",
+        "date": "03/09/2021",
+        "headline": "L'humoriste Linlin piège le rappeur Lyphik en caméra cachée",
+        "author": "Marlène Cléoma",
+        "stat": "+15 000 vues en 24 h"
+      }
+    },
+    {
+      "id": "S5-04",
+      "seq": 5,
+      "type": "line",
+      "who": "M",
+      "text": "Ce qui est intéressant, c'est le contraste. Ses clips affichent souvent l'étiquette drill, un registre plutôt dur. Et là, le public le découvre piégé dans une situation complètement absurde.",
+      "scene": "two_shot"
+    },
+    {
+      "id": "S5-05",
+      "seq": 5,
+      "type": "line",
+      "who": "K",
+      "text": "C'est toute la différence entre le personnage et la personne. Le personnage, c'est l'attitude, le regard caméra, le flow.",
+      "scene": "persona",
+      "data": {
+        "left": "LE PERSONNAGE",
+        "left_items": [
+          "L'attitude",
+          "Le regard caméra",
+          "Le flow"
+        ],
+        "right": "LA PERSONNE",
+        "right_items": [
+          "Non documentée",
+          "On ne spécule pas"
+        ]
+      }
+    },
+    {
+      "id": "S5-06",
+      "seq": 5,
+      "type": "line",
+      "who": "M",
+      "text": "Et la personne, on ne la connaît pas. Je préfère le dire franchement plutôt que de vous raconter des histoires.",
+      "scene": "persona",
+      "data": {
+        "left": "LE PERSONNAGE",
+        "left_items": [
+          "L'attitude",
+          "Le regard caméra",
+          "Le flow"
+        ],
+        "right": "LA PERSONNE",
+        "right_items": [
+          "Non documentée",
+          "On ne spécule pas"
+        ],
+        "reveal_right": true
+      }
+    },
+    {
+      "id": "S5-07",
+      "seq": 5,
+      "type": "line",
+      "who": "K",
+      "text": "Par contre, il y a des indices dans sa façon de communiquer : le drapeau guyanais dans presque tous ses titres, son surnom Three7, et ce Pa Mélé qu'il garde depuis le début.",
+      "scene": "single"
+    },
+    {
+      "id": "S5-08",
+      "seq": 5,
+      "type": "line",
+      "who": "M",
+      "text": "Et sur scène ? On a une date confirmée : le 25 décembre 2021, il est artiste invité du concert de Gazo, au Pôle culturel de Kourou.",
+      "scene": "map",
+      "data": {
+        "focus": "kourou",
+        "pins": [
+          "cayenne",
+          "matoury",
+          "kourou"
+        ],
+        "event": "25/12/2021 · Concert de GAZO · Pôle culturel de Kourou · artiste invité"
+      }
+    },
+    {
+      "id": "S5-09",
+      "seq": 5,
+      "type": "line",
+      "who": "K",
+      "text": "Sa bio parle aussi d'un showcase à Reims avec Stone Vybz. Mais là, on n'a trouvé aucune trace indépendante. Donc on vous le dit tel quel : c'est lui qui l'affirme.",
+      "scene": "factcheck",
+      "data": {
+        "items": [
+          [
+            "Concert de Gazo, Kourou, 25/12/2021",
+            "CONFIRMÉ"
+          ],
+          [
+            "Showcase avec Stone Vybz, Reims",
+            "DÉCLARÉ"
+          ],
+          [
+            "Festival de la Wyhcella, Kourou",
+            "DÉCLARÉ"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S6-01",
+      "seq": 6,
+      "type": "line",
+      "who": "M",
+      "text": "Et maintenant, l'actu ! Le 9 novembre 2026, Lyphik a sorti Bad Life.",
+      "scene": "badlife",
+      "data": {
+        "phase": 0
+      },
+      "chapter": "Bad Life"
+    },
+    {
+      "id": "S6-02",
+      "seq": 6,
+      "type": "line",
+      "who": "K",
+      "text": "En featuring avec Jahsik. Un nom qu'on croisait déjà sur l'album Yana de HYT, et sur la compilation Eveil d'AZ Sound.",
+      "scene": "badlife",
+      "data": {
+        "phase": 1
+      }
+    },
+    {
+      "id": "S6-03",
+      "seq": 6,
+      "type": "line",
+      "who": "M",
+      "text": "Il y a eu d'abord un visualizer, puis un street clip. Sur la miniature du visualizer : du rouge, du feu, du doré, et le drapeau guyanais en haut de l'image.",
+      "scene": "clip_slot",
+      "data": {
+        "title": "Lyphik feat. Jahsik — Bad Life",
+        "meta": "Visualizer + Street clip · novembre 2026",
+        "views": "Sortie le 09/11/2026",
+        "slot": "EX-05",
+        "style": "fire"
+      }
+    },
+    {
+      "id": "S6-04",
+      "seq": 6,
+      "type": "line",
+      "who": "K",
+      "text": "Et il le sort sous le label P.M.L. Les mêmes trois lettres que sa première mixtape.",
+      "scene": "pml",
+      "data": {
+        "label": true
+      }
+    },
+    {
+      "id": "S6-05",
+      "seq": 6,
+      "type": "line",
+      "who": "M",
+      "text": "Moi, j'y vois un clin d'œil, un retour aux sources. Mais attention : ça, c'est notre lecture, pas la sienne.",
+      "scene": "single"
+    },
+    {
+      "id": "S6-06",
+      "seq": 6,
+      "type": "line",
+      "who": "K",
+      "text": "Ce qui est sûr, c'est qu'il ne s'arrête pas : Tout x3 en juillet, Impulsif en septembre, Bad Life en novembre.",
+      "scene": "cards",
+      "data": {
+        "items": [
+          [
+            "TOUT x3",
+            "17/07/2026"
+          ],
+          [
+            "IMPULSIF",
+            "19/09/2026"
+          ],
+          [
+            "BAD LIFE",
+            "09/11/2026"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S6-07",
+      "seq": 6,
+      "type": "line",
+      "who": "M",
+      "text": "Le clip est tout frais, à quelques milliers de vues. C'est exactement le moment où votre écoute compte.",
+      "scene": "badlife",
+      "data": {
+        "phase": 2
+      }
+    },
+    {
+      "id": "S6-08",
+      "seq": 6,
+      "type": "line",
+      "who": "K",
+      "text": "Allez l'écouter, faites-vous votre propre avis, et revenez nous le dire en commentaire.",
+      "scene": "two_shot"
+    },
+    {
+      "id": "S7-01",
+      "seq": 7,
+      "type": "line",
+      "who": "M",
+      "text": "Alors, qu'est-ce qu'on retient ? Un artiste de Matoury, plus de dix ans de musique, plus d'un million et demi de vues sur les vidéos qu'on a pu recenser…",
+      "scene": "paradox",
+      "data": {
+        "phase": 0
+      },
+      "chapter": "Conclusion"
+    },
+    {
+      "id": "S7-02",
+      "seq": 7,
+      "type": "line",
+      "who": "K",
+      "text": "…mais moins de quatre cents auditeurs mensuels sur Spotify. C'est ce paradoxe qu'on voulait vous montrer.",
+      "scene": "paradox",
+      "data": {
+        "phase": 1
+      }
+    },
+    {
+      "id": "S7-03",
+      "seq": 7,
+      "type": "line",
+      "who": "M",
+      "text": "Il ne faut pas attendre qu'un artiste soit connu partout pour s'intéresser à son travail.",
+      "scene": "single"
+    },
+    {
+      "id": "S7-04",
+      "seq": 7,
+      "type": "line",
+      "who": "K",
+      "text": "Si tu ne connaissais pas Lyphik, maintenant tu as ta playlist : Dadada, Diss, Focus, Malus, et Bad Life.",
+      "scene": "playlist",
+      "data": {
+        "items": [
+          "DADADA",
+          "DISS",
+          "FOCUS",
+          "MALUS",
+          "BAD LIFE"
+        ]
+      }
+    },
+    {
+      "id": "S7-05",
+      "seq": 7,
+      "type": "line",
+      "who": "M",
+      "text": "Tous les liens sont en description. Abonnez-vous à 973 Culture, et dites-nous en commentaire quel artiste d'ici vous voulez dans le prochain épisode.",
+      "scene": "cta"
+    },
+    {
+      "id": "S7-06",
+      "seq": 7,
+      "type": "line",
+      "who": "K",
+      "text": "Mèsi tout moun pour la soirée. On se retrouve très vite.",
+      "scene": "set_wide",
+      "emotion": "smile"
+    },
+    {
+      "id": "S7-07",
+      "seq": 7,
+      "type": "line",
+      "who": "M",
+      "text": "Ciao tout moun !",
+      "scene": "set_wide",
+      "emotion": "smile"
+    },
+    {
+      "id": "S7-08",
+      "seq": 7,
+      "type": "visual",
+      "duration": 7.0,
+      "scene": "end_logo",
+      "music": "outro"
+    }
+  ]
+}
