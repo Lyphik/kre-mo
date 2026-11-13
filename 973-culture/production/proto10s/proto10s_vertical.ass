@@ -1,0 +1,18 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Inter Display,58,&H00FFFFFF,&H00FFFFFF,&H00101010,&H90000000,-1,0,0,0,100,100,0,0,1,4,2,2,50,50,250,1
+Style: Brand,Inter Display,30,&H003BBFF9,&H00FFFFFF,&H00101010,&H80000000,-1,0,0,0,100,100,3,0,1,3,0,8,40,40,70,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:10.00,Brand,,0,0,0,,973 CULTURE{\c&HFFFFFF&} · LE PODCAST
+Dialogue: 0,0:00:00.35,0:00:02.02,Sub,,0,0,0,,{\fad(80,80)}{\c&H354D08&\fs34}KENZO\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Cinq cent quatre-vingt-quinze mille vues{\c&HFFFFFF&} !
+Dialogue: 0,0:00:02.04,0:00:05.41,Sub,,0,0,0,,{\fad(80,80)}{\c&H3434D9&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}Attends… sur un clip où il n'est même pas l'artiste principal ?
+Dialogue: 0,0:00:05.43,0:00:07.85,Sub,,0,0,0,,{\fad(80,80)}{\c&H354D08&\fs34}KENZO\N{\c&HFFFFFF&\fs58}Exactement. Ça, c'est {\c&H3BBFF9&}Lyphik{\c&HFFFFFF&}.
+Dialogue: 0,0:00:07.87,0:00:08.60,Sub,,0,0,0,,{\fad(80,80)}{\c&H3434D9&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Pa mélé{\c&HFFFFFF&} !

@@ -1,0 +1,38 @@
+[
+ {
+  "id": "P1",
+  "who": "K",
+  "text": "Cinq cent quatre-vingt-quinze mille vues !",
+  "emotion": "excited",
+  "start": 0.35,
+  "t0": 0.35,
+  "t1": 2.287
+ },
+ {
+  "id": "P2",
+  "who": "M",
+  "text": "Attends… sur un clip où il n'est même pas l'artiste principal ?",
+  "emotion": "surprised",
+  "overlap": 0.25,
+  "t0": 2.037,
+  "t1": 5.284
+ },
+ {
+  "id": "P3",
+  "who": "K",
+  "text": "Exactement. Ça, c'est Lyphik.",
+  "emotion": "proud",
+  "gap": 0.15,
+  "t0": 5.434,
+  "t1": 7.82
+ },
+ {
+  "id": "P4",
+  "who": "M",
+  "text": "Pa mélé !",
+  "emotion": "laugh",
+  "gap": 0.05,
+  "t0": 7.87,
+  "t1": 8.45
+ }
+]

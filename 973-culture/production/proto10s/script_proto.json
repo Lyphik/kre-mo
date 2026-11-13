@@ -1,0 +1,10 @@
+{
+  "id": "PROTO-10S",
+  "note": "Prototype de 10 s : une seule scène commune, dialogue rapide avec chevauchement, réactions. Faits repris du master EP01 (sources : dossier-lyphik.md).",
+  "lines": [
+    {"id": "P1", "who": "K", "text": "Cinq cent quatre-vingt-quinze mille vues !", "emotion": "excited", "start": 0.35},
+    {"id": "P2", "who": "M", "text": "Attends… sur un clip où il n'est même pas l'artiste principal ?", "emotion": "surprised", "overlap": 0.25},
+    {"id": "P3", "who": "K", "text": "Exactement. Ça, c'est Lyphik.", "emotion": "proud", "gap": 0.15},
+    {"id": "P4", "who": "M", "text": "Pa mélé !", "emotion": "laugh", "gap": 0.05}
+  ]
+}
