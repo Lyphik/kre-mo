@@ -29,7 +29,7 @@ for i, l in enumerate(tl, 1):
     for k in ("Lyphik", "Pa mélé", "Cinq cent quatre-vingt-quinze mille vues"):
         styled = styled.replace(k, "{\\c&H3BBFF9&}" + k + "{\\c&HFFFFFF&}")
     who = "KENZO" if l["who"] == "K" else "MAËVA"
-    col = "&H354D08&" if l["who"] == "K" else "&H3434D9&"
+    col = "&H71CC2E&" if l["who"] == "K" else "&H5A5AFF&"
     ass_ev.append(f"Dialogue: 0,{tc_ass(a)},{tc_ass(e)},Sub,,0,0,0,,{{\\fad(80,80)}}{{\\c{col}\\fs34}}{who}\\N{{\\c&HFFFFFF&\\fs58}}{styled}")
 
 open(os.path.join(D, "proto10s_fr.srt"), "w", encoding="utf-8").write("\n".join(srt))

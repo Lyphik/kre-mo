@@ -12,7 +12,7 @@ Style: Brand,Inter Display,30,&H003BBFF9,&H00FFFFFF,&H00101010,&H80000000,-1,0,0
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.00,0:00:10.00,Brand,,0,0,0,,973 CULTURE{\c&HFFFFFF&} · LE PODCAST
-Dialogue: 0,0:00:00.35,0:00:02.02,Sub,,0,0,0,,{\fad(80,80)}{\c&H354D08&\fs34}KENZO\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Cinq cent quatre-vingt-quinze mille vues{\c&HFFFFFF&} !
-Dialogue: 0,0:00:02.04,0:00:05.41,Sub,,0,0,0,,{\fad(80,80)}{\c&H3434D9&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}Attends… sur un clip où il n'est même pas l'artiste principal ?
-Dialogue: 0,0:00:05.43,0:00:07.85,Sub,,0,0,0,,{\fad(80,80)}{\c&H354D08&\fs34}KENZO\N{\c&HFFFFFF&\fs58}Exactement. Ça, c'est {\c&H3BBFF9&}Lyphik{\c&HFFFFFF&}.
-Dialogue: 0,0:00:07.87,0:00:08.60,Sub,,0,0,0,,{\fad(80,80)}{\c&H3434D9&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Pa mélé{\c&HFFFFFF&} !
+Dialogue: 0,0:00:00.35,0:00:02.02,Sub,,0,0,0,,{\fad(80,80)}{\c&H71CC2E&\fs34}KENZO\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Cinq cent quatre-vingt-quinze mille vues{\c&HFFFFFF&} !
+Dialogue: 0,0:00:02.04,0:00:05.41,Sub,,0,0,0,,{\fad(80,80)}{\c&H5A5AFF&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}Attends… sur un clip où il n'est même pas l'artiste principal ?
+Dialogue: 0,0:00:05.43,0:00:07.85,Sub,,0,0,0,,{\fad(80,80)}{\c&H71CC2E&\fs34}KENZO\N{\c&HFFFFFF&\fs58}Exactement. Ça, c'est {\c&H3BBFF9&}Lyphik{\c&HFFFFFF&}.
+Dialogue: 0,0:00:07.87,0:00:08.60,Sub,,0,0,0,,{\fad(80,80)}{\c&H5A5AFF&\fs34}MAËVA\N{\c&HFFFFFF&\fs58}{\c&H3BBFF9&}Pa mélé{\c&HFFFFFF&} !

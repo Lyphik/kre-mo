@@ -1,6 +1,6 @@
 # Rapport — Prototype 3D de 10 s (Kenzo & Maëva)
 
-> 24/11/2026 · Suite au refus du Short 1. Diagnostic préalable : [`diagnostic-faisabilite-3d.md`](diagnostic-faisabilite-3d.md).
+> 24/11/2026 · Version finale (rendus terminés et mesurés) · Suite au refus du Short 1. Diagnostic préalable : [`diagnostic-faisabilite-3d.md`](diagnostic-faisabilite-3d.md).
 > Fichiers : `deliverables/proto10s/` · Pipeline : `production/proto10s/`
 
 ## 1. Ce qui a été produit
@@ -10,7 +10,7 @@
 | `973culture_proto10s_3d_16x9_720p.mp4` | 10 s, 1280×720, 25 i/s, rendu Cycles (CPU) + débruitage OIDN, son stéréo −14 LUFS |
 | `973culture_proto10s_3d_vertical_720x1280.mp4` | 10 s, 720×1280, **cadrages verticaux dédiés** (et non un recadrage), sous-titres incrustés |
 | `973culture_proto10s_3d_16x9_720p.srt` | Sous-titres séparés pour la version 16:9 |
-| `preuves/` | Planches contact, comparatif avant/après, mesures techniques |
+| `preuves/` | Planches contact (16:9 et vertical), comparatif avant/après, quatre images en pleine résolution, [mesures techniques](../../deliverables/proto10s/preuves/mesures-techniques.md) |
 
 ## 2. Réponse point par point au retour sur le Short 1
 
@@ -23,6 +23,8 @@
 | Musique réelle insuffisante | Lit musical original ; **aucun morceau de Lyphik** sans autorisation (choix de droits, pas limite technique) | ⚠️ Non traité (bloqué par les droits) |
 | Vertical sous-exploité | Rendu vertical natif : duo étagé en profondeur, couronnes de palmiers et ciel en haut, sous-titres dans le tiers inférieur | ✅ |
 | Duo presque pas exploité | Scène commune, réplique coupée par Maëva (chevauchement), réactions croisées, rire partagé, découpage champ / contrechamp | ✅ |
+
+Contrôles mesurés sur les deux fichiers : 250 images, 10,00 s, aucun plan figé, aucune image noire, −15,0 LUFS et −1,1 dBTP (détails dans `preuves/mesures-techniques.md`).
 
 ## 3. Découpage
 
